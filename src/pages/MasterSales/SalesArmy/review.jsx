@@ -74,7 +74,7 @@ const ReviewArmy = () => {
         });
         Swal.fire("Sukses", "Pesan tolak akun berhasil terkirim ke akun terkait", "success");
         // resetForm();
-        navigate(`/salesArmy`)
+        navigate(`/army`)
       } catch (err) {
         setError(err.response.data.errors);
         Swal.fire("Gagal", err.response.data.message, "error");
