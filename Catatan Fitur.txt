@@ -1,0 +1,36 @@
+==== Auth Area ====
+* Login with Role => Done only HO , 
+----list role => spv-ho, ho, spv-wh, wh, cashier, army, sales, customer
+* LogOut => Done
+* LogOut All Devices => Done
+* Get Profile Login => Done
+
+=== Site Area ====
+* Index => Done
+* Detail => Only Trigger Update Data
+* Create => Done
+* Update => Done
+* Delete => Done
+
+=== Dealer Area ===
+* Index => Done
+* Detail => Only Trigger Update Data
+* Create => Done
+* Update => Done
+* Delete => Done
+
+=== Sales Army Area ===
+* Index => Done
+* Detail => Done
+* Create => Done
+* Delete => Done
+* Reject => Stuck layout
+* Approve => Done
+* Toogle Active => Done
+
+
+
+Form Area with office on page email
+kebutuhan frontend total dealer, site, activity(tahap 2), total army keseluruhan
+
+
