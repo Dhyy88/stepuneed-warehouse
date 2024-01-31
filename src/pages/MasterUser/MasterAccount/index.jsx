@@ -180,7 +180,7 @@ const Profiles = () => {
               </div>
             </div>
             <Link
-              to="/setting"
+              to="/profile/setting"
               className="inline-flex items-center space-x-3 rtl:space-x-reverse text-sm capitalize font-medium text-blue-500 dark:text-slate-300"
             >
               <span>Klik disini untuk memperbaharui data akun</span>{" "}
@@ -199,7 +199,7 @@ const Profiles = () => {
               </div>
             </div>
             <Link
-              to="/password"
+              to="/profile/setting/password"
               className="inline-flex items-center space-x-3 rtl:space-x-reverse text-sm capitalize font-medium text-blue-500 dark:text-slate-300"
             >
               <span>Klik disini untuk memperbaharui kata sandi</span>{" "}

@@ -95,7 +95,7 @@ const UpdateSite = () => {
             setSelectedProvince(null);
             setSelectedCity(null);
             setType(null);
-            navigate("/cabang");
+            navigate("/sites");
           }
         );
       } catch (err) {

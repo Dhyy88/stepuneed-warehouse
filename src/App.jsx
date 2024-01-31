@@ -35,6 +35,7 @@ const DetailUser = lazy(() => import("./pages/MasterUser/MasterAccountUser/detai
 
 // Master Data
 const Categories = lazy(() => import("./pages/MasterData/Category"));
+const Products = lazy(() => import("./pages/MasterData/Product"));
 const Cars = lazy(() => import("./pages/MasterData/Cars"));
 const UpdateCars = lazy(() => import("./pages/MasterData/Cars/update"));
 
@@ -50,29 +51,30 @@ function App() {
 
               {/* Route Sales Army */}
               <Route path="army" element={<SalesArmy />} />
-              <Route path="detailArmy/:uid" element={<DetailArmy />} />
-              <Route path="review/:uid" element={<ReviewArmy />} />
+              <Route path="army/detail/:uid" element={<DetailArmy />} />
+              <Route path="army/review/:uid" element={<ReviewArmy />} />
 
               {/* Route Sales Internal */}
               <Route path="salesInternal" element={<SalesInternal />} />
 
               {/* Route Divisi */}
-              <Route path="dealer" element={<Dealers />} />
-              <Route path="cabang" element={<Sites />} />
-              <Route path="tambahCabang" element={ <Suspense fallback={<Loading />}> <CreateSiteProtect /> </Suspense> } />
-              <Route path="ubahCabang/:uid" element={ <Suspense fallback={<Loading />}> <UpdateSiteProtect /> </Suspense> } />
+              <Route path="dealers" element={<Dealers />} />
+              <Route path="sites" element={<Sites />} />
+              <Route path="sites/create" element={ <Suspense fallback={<Loading />}> <CreateSiteProtect /> </Suspense> } />
+              <Route path="sites/update/:uid" element={ <Suspense fallback={<Loading />}> <UpdateSiteProtect /> </Suspense> } />
               
               {/* Route Master Data */}
-              <Route path="category" element={<Categories />} />
+              <Route path="categories" element={<Categories />} />
+              <Route path="products" element={<Products />} />
               <Route path="cars" element={<Cars />} />
-              <Route path="ubahMobil/:uid" element={<UpdateCars />} />
+              <Route path="cars/update/:uid" element={<UpdateCars />} />
 
               {/* Route User */}
               <Route path="profile" element={<Profiles />} />
-              <Route path="setting" element={<ProfileSetting />} />
-              <Route path="password" element={<PasswordSetting />} />
-              <Route path="pengguna" element={ <Suspense fallback={<Loading />}> <UserProtect /> </Suspense> } />
-              <Route path="detailPengguna/:uid" element={<DetailUser />} />
+              <Route path="profile/setting" element={<ProfileSetting />} />
+              <Route path="profile/setting/password" element={<PasswordSetting />} />
+              <Route path="users" element={ <Suspense fallback={<Loading />}> <UserProtect /> </Suspense> } />
+              <Route path="users/detail/:uid" element={<DetailUser />} />
               
               {/* Route Error */}
               <Route path="*" element={<Navigate to="/404" />} />

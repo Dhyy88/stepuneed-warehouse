@@ -19,11 +19,11 @@ export const menuItems = [
     child: [
       {
         childtitle: "Data Kategori",
-        childlink: "/category",
+        childlink: "/categories",
       },
       {
         childtitle: "Data Produk",
-        childlink: "/produk"
+        childlink: "/products"
       },
       {
         childtitle: "Data Mobil",
@@ -40,12 +40,12 @@ export const menuItems = [
     child: [
       {
         childtitle: "Data Cabang",
-        childlink: "/cabang",
+        childlink: "/sites",
         isHide: false,
       },
       {
         childtitle: "Tambah Cabang",
-        childlink: "/tambahCabang",
+        childlink: "/sites/create",
         // isHide: true,
       }
     ]
@@ -55,7 +55,7 @@ export const menuItems = [
   {
     title: "Master Dealer",
     icon: "heroicons-outline:truck",
-    link: "/dealer",
+    link: "/dealers",
   },
 
   {
@@ -82,9 +82,9 @@ export const menuItems = [
 
   //Menu Master Pengguna
   {
-    title: "Admin",
+    title: "User Admin",
     icon: "heroicons-outline:users",
-    link: "/pengguna",
+    link: "/users",
     isHide: true,
   },
 ];
@@ -106,11 +106,11 @@ export const topMenu = [
     child: [
       {
         childtitle: "Data Produk",
-        link: "/coming-soon",
+        link: "/products",
       },
       {
         childtitle: "Data Kategori",
-        link: "/category"
+        link: "/categories"
       },
       {
         childtitle: "Data Mobil",
@@ -127,11 +127,11 @@ export const topMenu = [
     child: [
       {
         childtitle: "Data Cabang",
-        link: "/cabang",
+        link: "/sites",
       },
       {
         childtitle: "Tambah Cabang",
-        link: "/tambahCabang",
+        link: "/sites/create",
       },
     ]
   },
@@ -140,7 +140,7 @@ export const topMenu = [
   {
     title: "Master Dealer",
     icon: "heroicons-outline:truck",
-    link: "/dealer",
+    link: "/dealers",
   },
 
   // Menu Master Sales
@@ -163,9 +163,9 @@ export const topMenu = [
 
   //Menu Master Pengguna
   {
-    title: "Pengguna",
+    title: "User Admin",
     icon: "heroicons-outline:users",
-    link: "/pengguna",
+    link: "/users",
     isHide: true,
   },
 ];

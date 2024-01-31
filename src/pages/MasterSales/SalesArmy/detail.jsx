@@ -490,7 +490,7 @@ const DetailArmy = () => {
                           <Button
                             text="Tolak Akun"
                             className="btn-danger shadow-base2"
-                            onClick={() => navigate(`/review/${data.uid}`)}
+                            onClick={() => navigate(`/army/review/${data.uid}`)}
                           />
                         </>
                       )}

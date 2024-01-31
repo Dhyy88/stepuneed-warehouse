@@ -433,7 +433,7 @@ const Users = () => {
                                     type="button"
                                     onClick={() =>
                                       navigate(
-                                        `/detailPengguna/${item.uid}`
+                                        `/users/detail/${item.uid}`
                                       )
                                     }
                                   >

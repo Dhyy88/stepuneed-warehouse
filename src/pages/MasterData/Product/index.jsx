@@ -10,7 +10,7 @@ import Button from "@/components/ui/Button";
 import Loading from "../../../components/Loading";
 import { useNavigate } from "react-router-dom";
 
-const Sites = () => {
+const Products = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({
     data: [],
@@ -77,14 +77,14 @@ const Sites = () => {
     <>
       <div className="grid grid-cols-12 gap-6">
         <div className="lg:col-span-12 col-span-12">
-          <Card title="Data Cabang">
+          <Card title="Data Produk">
             <div className="md:flex justify-between items-center mb-4">
               <div className="md:flex items-center gap-3">
                 <div className="row-span-3 md:row-span-4">
                   <Button
-                    text="Tambah Cabang"
+                    text="Tambah Produk"
                     className="btn-primary dark w-full "
-                    onClick={() => navigate(`/sites/create`)}
+                    onClick={() => navigate(`/tambahProduk`)}
                   />
                 </div>
               </div>
@@ -108,7 +108,7 @@ const Sites = () => {
                     onChange={(event) =>
                       setQuery({ ...query, search: event.target.value })
                     }
-                    placeholder="Cari cabang..."
+                    placeholder="Cari produk..."
                   />
                 </div>
               </div>
@@ -250,7 +250,7 @@ const Sites = () => {
                                     className="action-btn"
                                     type="button"
                                     onClick={() =>
-                                      navigate(`/sites/update/${item.uid}`)
+                                      navigate(`/ubahCabang/${item.uid}`)
                                     }
                                   >
                                     <Icon icon="heroicons:pencil-square" />
@@ -288,4 +288,4 @@ const Sites = () => {
   );
 };
 
-export default Sites;
+export default Products;

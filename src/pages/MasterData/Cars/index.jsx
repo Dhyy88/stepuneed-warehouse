@@ -341,7 +341,7 @@ const Cars = () => {
                                     className="action-btn"
                                     type="button"
                                     onClick={() =>
-                                      navigate(`/ubahMobil/${item.uid}`)
+                                      navigate(`/cars/update/${item.uid}`)
                                     }
                                   >
                                     <Icon icon="heroicons:pencil-square" />

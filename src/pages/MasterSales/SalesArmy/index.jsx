@@ -488,7 +488,7 @@ const SalesArmy = () => {
                                     className="action-btn"
                                     type="button"
                                     onClick={() =>
-                                      navigate(`/detailArmy/${item.uid}`)
+                                      navigate(`/army/detail/${item.uid}`)
                                     }
                                   >
                                     <Icon icon="heroicons:eye" />
