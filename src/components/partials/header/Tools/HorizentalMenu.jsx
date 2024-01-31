@@ -11,11 +11,10 @@ const HorizentalMenu = () => {
     <div className="main-menu">
       <ul>
         {topMenu?.map((item, i) => {
-
           if (item.title === "Pengguna" && !is_spv) {
             return null;
           }
-          
+
           return (
             <li
               key={i}
@@ -75,28 +74,32 @@ const HorizentalMenu = () => {
               {/* Megamenu*/}
               {item.megamenu && (
                 <div className="rt-mega-menu">
-                  <div className="flex flex-wrap space-x-8 justify-between rtl:space-x-reverse">
+                  <div className="flex flex-wrap space-x-8 justify-around rtl:space-x-reverse">
                     {item.megamenu.map((m_item, m_i) => (
                       <div key={m_i}>
                         {/* mega menu title*/}
                         <div className="text-sm font-medium text-slate-900 dark:text-white mb-2 flex space-x-1 items-center">
-                          {/* <Icon icon={m_item.megamenuicon} /> */}
-                          <span> {m_item.megamenutitle}</span>
+                          <span className="icon-box">
+                            <Icon icon={m_item.megamenuicon} />
+                          </span>
+                          <span className="text-box"> {m_item.megamenutitle}</span>
                         </div>
                         {/* single menu item*/}
                         {m_item.singleMegamenu.map((ms_item, ms_i) => (
                           <NavLink to={ms_item.m_childlink} key={ms_i}>
                             {({ isActive }) => (
-                              <div className="flex items-center space-x-2 text-[15px] leading-6 rtl:space-x-reverse">
+                              <div className="flex items-center space-x-2 text-[15px] leading-6 rtl:space-x-reverse ml-4">
                                 <span
-                                  className={`h-[6px] w-[6px] rounded-full border border-slate-600 dark:border-white inline-block flex-none ${
-                                    isActive ? " bg-slate-900 dark:bg-white" : ""
+                                  className={`h-[6px] w-[6px] rounded-full border border-slate-600 dark:border-white inline-block flex-none  ${
+                                    isActive
+                                      ? " bg-slate-900 dark:bg-white"
+                                      : ""
                                   }`}
                                 ></span>
                                 <span
                                   className={`capitalize ${
                                     isActive
-                                      ? " text-slate-900 dark:text-white font-medium"
+                                      ? " text-blue-900 dark:text-white font-medium"
                                       : "text-slate-600 dark:text-slate-300"
                                   }`}
                                 >

@@ -10,7 +10,7 @@ export const menuItems = [
   //Menu Master Inventory
   {
     isHeadr: true,
-    title: "Menu Master",
+    title: "Master Data",
   },
   {
     title: "POS",
@@ -23,8 +23,12 @@ export const menuItems = [
       },
       {
         childtitle: "Data Produk",
-        childlink: "/products",
+        childlink: "/#",
         multi_menu: [
+          {
+            multiTitle: "List Produk",
+            multiLink: "products",
+          },
           {
             multiTitle: "Tambah Produk",
             multiLink: "products/create",
@@ -66,7 +70,7 @@ export const menuItems = [
 
   {
     isHeadr: true,
-    title: "Menu Pengguna",
+    title: "Master Data Pengguna",
   },
 
   //Menu Master Sales
@@ -104,67 +108,69 @@ export const topMenu = [
     link: "dashboard",
   },
 
-  //Menu Master Inventory 
   {
-    title: "POS",
-    icon: "heroicons-outline:rectangle-group",
+    title: "Master Data",
+    icon: "heroicons-outline:view-boards",
     link: "/app/home",
-    child: [
+    megamenu: [
       {
-        childtitle: "Data Produk",
-        link: "/products",
+        megamenutitle: "POS (Point Of Sale)",
+        megamenuicon: "heroicons-outline:rectangle-group",
+        singleMegamenu: [
+          {
+            m_childtitle: "Data Produk",
+            m_childlink: "/products",
+          },
+          {
+            m_childtitle: "Data Kategori",
+            m_childlink: "/categories",
+          },
+          {
+            m_childtitle: "Data Mobil",
+            m_childlink: "/cars",
+          },
+        ],
       },
       {
-        childtitle: "Data Kategori",
-        link: "/categories"
+        megamenutitle: "Master Cabang",
+        megamenuicon: "heroicons-outline:building-office-2",
+        singleMegamenu: [
+          {
+            m_childtitle: "Data Cabang",
+            m_childlink: "/sites",
+          },
+          {
+            m_childtitle: "Tambah Cabang",
+            m_childlink: "/sites/create",
+          },
+        ],
       },
-      {
-        childtitle: "Data Mobil",
-        link: "/cars"
-      }
-    ]
-  },
 
-  //Menu Master Cabang 
-  {
-    title: "Master Cabang",
-    icon: "heroicons-outline:building-office-2",
-    link: "/app/home",
-    child: [
       {
-        childtitle: "Data Cabang",
-        link: "/sites",
+        megamenutitle: "Master Dealer",
+        megamenuicon: "heroicons-outline:truck",
+        singleMegamenu: [
+          {
+            m_childtitle: "Data Dealer",
+            m_childlink: "/dealers",
+          },
+        ],
       },
       {
-        childtitle: "Tambah Cabang",
-        link: "/sites/create",
+        megamenutitle: "Master Sales",
+        megamenuicon: "heroicons-outline:user-group",
+        singleMegamenu: [
+          {
+            m_childtitle: "Data Sales Army",
+            m_childlink: "/army",
+          },
+          {
+            m_childtitle: "Data Sales Internal",
+            m_childlink: "/coming-soon",
+          },
+        ],
       },
-    ]
-  },
-
-  //Menu Master Dealer 
-  {
-    title: "Master Dealer",
-    icon: "heroicons-outline:truck",
-    link: "/dealers",
-  },
-
-  // Menu Master Sales
-  {
-    title: "Master Sales",
-    icon: "heroicons-outline:user-group",
-    link: "/app/home",
-    child: [
-      {
-        childtitle: "Sales Army",
-        link: "/army",
-      },
-      {
-        childtitle: "Sales Internal",
-        link: "/coming-soon"
-        // link: "/salesInternal"
-      }
-    ]
+    ],
   },
 
   //Menu Master Pengguna
@@ -174,6 +180,8 @@ export const topMenu = [
     link: "/users",
     isHide: true,
   },
+
+
 ];
 
 // import User1 from "@/assets/images/all-img/user.png";
@@ -215,3 +223,70 @@ export const colors = {
 //     return "rgb(" + r + ", " + g + ", " + b + ")";
 //   }
 // };
+
+
+
+// BACKUP MENU
+
+  //Menu Master Inventory 
+  // {
+  //   title: "POS",
+  //   icon: "heroicons-outline:rectangle-group",
+  //   link: "/app/home",
+  //   child: [
+  //     {
+  //       childtitle: "Data Produk",
+  //       link: "/products",
+  //     },
+  //     {
+  //       childtitle: "Data Kategori",
+  //       link: "/categories"
+  //     },
+  //     {
+  //       childtitle: "Data Mobil",
+  //       link: "/cars"
+  //     }
+  //   ]
+  // },
+
+  // //Menu Master Cabang 
+  // {
+  //   title: "Master Cabang",
+  //   icon: "heroicons-outline:building-office-2",
+  //   link: "/app/home",
+  //   child: [
+  //     {
+  //       childtitle: "Data Cabang",
+  //       link: "/sites",
+  //     },
+  //     {
+  //       childtitle: "Tambah Cabang",
+  //       link: "/sites/create",
+  //     },
+  //   ]
+  // },
+
+  // //Menu Master Dealer 
+  // {
+  //   title: "Master Dealer",
+  //   icon: "heroicons-outline:truck",
+  //   link: "/dealers",
+  // },
+
+  // // Menu Master Sales
+  // {
+  //   title: "Master Sales",
+  //   icon: "heroicons-outline:user-group",
+  //   link: "/app/home",
+  //   child: [
+  //     {
+  //       childtitle: "Sales Army",
+  //       link: "/army",
+  //     },
+  //     {
+  //       childtitle: "Sales Internal",
+  //       link: "/coming-soon"
+  //       // link: "/salesInternal"
+  //     }
+  //   ]
+  // },
