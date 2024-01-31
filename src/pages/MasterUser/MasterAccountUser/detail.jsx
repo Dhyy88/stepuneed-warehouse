@@ -26,7 +26,7 @@ const DetailUser = () => {
         });
       }
     } catch (error) {
-      Swal.fire("Error", error.response.data.message, 'error');
+      Swal.fire("Error", error.response.data.message, "error");
       setIsLoading(false);
     }
   };
@@ -58,12 +58,12 @@ const DetailUser = () => {
           "success"
         );
         getDataById();
-        setIsLoading(false)
+        setIsLoading(false);
       } catch (error) {
         Swal.fire("Gagal", err.response.data.message, "error");
       }
     } else {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   };
 
@@ -148,7 +148,7 @@ const DetailUser = () => {
               <ul className="list space-y-8">
                 <li className="flex space-x-3 rtl:space-x-reverse">
                   <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                    <Icon icon="heroicons:identification" />
+                    <Icon icon="heroicons:envelope" />
                   </div>
                   <div className="flex-1">
                     <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
@@ -157,19 +157,27 @@ const DetailUser = () => {
                     {data?.email}
                   </div>
 
-                  <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                    <Icon icon="heroicons:face-smile" />
-                  </div>
+                  {data?.profile?.gender && (
+                    <>
+                      <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
+                        <Icon icon="heroicons:face-smile" />
+                      </div>
 
-                  <div className="flex-1">
-                    <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                      Jenis Kelamin
-                    </div>
-                    <div className="text-base text-slate-600 dark:text-slate-50">
-                      {data?.profile?.gender === "L" && <span>Laki-laki</span>}
-                      {data?.profile?.gender === "P" && <span>Perempuan</span>}
-                    </div>
-                  </div>
+                      <div className="flex-1">
+                        <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
+                          Jenis Kelamin
+                        </div>
+                        <div className="text-base text-slate-600 dark:text-slate-50">
+                          {data?.profile?.gender === "L" && (
+                            <span>Laki-laki</span>
+                          )}
+                          {data?.profile?.gender === "P" && (
+                            <span>Perempuan</span>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  )}
                 </li>
 
                 <li className="flex space-x-3 rtl:space-x-reverse">

@@ -12,6 +12,11 @@ const Error403 = lazy(() => import("./pages/403"));
 const ComingSoonPage = lazy(() => import("./pages/utility/coming-soon"));
 const UnderConstructionPage = lazy(() => import("./pages/utility/under-construction"));
 
+// Master Account Setting
+const Profiles = lazy(() => import("./pages/MasterUser/MasterAccount")); 
+const ProfileSetting = lazy(() => import("./pages/MasterUser/MasterAccount/profile_setting"));
+const PasswordSetting = lazy(() => import("./pages/MasterUser/MasterAccount/password_setting"));
+
 // Master Sales Pages
 const SalesArmy = lazy(() => import("./pages/MasterSales/SalesArmy"));
 const DetailArmy = lazy(() => import("./pages/MasterSales/SalesArmy/detail"));
@@ -63,6 +68,9 @@ function App() {
               <Route path="ubahMobil/:uid" element={<UpdateCars />} />
 
               {/* Route User */}
+              <Route path="profile" element={<Profiles />} />
+              <Route path="setting" element={<ProfileSetting />} />
+              <Route path="password" element={<PasswordSetting />} />
               <Route path="pengguna" element={ <Suspense fallback={<Loading />}> <UserProtect /> </Suspense> } />
               <Route path="detailPengguna/:uid" element={<DetailUser />} />
               

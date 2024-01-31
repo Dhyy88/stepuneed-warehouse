@@ -29,7 +29,6 @@ const DetailArmy = () => {
       if (uid) {
         axios.get(`${ApiEndpoint.SALES_EXTERNAL}/${uid}`).then((response) => {
           setData(response.data.data);
-          console.log(response.data.data.army_profile.reject_note);
         });
       }
     } catch (error) {
@@ -328,7 +327,7 @@ const DetailArmy = () => {
 
                 <li className="flex space-x-3 rtl:space-x-reverse">
                   <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                    <Icon icon="heroicons:star" />
+                    <Icon icon="heroicons:face-smile" />
                   </div>
                   <div className="flex-1">
                     <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">

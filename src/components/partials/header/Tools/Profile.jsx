@@ -37,9 +37,9 @@ const profileLabel = () => {
         </div>
       </div>
       <div className="flex-none text-slate-600 dark:text-white text-sm font-normal items-center lg:flex hidden overflow-hidden text-ellipsis whitespace-nowrap">
-        <span className="overflow-hidden text-ellipsis whitespace-nowrap w-[120px] block">
+        <span className="overflow-hidden text-ellipsis whitespace-nowrap w-[100px] block">
           {/* Head Office */}
-          {data?.name || "Head Office"}
+          {data?.profile?.first_name || "Head Office"} {data?.profile?.last_name || ""}
         </span>
         <span className="text-base inline-block ltr:ml-[10px] rtl:mr-[10px]">
           <Icon icon="heroicons-outline:chevron-down"></Icon>
@@ -62,50 +62,15 @@ const Profile = () => {
     //     navigate("/profile");
     //   },
     // },
-    // {
-    //   label: "Chat",
-    //   icon: "heroicons-outline:chat",
-    //   action: () => {
-    //     navigate("/chat");
-    //   },
-    // },
-    // {
-    //   label: "Email",
-    //   icon: "heroicons-outline:mail",
-    //   action: () => {
-    //     navigate("/email");
-    //   },
-    // },
-    // {
-    //   label: "Todo",
-    //   icon: "heroicons-outline:clipboard-check",
-    //   action: () => {
-    //     navigate("/todo");
-    //   },
-    // },
-    // {
-    //   label: "Settings",
-    //   icon: "heroicons-outline:cog",
-    //   action: () => {
-    //     navigate("/settings");
-    //   },
-    // },
-    // {
-    //   label: "Price",
-    //   icon: "heroicons-outline:credit-card",
-    //   action: () => {
-    //     navigate("/pricing");
-    //   },
-    // },
-    // {
-    //   label: "Faq",
-    //   icon: "heroicons-outline:information-circle",
-    //   action: () => {
-    //     navigate("/faq");
-    //   },
-    // },
     {
-      label: "Logout",
+      label: "Pengaturan",
+      icon: "heroicons-outline:cog",
+      action: () => {
+        navigate("/profile");
+      },
+    },
+    {
+      label: "Keluar Akun",
       icon: "heroicons-outline:login",
       action: () => {
         dispatch(handleLogout(false));

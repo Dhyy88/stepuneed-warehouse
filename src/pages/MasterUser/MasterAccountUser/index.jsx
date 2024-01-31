@@ -50,7 +50,6 @@ const Users = () => {
         is_active: query?.is_active,
       });
       setData(response?.data?.data);
-      console.log(response.data.data);
       setIsLoading(false);
     } catch (err) {
       setError(err);

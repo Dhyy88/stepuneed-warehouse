@@ -2,6 +2,7 @@ const ApiEndpoint = {
   // AUTH AREA
     LOGIN: 'ho/auth/login',
     DETAIL: 'ho/account',
+    CHANGE_PASSWORD: 'ho/account/password/change',
 
   //HO ACCOUNT
     HO: 'ho/hos',
