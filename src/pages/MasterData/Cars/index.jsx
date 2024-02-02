@@ -196,21 +196,6 @@ const Cars = () => {
     setEditMode(false);
   };
 
-  const DetailModalContent = () => {
-    return (
-      <>
-        <h4 className="font-medium text-lg mb-3 text-slate-900">{full_name}</h4>
-        <div className="text-base text-slate-600 dark:text-slate-300">
-          Brand: {brand}
-          <br />
-          Model: {model}
-          <br />
-          Year: {year}
-        </div>
-      </>
-    );
-  };
-
   return (
     <>
       <div className="grid grid-cols-12 gap-6">
@@ -251,7 +236,7 @@ const Cars = () => {
                         <Loading />
                       </div>
                     </>
-                  ) : data?.length === 0 ? (
+                  ) : data?.data?.length === 0 ? (
                     <>
                       <table className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700">
                         <thead className="bg-slate-200 dark:bg-slate-700">
@@ -292,7 +277,7 @@ const Cars = () => {
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
-                        {data?.map((item, index) => (
+                        {data?.data?.map((item, index) => (
                           <tr key={index}>
                             <td className="table-td">{item?.full_name} </td>
 
@@ -321,14 +306,6 @@ const Cars = () => {
                                     <h4 className="text-base text-slate-600 dark:text-slate-300 mb-4">
                                       Tahun = {year}
                                     </h4>
-                                    {/* <div className="text-base text-slate-600 dark:text-slate-300">
-                                      Oat cake ice cream candy chocolate cake
-                                      chocolate cake cotton candy dragée apple
-                                      pie. Brownie carrot cake candy canes
-                                      bonbon fruitcake topping halvah. Cake
-                                      sweet roll cake cheesecake cookie
-                                      chocolate cake liquorice.
-                                    </div> */}
                                   </Modal>
                                 </button>
                                 <Tooltip

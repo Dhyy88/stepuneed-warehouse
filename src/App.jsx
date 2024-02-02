@@ -36,8 +36,11 @@ const DetailUser = lazy(() => import("./pages/MasterUser/MasterAccountUser/detai
 // Master Data
 const Categories = lazy(() => import("./pages/MasterData/Category"));
 const Products = lazy(() => import("./pages/MasterData/Product"));
+const CreateProduct = lazy(() => import("./pages/MasterData/Product/create"));
 const Cars = lazy(() => import("./pages/MasterData/Cars"));
 const UpdateCars = lazy(() => import("./pages/MasterData/Cars/update"));
+
+const RecursiveComponent = lazy(() => import("./pages/MasterData/Product/belajar"));
 
 function App() {
   const ability = createMongoAbility();
@@ -66,6 +69,7 @@ function App() {
               {/* Route Master Data */}
               <Route path="categories" element={<Categories />} />
               <Route path="products" element={<Products />} />
+              <Route path="products/create" element={<CreateProduct />} />
               <Route path="cars" element={<Cars />} />
               <Route path="cars/update/:uid" element={<UpdateCars />} />
 
@@ -75,6 +79,7 @@ function App() {
               <Route path="profile/setting/password" element={<PasswordSetting />} />
               <Route path="users" element={ <Suspense fallback={<Loading />}> <UserProtect /> </Suspense> } />
               <Route path="users/detail/:uid" element={<DetailUser />} />
+              <Route path="belajar" element={<RecursiveComponent />} />
               
               {/* Route Error */}
               <Route path="*" element={<Navigate to="/404" />} />

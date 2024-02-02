@@ -30,6 +30,9 @@ const ApiEndpoint = {
     CATEGORY: 'ho/categories',
     CREATE_CATEGORY: 'ho/categories/create',
 
+    //PRODCTS
+    PRODUCTS : 'ho/products',
+
     //ADMINISTRATIVE AREA PUBLIC
     GET_PROVINCE: 'administrative-area/provinces',
     GET_CITIES: 'administrative-area/cities'

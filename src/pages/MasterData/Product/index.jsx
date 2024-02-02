@@ -14,63 +14,84 @@ const Products = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({
     data: [],
+    current_page: 1,
+    last_page: 1,
+    prev_page_url: null,
+    next_page_url: null,
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
 
   const [query, setQuery] = useState({
     search: "",
-    province: "",
-    city: "",
-    type: "",
+    is_active: "",
+    paginate: 1,
   });
 
-  async function getDataSite(query) {
+  async function getDataProducts(query) {
     setIsLoading(true);
     try {
       const response = await axios.post(ApiEndpoint.SITES, {
         search: query?.search,
-        province: query?.province,
-        city: query?.city,
-        type: query?.type,
+        is_active: query?.is_active,
+        paginate: 5
       });
-      setData(response.data.data);
+      setData(response?.data?.data);
       setIsLoading(false);
     } catch (err) {
-      setError(err);
+      setError(err.response.data.message);
+      Swal.fire("Gagal", err?.response?.data?.message, "error");
       setIsLoading(false);
     }
+    setIsLoading(false)
   }
 
-  async function onDelete(uid) {
-    try {
-      const result = await Swal.fire({
-        title: "Apakah anda yakin menghapus cabang ini?",
-        text: "Anda tidak akan dapat mengembalikannya!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Ya, Hapus",
-        cancelButtonText: "Batal",
-      });
+  // async function getDataSite(query) {
+  //   setIsLoading(true);
+  //   try {
+  //     const response = await axios.post(ApiEndpoint.SITES, {
+  //       search: query?.search,
+  //       province: query?.province,
+  //       city: query?.city,
+  //       type: query?.type,
+  //     });
+  //     setData(response.data.data);
+  //     setIsLoading(false);
+  //   } catch (err) {
+  //     setError(err);
+  //     setIsLoading(false);
+  //   }
+  // }
 
-      if (result.isConfirmed) {
-        await axios.delete(`${ApiEndpoint.SITES}/${uid}`);
-        Swal.fire(
-          "Berhasil!",
-          "Anda berhasil menghapus data cabang ini.",
-          "success"
-        );
-        getDataSite(query);
-      } else {
-        Swal.fire("Batal", "Hapus data cabang dibatalkan.", "info");
-      }
-    } catch (err) {
-      Swal.fire("Gagal", err.response.data.message, "error");
-    }
-  }
+  // async function onDelete(uid) {
+  //   try {
+  //     const result = await Swal.fire({
+  //       title: "Apakah anda yakin menghapus cabang ini?",
+  //       text: "Anda tidak akan dapat mengembalikannya!",
+  //       icon: "warning",
+  //       showCancelButton: true,
+  //       confirmButtonText: "Ya, Hapus",
+  //       cancelButtonText: "Batal",
+  //     });
+
+  //     if (result.isConfirmed) {
+  //       await axios.delete(`${ApiEndpoint.SITES}/${uid}`);
+  //       Swal.fire(
+  //         "Berhasil!",
+  //         "Anda berhasil menghapus data cabang ini.",
+  //         "success"
+  //       );
+  //       getDataSite(query);
+  //     } else {
+  //       Swal.fire("Batal", "Hapus data cabang dibatalkan.", "info");
+  //     }
+  //   } catch (err) {
+  //     Swal.fire("Gagal", err.response.data.message, "error");
+  //   }
+  // }
 
   useEffect(() => {
-    getDataSite(query);
+    getDataProducts(query);
   }, [query]);
 
   return (
@@ -84,7 +105,7 @@ const Products = () => {
                   <Button
                     text="Tambah Produk"
                     className="btn-primary dark w-full "
-                    onClick={() => navigate(`/tambahProduk`)}
+                    onClick={() => navigate(`/products/create`)}
                   />
                 </div>
               </div>
