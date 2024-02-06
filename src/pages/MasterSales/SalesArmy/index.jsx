@@ -109,8 +109,8 @@ const SalesArmy = () => {
         });
         Swal.fire("Sukses", "Data sales berhasil ditambahkan.", "success");
         getDataSalesExternal(query);
-        resetForm()
-        setIsLoadingButton(false)
+        resetForm();
+        setIsLoadingButton(false);
       } catch (err) {
         setError(err.response.data.errors);
         Swal.fire("Gagal", err.response.data.message, "error");
@@ -205,7 +205,7 @@ const SalesArmy = () => {
       <div className="grid grid-cols-12 gap-6">
         <div className="lg:col-span-9 col-span-12">
           <Card title="Data Army">
-            <div className="md:flex justify-end items-center mb-4">
+            <div className="md:flex justify-between items-center mb-4">
               <div className="md:flex items-center gap-3">
                 <div className="row-span-3 md:row-span-4 mb-2">
                   <select
@@ -280,6 +280,8 @@ const SalesArmy = () => {
                     <option value="P">Perempuan</option>
                   </select>
                 </div>
+              </div>
+              <div className="md:flex items-center gap-3">
                 <div className="row-span-3 md:row-span-4 mb-2">
                   <Textinput
                     type="text"
@@ -408,7 +410,7 @@ const SalesArmy = () => {
                             ) : (
                               <td className="table-td">-</td>
                             )}
-                            
+
                             {item?.army_profile?.phone_number ? (
                               <td className="table-td">
                                 {item?.army_profile?.phone_number}

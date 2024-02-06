@@ -83,7 +83,7 @@ const Sites = () => {
                 <div className="row-span-3 md:row-span-4">
                   <Button
                     text="Tambah Cabang"
-                    className="btn-primary dark w-full "
+                    className="btn-primary dark w-full btn-sm "
                     onClick={() => navigate(`/sites/create`)}
                   />
                 </div>

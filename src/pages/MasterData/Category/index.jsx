@@ -350,7 +350,7 @@ const Categories = () => {
       <div className="grid grid-cols-12 gap-6">
         <div className="lg:col-span-9 col-span-12">
           <Card title="Data Kategori">
-            <div className="md:flex justify-between items-center mb-4">
+            <div className="md:flex justify-end items-center mb-4">
               <div className="md:flex items-center gap-3">
                 <div className="row-span-3 md:row-span-4">
                   <Textinput
