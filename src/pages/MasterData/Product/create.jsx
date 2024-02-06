@@ -17,6 +17,7 @@ import { Modal, Select } from "antd";
 import { TreeSelect, Space } from "@arco-design/web-react";
 import "@arco-design/web-react/dist/css/arco.css";
 import Alert from "@/components/ui/Alert";
+import LoadingButton from "../../../components/LoadingButton";
 
 const CreateProduct = () => {
   // START STATE GET DATA
@@ -441,6 +442,7 @@ const CreateProduct = () => {
         } catch (error) {
           setError(error.response.data.errors);
           Swal.fire("Gagal", "Terjadi kesalahan saat mengirim data", "error");
+          setIsLoading(false);
         }
       } else {
         setIsLoading(false);
@@ -965,10 +967,17 @@ const CreateProduct = () => {
         )}
         <div className="grid xl:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-5 mt-10">
           <Button text="Batal" className="btn-primary light w-full" />
-          <Button
+          {/* <Button
             text="Simpan"
             className="btn-primary dark w-full"
             onClick={onSubmit}
+          /> */}
+          <Button
+            text={isLoading ? <LoadingButton /> : "Simpan"}
+            className="btn-primary dark w-full "
+            type="submit"
+            onClick={onSubmit}
+            disabled={isLoading}
           />
         </div>
       </Card>
