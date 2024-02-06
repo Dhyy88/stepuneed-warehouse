@@ -29,9 +29,12 @@ const ApiEndpoint = {
     //CATEGORY
     CATEGORY: 'ho/categories',
     CREATE_CATEGORY: 'ho/categories/create',
+    CATEGORIES: 'categories/tree',
 
     //PRODCTS
     PRODUCTS : 'ho/products',
+    VARIANT_GENERATOR: 'ho/products/variant-generator',
+    CREATE_PRODUCTS: 'ho/products/create',
 
     //ADMINISTRATIVE AREA PUBLIC
     GET_PROVINCE: 'administrative-area/provinces',
