@@ -229,10 +229,8 @@ const DetailArmy = () => {
           </div>
         </div>
         {data?.army_profile?.reject_note && (
-          <Alert
-            className="light-mode alert-danger mb-5"
-          >
-            Riwayat pesan tolak akun army : 
+          <Alert className="light-mode alert-danger mb-5">
+            Riwayat pesan tolak akun army :
             {data?.army_profile?.reject_note?.first_name && (
               <>
                 <br /> - {data?.army_profile?.reject_note?.first_name}
@@ -270,7 +268,8 @@ const DetailArmy = () => {
             )}
             {data?.army_profile?.reject_note?.payment_account_number && (
               <>
-                <br /> - {data?.army_profile?.reject_note?.payment_account_number}
+                <br /> -{" "}
+                {data?.army_profile?.reject_note?.payment_account_number}
               </>
             )}
             {data?.army_profile?.reject_note?.selfie_with_ktp && (
@@ -460,61 +459,95 @@ const DetailArmy = () => {
               <div className="grid justify-items-center">
                 {data?.is_completed === false && (
                   <>
-                  <div className="row flex justify-items-center gap-5">
-                    <div className="grid grid-cols-1 md:grid-cols-1 ">
-                      {data?.is_active === false ? (
-                        <Button
-                          text={ isLoadingButton ? (<LoadingButton />) : ("Aktifkan Akun")}
-                          className="btn-primary shadow-base2"
-                          onClick={() => onActiveAccount()}
-                          disabled={isLoadingButton}
-                        />
-                      ) : (
-                        <Button
-                          text={ isLoadingButton ? (<LoadingButton />) : ("Nonaktifkan Akun")}
-                          className="btn-warning shadow-base2"
-                          onClick={() => onSuspendAccount()}
-                          disabled={isLoadingButton}
-                        />
-                      )}
-                    </div>
-                    <div className="grid grid-cols-2 md:grid-cols-2 grid-cols-1">
-                      {data?.army_profile?.approve_status !== "rejected" && data?.army_profile?.approve_status !== "incomplete" &&  (
-                        <>
+                    <div className="row flex justify-items-center gap-5">
+                      <div className="grid grid-cols-1 md:grid-cols-1 ">
+                        {data?.is_active === false ? (
                           <Button
-                            text={ isApproveLoading ? (<LoadingButton />) : ("Setujui Akun")}
-                            className="btn-success shadow-base2 mr-5"
-                            onClick={() => onApproved()}
-                            disabled={isApproveLoading}
+                            text={
+                              isLoadingButton ? (
+                                <LoadingButton />
+                              ) : (
+                                "Aktifkan Akun"
+                              )
+                            }
+                            className="btn-primary shadow-base2"
+                            onClick={() => onActiveAccount()}
+                            disabled={isLoadingButton}
                           />
+                        ) : (
                           <Button
-                            text="Tolak Akun"
-                            className="btn-danger shadow-base2"
-                            onClick={() => navigate(`/army/review/${data.uid}`)}
+                            text={
+                              isLoadingButton ? (
+                                <LoadingButton />
+                              ) : (
+                                "Nonaktifkan Akun"
+                              )
+                            }
+                            className="btn-warning shadow-base2"
+                            onClick={() => onSuspendAccount()}
+                            disabled={isLoadingButton}
                           />
-                        </>
-                      )}
+                        )}
+                      </div>
+                      <div className="grid grid-cols-2 md:grid-cols-2 grid-cols-1">
+                        {data?.army_profile?.approve_status !== "rejected" &&
+                          data?.army_profile?.approve_status !==
+                            "incomplete" && (
+                            <>
+                              <Button
+                                text={
+                                  isApproveLoading ? (
+                                    <LoadingButton />
+                                  ) : (
+                                    "Setujui Akun"
+                                  )
+                                }
+                                className="btn-success shadow-base2 mr-5"
+                                onClick={() => onApproved()}
+                                disabled={isApproveLoading}
+                              />
+                              <Button
+                                text="Tolak Akun"
+                                className="btn-danger shadow-base2"
+                                onClick={() =>
+                                  navigate(`/army/review/${data.uid}`)
+                                }
+                              />
+                            </>
+                          )}
+                      </div>
                     </div>
-                  </div>
                   </>
                 )}
                 <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1">
                   {data?.is_completed === true && (
                     <>
                       {data?.is_active === false ? (
-                      <Button
-                        text={ isLoadingButton ? (<LoadingButton />) : ("Aktifkan Akun")}
-                        className="btn-primary shadow-base2"
-                        onClick={() => onActiveAccount()}
-                        disabled={isLoadingButton}
-                      />
+                        <Button
+                          text={
+                            isLoadingButton ? (
+                              <LoadingButton />
+                            ) : (
+                              "Aktifkan Akun"
+                            )
+                          }
+                          className="btn-primary shadow-base2"
+                          onClick={() => onActiveAccount()}
+                          disabled={isLoadingButton}
+                        />
                       ) : (
-                      <Button
-                        text={ isLoadingButton ? (<LoadingButton />) : ("Nonaktifkan Akun")}
-                        className="btn-warning shadow-base2"
-                        onClick={() => onSuspendAccount()}
-                        disabled={isLoadingButton}
-                      />
+                        <Button
+                          text={
+                            isLoadingButton ? (
+                              <LoadingButton />
+                            ) : (
+                              "Nonaktifkan Akun"
+                            )
+                          }
+                          className="btn-warning shadow-base2"
+                          onClick={() => onSuspendAccount()}
+                          disabled={isLoadingButton}
+                        />
                       )}
                     </>
                   )}

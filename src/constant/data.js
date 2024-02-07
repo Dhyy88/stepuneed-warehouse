@@ -18,12 +18,8 @@ export const menuItems = [
     link: "/app/home",
     child: [
       {
-        childtitle: "Data Kategori",
-        childlink: "/categories",
-      },
-      {
         childtitle: "Data Produk",
-        childlink: "/#",
+        childlink: "/products",
         multi_menu: [
           {
             multiTitle: "List Produk",
@@ -34,6 +30,14 @@ export const menuItems = [
             multiLink: "products/create",
           },
         ],
+      },
+      {
+        childtitle: "Data Bundle Produk",
+        childlink: "/bundles"
+      },  
+      {
+        childtitle: "Data Kategori",
+        childlink: "/categories",
       },
       {
         childtitle: "Data Mobil",
@@ -66,6 +70,12 @@ export const menuItems = [
     title: "Master Dealer",
     icon: "heroicons-outline:truck",
     link: "/dealers",
+  },
+
+  {
+    title: "Master Produk Army",
+    icon: "heroicons-outline:clipboard",
+    link: "/army/contents",
   },
 
   {
@@ -118,16 +128,20 @@ export const topMenu = [
         megamenuicon: "heroicons-outline:rectangle-group",
         singleMegamenu: [
           {
-            m_childtitle: "Data Produk",
-            m_childlink: "/products",
-          },
-          {
             m_childtitle: "Data Kategori",
             m_childlink: "/categories",
           },
           {
-            m_childtitle: "Data Mobil",
-            m_childlink: "/cars",
+            m_childtitle: "Data Produk",
+            m_childlink: "/products",
+          },
+          {
+            m_childtitle: "Data Bundle Produk",
+            m_childlink: "/bundles",
+          },
+          {
+            m_childtitle: "Data Konten Army",
+            m_childlink: "/army/contents",
           },
         ],
       },
@@ -153,6 +167,10 @@ export const topMenu = [
           {
             m_childtitle: "Data Dealer",
             m_childlink: "/dealers",
+          },
+          {
+            m_childtitle: "Data Mobil",
+            m_childlink: "/cars",
           },
         ],
       },

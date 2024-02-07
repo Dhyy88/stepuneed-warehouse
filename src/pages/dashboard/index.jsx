@@ -7,26 +7,32 @@ import SelectMonth from "@/components/partials/SelectMonth";
 import CompanyTable from "@/components/partials/Table/company-table";
 import RecentActivity from "@/components/partials/widget/recent-activity";
 import HomeBredCurbs from "./HomeBredCurbs";
+import Alert from "@/components/ui/Alert";
 
 import ApiEndpoint from "../../API/Api_EndPoint";
 import axios from "../../API/Axios";
 
 const Dashboard = () => {
+  // const getProfile = async () => {
+  //   await axios.get(ApiEndpoint.DETAIL).then((response) => {
+  //     console.log(response.data.data);
+  //   });
+  // };
 
-  const getProfile = async () => {
-    await axios.get(ApiEndpoint.DETAIL).then((response) => {
-      // console.log(response.data.data);
-    });
-  };
-
-  useEffect(() => {
-    getProfile();
-  }, []);
+  // useEffect(() => {
+  //   getProfile();
+  // }, []);
 
   return (
     <div>
       <HomeBredCurbs title="Dashboard" />
-      <div className="grid grid-cols-12 gap-5 mb-5">
+      <Alert
+          icon="heroicons-outline:exclamation"
+        className="light-mode alert-primary mb-5"
+      >
+        Selamat datang !, Statistik data dashboard saat ini belum tersedia, silahkan explore menu yang sudah tersedia 
+      </Alert>
+      {/* <div className="grid grid-cols-12 gap-5 mb-5">
         <div className="2xl:col-span-12 lg:col-span-8 col-span-12">
           <Card bodyClass="p-4">
             <div className="grid md:grid-cols-3 col-span-1 gap-4">
@@ -58,7 +64,7 @@ const Dashboard = () => {
             <RecentActivity />
           </Card>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };

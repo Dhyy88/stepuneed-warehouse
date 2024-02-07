@@ -21,6 +21,8 @@ const PasswordSetting = lazy(() => import("./pages/MasterUser/MasterAccount/pass
 const SalesArmy = lazy(() => import("./pages/MasterSales/SalesArmy"));
 const DetailArmy = lazy(() => import("./pages/MasterSales/SalesArmy/detail"));
 const ReviewArmy = lazy(() => import("./pages/MasterSales/SalesArmy/review"));
+const ArmyContents = lazy(() => import("./pages/MasterSales/SalesArmy/ArmyContent"));
+
 const SalesInternal = lazy(() => import("./pages/MasterSales/SalesInternal"));
 
 // Master Divisi
@@ -34,9 +36,14 @@ const Users = lazy(() => import("./pages/MasterUser/MasterAccountUser"));
 const DetailUser = lazy(() => import("./pages/MasterUser/MasterAccountUser/detail"));
 
 // Master Data
-const Categories = lazy(() => import("./pages/MasterData/Category"));
 const Products = lazy(() => import("./pages/MasterData/Product"));
 const CreateProduct = lazy(() => import("./pages/MasterData/Product/create"));
+const DetailProducts = lazy(() => import("./pages/MasterData/Product/detail"));
+const Bundles = lazy(() => import("./pages/MasterData/Bundles"));
+const CreateBundle = lazy(() => import("./pages/MasterData/Bundles/create"));
+const UpdateBundle = lazy(() => import("./pages/MasterData/Bundles/update"));
+const DetailBundles = lazy(() => import("./pages/MasterData/Bundles/detail"));
+const Categories = lazy(() => import("./pages/MasterData/Category"));
 const Cars = lazy(() => import("./pages/MasterData/Cars"));
 const UpdateCars = lazy(() => import("./pages/MasterData/Cars/update"));
 
@@ -56,6 +63,7 @@ function App() {
               <Route path="army" element={<SalesArmy />} />
               <Route path="army/detail/:uid" element={<DetailArmy />} />
               <Route path="army/review/:uid" element={<ReviewArmy />} />
+              <Route path="army/contents" element={<ArmyContents />} />
 
               {/* Route Sales Internal */}
               <Route path="salesInternal" element={<SalesInternal />} />
@@ -67,9 +75,14 @@ function App() {
               <Route path="sites/update/:uid" element={ <Suspense fallback={<Loading />}> <UpdateSiteProtect /> </Suspense> } />
               
               {/* Route Master Data */}
-              <Route path="categories" element={<Categories />} />
               <Route path="products" element={<Products />} />
               <Route path="products/create" element={<CreateProduct />} />
+              <Route path="products/detail/:uid" element={<DetailProducts />} />
+              <Route path="bundles" element={<Bundles />} />
+              <Route path="bundles/create" element={<CreateBundle />} />
+              <Route path="bundles/detail/:uid" element={<DetailBundles />} />
+              <Route path="bundles/update/:uid" element={<UpdateBundle />} />
+              <Route path="categories" element={<Categories />} />
               <Route path="cars" element={<Cars />} />
               <Route path="cars/update/:uid" element={<UpdateCars />} />
 

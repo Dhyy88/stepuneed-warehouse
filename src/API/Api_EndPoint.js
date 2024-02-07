@@ -36,6 +36,14 @@ const ApiEndpoint = {
     VARIANT_GENERATOR: 'ho/products/variant-generator',
     CREATE_PRODUCTS: 'ho/products/create',
 
+    //BUNDLE PRODUCTS
+    BUNDLES : 'ho/bundles',
+    CREATE_BUNDLES : 'ho/bundles/create',
+
+    //SALES ARMY CONTENT
+    ARMY_CONTENT: 'ho/army-contents',
+    CREATE_ARMY_CONTENT: 'ho/army-contents/create',
+
     //ADMINISTRATIVE AREA PUBLIC
     GET_PROVINCE: 'administrative-area/provinces',
     GET_CITIES: 'administrative-area/cities'

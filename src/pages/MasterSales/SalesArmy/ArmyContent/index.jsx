@@ -2,18 +2,35 @@ import React, { useState, useEffect } from "react";
 import Textinput from "@/components/ui/Textinput";
 import Card from "@/components/ui/Card";
 import Icon from "@/components/ui/Icon";
-import Modal from "@/components/ui/Modal";
 import Tooltip from "@/components/ui/Tooltip";
 import Swal from "sweetalert2";
 import Button from "@/components/ui/Button";
-import axios from "../../../API/Axios";
-import ApiEndpoint from "../../../API/Api_EndPoint";
-import Loading from "../../../components/Loading";
-import LoadingButton from "../../../components/LoadingButton";
-import { useNavigate } from "react-router-dom";
+import Select from "react-select";
+import ApiEndpoint from "../../../../API/Api_EndPoint";
+import axios from "../../../../API/Axios";
+import Loading from "../../../../components/Loading";
+import LoadingButton from "../../../../components/LoadingButton";
+import Alert from "@/components/ui/Alert";
 
-const Cars = () => {
-  const navigate = useNavigate();
+const styles = {
+  multiValue: (base, state) => {
+    return state.data.isFixed ? { ...base, opacity: "0.5" } : base;
+  },
+  multiValueLabel: (base, state) => {
+    return state.data.isFixed
+      ? { ...base, color: "#626262", paddingRight: 6 }
+      : base;
+  },
+  multiValueRemove: (base, state) => {
+    return state.data.isFixed ? { ...base, display: "none" } : base;
+  },
+  option: (provided, state) => ({
+    ...provided,
+    fontSize: "12px",
+  }),
+};
+
+const ArmyContents = () => {
   const [data, setData] = useState({
     data: [],
     current_page: 1,
@@ -21,62 +38,116 @@ const Cars = () => {
     prev_page_url: null,
     next_page_url: null,
   });
-  const [dataUid, setDataUid] = useState(null);
-
-  const [brand, setBrand] = useState("");
-  const [uid, setUid] = useState("");
-  const [model, setModel] = useState("");
-  const [year, setYear] = useState("");
-  const [full_name, setFullName] = useState("");
-  const [yearInputs, setYearInputs] = useState([""]);
+  const [data_bundles, setDataBundles] = useState({
+    data: [],
+    current_page: 1,
+    last_page: 1,
+    prev_page_url: null,
+    next_page_url: null,
+  });
+  const [data_products, setDataProducts] = useState({
+    data: [],
+    current_page: 1,
+    last_page: 1,
+    prev_page_url: null,
+    next_page_url: null,
+  });
+  const [query, setQuery] = useState({
+    search: "",
+    paginate: 5,
+    content_type: "",
+    is_active: "",
+  });
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingButton, setIsLoadingButton] = useState(false);
   const [error, setError] = useState(null);
-  const [query, setQuery] = useState({ search: "", paginate: 5 });
-  const [editMode, setEditMode] = useState(false);
 
-  async function getDataCars(query) {
+  const [content_type, setContentType] = useState(null);
+  const [content_uid, setContentUID] = useState(null);
+  const [selected_uid, setSelectedUid] = useState(null);
+
+  async function getDataContent(query) {
     setIsLoading(true);
     try {
-      const response = await axios.post(ApiEndpoint.CARS, {
+      const response = await axios.post(ApiEndpoint.ARMY_CONTENT, {
         page: query?.page,
-        paginate: query?.paginate,
         search: query?.search,
+        paginate: 5,
+        content_type: query?.content_type,
       });
       setData(response?.data?.data);
       setIsLoading(false);
-    } catch (error) {
-      Swal.fire("error", error?.response?.data?.message, "error");
+    } catch (err) {
+      setError(err);
       setIsLoading(false);
     }
+  }
+
+  async function getDataBundle(query) {
+    setIsLoading(true);
+    try {
+      const response = await axios.post(ApiEndpoint.BUNDLES, {
+        page: query?.page,
+        search: query?.search,
+        paginate: 5,
+      });
+      setDataBundles(response?.data?.data);
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+    }
+    setIsLoading(false);
+  }
+
+  async function getDataProducts(query) {
+    setIsLoading(true);
+    try {
+      const response = await axios.post(ApiEndpoint.PRODUCTS, {
+        page: query?.page,
+        search: query?.search,
+        is_active: query?.is_active,
+        paginate: 5,
+      });
+      setDataProducts(response?.data?.data);
+      setIsLoading(false);
+    } catch (err) {
+      setError(err.response.data.message);
+      Swal.fire("Gagal", err?.response?.data?.message, "error");
+      setIsLoading(false);
+    }
+    setIsLoading(false);
   }
 
   const onSubmit = async () => {
     setIsLoadingButton(true);
     const confirmResult = await Swal.fire({
       title: "Konfirmasi",
-      text: "Anda yakin data yang dimasukkan sudah benar?",
+      text: "Anda yakin ingin menambahkan data konten ini ?",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Ya, Tambahkan",
       cancelButtonText: "Batal",
     });
-    setIsLoadingButton(true);
+
     if (confirmResult.isConfirmed) {
       try {
-        await axios.post(ApiEndpoint.CREATE_CARS, {
-          brand: brand,
-          model: model,
-          year: yearInputs.map((yearInput) => parseInt(yearInput)),
+        await axios.post(ApiEndpoint.CREATE_ARMY_CONTENT, {
+          content_type: content_type?.value,
+          content_uid: selected_uid?.value,
         });
-        Swal.fire("Berhasil", "Model mobil telah ditambahkan", "success");
-        getDataCars(query);
+        Swal.fire("Sukses", "Data konten berhasil ditambahkan.", "success");
+        getDataContent(query);
         resetForm();
         setIsLoadingButton(false);
       } catch (err) {
         setError(err.response.data.errors);
-        Swal.fire("Gagal", err.response.data.message, "error");
+        // Swal.fire("Gagal", err.response.data.message, "error");
+        Swal.fire(
+          "Gagal",
+          "Mohon periksa kembali tipe dan data yang di input",
+          "error"
+        );
         setIsLoadingButton(false);
       }
     } else {
@@ -84,27 +155,10 @@ const Cars = () => {
     }
   };
 
-  async function onDetail(uid) {
-    try {
-      if (uid) {
-        axios.get(`${ApiEndpoint.CARS}/${uid}`).then((response) => {
-          setDataUid(response?.data?.data);
-          setUid(response?.data?.data?.uid);
-          setFullName(response?.data?.data?.full_name);
-          setBrand(response?.data?.data?.brand);
-          setModel(response?.data?.data?.model);
-          setYear(response?.data?.data?.year);
-        });
-      }
-    } catch (error) {
-      // setError(error.response.data.errors);
-    }
-  }
-
   async function onDelete(uid) {
     try {
       const result = await Swal.fire({
-        title: "Apakah anda yakin menghapus model mobil ini?",
+        title: "Apakah anda yakin menghapus konten ini?",
         text: "Anda tidak akan dapat mengembalikannya!",
         icon: "warning",
         showCancelButton: true,
@@ -113,41 +167,20 @@ const Cars = () => {
       });
 
       if (result.isConfirmed) {
-        await axios.delete(`${ApiEndpoint.CARS}/${uid}`);
+        await axios.delete(`${ApiEndpoint.ARMY_CONTENT}/${uid}`);
         Swal.fire(
           "Berhasil!",
-          "Anda berhasil menghapus data model mobil ini.",
+          "Anda berhasil menghapus data konten ini.",
           "success"
         );
-        getDataCars(query);
+        getDataContent(query);
       } else {
-        Swal.fire("Batal", "Hapus data model mobil dibatalkan.", "info");
+        Swal.fire("Batal", "Hapus data konten dibatalkan.", "info");
       }
     } catch (err) {
       Swal.fire("Gagal", err.response.data.message, "error");
     }
   }
-
-  const addYearInput = () => {
-    setYearInputs([...yearInputs, ""]);
-  };
-
-  const updateYearInput = (index, value) => {
-    const newYearInputs = [...yearInputs];
-    newYearInputs[index] = value;
-    setYearInputs(newYearInputs);
-  };
-
-  const removeYearInput = (index) => {
-    const newYearInputs = [...yearInputs];
-    newYearInputs.splice(index, 1);
-    setYearInputs(newYearInputs);
-  };
-
-  const updateBrandModel = (newBrand, newModel) => {
-    setBrand(newBrand);
-    setModel(newModel);
-  };
 
   const handlePrevPagination = () => {
     if (data.prev_page_url) {
@@ -185,31 +218,70 @@ const Cars = () => {
     return pageNumbers;
   };
 
-  useEffect(() => {
-    getDataCars(query);
-  }, [query]);
-
   const resetForm = () => {
-    setBrand("");
-    setModel("");
-    setYearInputs([""]);
-    setEditMode(false);
+    setContentType(null);
+    setContentUID(null);
+    setSelectedUid(null);
+    setError(null);
   };
+
+  const bundleOptions = data_bundles.data.map((bundle) => ({
+    value: bundle.uid,
+    label: bundle.name,
+  }));
+
+  const productOptions = data_products.data.map((product) => ({
+    value: product.uid,
+    label: product.name,
+  }));
+
+  const contentOptions = [
+    { label: "Bundle", options: bundleOptions },
+    { label: "Product", options: productOptions },
+  ];
+
+  const typeContent = [
+    { value: "bundle", label: "Bundle" },
+    { value: "product", label: "Produk" },
+  ];
+
+  useEffect(() => {
+    getDataContent(query);
+    getDataBundle(query);
+    getDataProducts(query);
+  }, [query]);
 
   return (
     <>
       <div className="grid grid-cols-12 gap-6">
         <div className="lg:col-span-9 col-span-12">
-          <Card title="Model Mobil">
+          <Card title="Data Konten Army">
+            {" "}
             <div className="md:flex justify-between items-center mb-4">
               <div className="md:flex items-center gap-3">
-                <div className="row-span-3 md:row-span-4">
+                <div className="row-span-3 md:row-span-4 mb-2">
+                  <select
+                    className="form-control py-2 w-max"
+                    value={query.content_type}
+                    onChange={(event) =>
+                      setQuery({ ...query, content_type: event.target.value })
+                    }
+                  >
+                    <option value="">Semua Tipe</option>
+                    <option value="product">Produk</option>
+                    <option value="bundle">Bundle</option>
+                  </select>
+                </div>
+              </div>
+              <div className="md:flex items-center gap-3">
+                <div className="row-span-3 md:row-span-4 mb-2">
                   <Textinput
+                    type="text"
                     // value={query || ""}
                     onChange={(event) =>
                       setQuery({ ...query, search: event.target.value })
                     }
-                    placeholder="Cari model mobil..."
+                    placeholder="Cari konten army..."
                   />
                 </div>
               </div>
@@ -223,7 +295,19 @@ const Cars = () => {
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
                             <th scope="col" className=" table-th ">
-                              Nama Mobil
+                              Nama Konten
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Total Produk
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Total Harga
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Tipe
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Status
                             </th>
                             <th scope="col" className=" table-th ">
                               Aksi
@@ -242,7 +326,19 @@ const Cars = () => {
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
                             <th scope="col" className=" table-th ">
-                              Nama Mobil
+                              Nama Konten
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Total Produk
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Total Harga
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Tipe
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Status
                             </th>
                             <th scope="col" className=" table-th ">
                               Aksi
@@ -250,7 +346,6 @@ const Cars = () => {
                           </tr>
                         </thead>
                       </table>
-
                       <div className="w-full flex flex-col justify-center text-secondary p-10">
                         <div className="w-full flex justify-center mb-3">
                           <span className="text-slate-900 dark:text-white text-[100px] transition-all duration-300">
@@ -259,7 +354,7 @@ const Cars = () => {
                         </div>
                         <div className="w-full flex justify-center text-secondary">
                           <span className="text-slate-900 dark:text-white text-[20px] transition-all duration-300">
-                            Data Mobil belum tersedia
+                            Konten army belum tersedia
                           </span>
                         </div>
                       </div>
@@ -269,7 +364,19 @@ const Cars = () => {
                       <thead className="bg-slate-200 dark:bg-slate-700">
                         <tr>
                           <th scope="col" className=" table-th ">
-                            Nama Mobil
+                            Nama Konten
+                          </th>
+                          <th scope="col" className=" table-th ">
+                            Total Produk
+                          </th>
+                          <th scope="col" className=" table-th ">
+                            Total Harga
+                          </th>
+                          <th scope="col" className=" table-th ">
+                            Tipe
+                          </th>
+                          <th scope="col" className=" table-th ">
+                            Status
                           </th>
                           <th scope="col" className=" table-th ">
                             Aksi
@@ -279,26 +386,50 @@ const Cars = () => {
                       <tbody className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
                         {data?.data?.map((item, index) => (
                           <tr key={index}>
-                            <td className="table-td">{item?.full_name} </td>
+                            <td className="table-td">{item?.content?.name}</td>
+
+                            {item?.content?.item_count ? (
+                              <td className="table-td">
+                                {item?.content?.item_count} Produk
+                              </td>
+                            ) : (
+                              <td className="table-td">0 Produk</td>
+                            )}
+
+                            {item?.content?.total_price ? (
+                              <td className="table-td">
+                                Rp {item?.content?.total_price}
+                              </td>
+                            ) : (
+                              <td className="table-td">Rp 0</td>
+                            )}
+
+                            <td className="table-td">
+                              {item?.type === "product" ? (
+                                <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
+                                  Produk
+                                </span>
+                              ) : (
+                                <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-info-700 bg-info-500">
+                                  Bundle
+                                </span>
+                              )}
+                            </td>
+
+                            <td className="table-td">
+                              {item?.content?.is_active === true ? (
+                                <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
+                                  Aktif
+                                </span>
+                              ) : (
+                                <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-danger-500 bg-danger-500">
+                                  Nonaktif
+                                </span>
+                              )}
+                            </td>
 
                             <td className="table-td">
                               <div className="flex space-x-3 rtl:space-x-reverse">
-                                <Tooltip
-                                  content="Edit"
-                                  placement="top"
-                                  arrow
-                                  animation="shift-away"
-                                >
-                                  <button
-                                    className="action-btn"
-                                    type="button"
-                                    onClick={() =>
-                                      navigate(`/cars/update/${item.uid}`)
-                                    }
-                                  >
-                                    <Icon icon="heroicons:pencil-square" />
-                                  </button>
-                                </Tooltip>
                                 <Tooltip
                                   content="Hapus"
                                   placement="top"
@@ -376,126 +507,70 @@ const Cars = () => {
                 </div>
               </div>
             </div>
-            {/*end*/}
           </Card>
         </div>
         <div className="lg:col-span-3 col-span-12">
-          <Card title={"Tambah Model Mobil"}>
+          <Card title={"Tambah Konten"}>
+            <Alert
+              //   icon="heroicons-outline:exclamation"
+              className="light-mode alert-success mb-5"
+            >
+              Mohon sesuaikan inputan Tipe dan pemilihan produk atau bundle
+            </Alert>
             <div className="text-sm text-slate-600 font-normal bg-white dark:bg-slate-900 dark:text-slate-300 rounded p-5">
               <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
-                <Textinput
-                  label="Brand mobil *"
-                  type="text"
-                  placeholder="Masukkan brand mobil yang valid"
-                  onChange={(e) => setBrand(e.target.value)}
-                  value={brand}
+                <label htmlFor=" hh" className="form-label ">
+                  Tipe Konten *
+                </label>
+                <Select
+                  className="react-select mt-2"
+                  classNamePrefix="select"
+                  placeholder="Pilih Tipe..."
+                  options={typeContent}
+                  value={content_type}
+                  onChange={(selectedOption) => setContentType(selectedOption)}
                 />
                 {error && (
                   <span className="text-danger-600 text-xs py-2">
-                    {error.brand}
+                    {error.content_type}
                   </span>
                 )}
               </div>
               <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
-                <Textinput
-                  label="Model mobil"
-                  type="text"
-                  placeholder="Masukkan model mobil yang valid"
-                  onChange={(e) => setModel(e.target.value)}
-                  value={model}
+                <label htmlFor=" hh" className="form-label ">
+                  Pilih Produk / Bundle *
+                </label>
+                <Select
+                  styles={styles}
+                  className="react-select"
+                  classNamePrefix="select"
+                  placeholder="Pilih data..."
+                  options={contentOptions}
+                  value={selected_uid}
+                  onChange={(selectedOption) => setSelectedUid(selectedOption)}
                 />
+
                 {error && (
                   <span className="text-danger-600 text-xs py-2">
-                    {error.model}
+                    {error.content_uid}
                   </span>
                 )}
               </div>
-
-              <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
-                <div className="flex row justify-between items-center mb-2">
-                  <label htmlFor="hh" className="form-label">
-                    Tahun keluaran *
-                  </label>
-                  <div className="flex row justify-end gap-2">
-                    <button
-                      type="button"
-                      className="action-btn"
-                      onClick={() => {
-                        addYearInput();
-                        updateBrandModel(brand, model);
-                      }}
-                    >
-                      <Icon icon="heroicons:plus" />
-                    </button>
-                  </div>
-                </div>
-
-                {yearInputs.map((yearInput, index) => (
-                  <div key={index} className="items-center mb-2">
-                    <div className="flex row justify-between items-center mb-2">
-                      <div className={index > 0 ? "w-full mr-2" : "w-full"}>
-                        <Textinput
-                          type="text"
-                          placeholder="Tahun keluaran"
-                          value={yearInput}
-                          onChange={(e) => {
-                            updateYearInput(index, e.target.value);
-                          }}
-                          key={index}
-                        />
-                      </div>
-                      <div className="">
-                        {index > 0 && (
-                          <button
-                            className="action-btn flex"
-                            onClick={() => {
-                              removeYearInput(index);
-                            }}
-                          >
-                            <Icon icon="heroicons:trash" />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                {error && error.yearInput && error.yearInput[index] && (
-                  <span className="text-danger-600 text-xs py-2">
-                    {error.yearInput[index]}
-                  </span>
-                )}
-              </div>
-
-              <div className="text-base text-end text-slate-600 dark:text-slate-300">
-                {editMode ? (
+              <div className="grid justify-items-end">
+                <div className="grid xl:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 ">
                   <Button
-                    text={isLoadingButton ? <LoadingButton /> : "Ubah"}
-                    className="btn-primary dark w-full mr-2 mb-2 "
-                    onClick={onUpdate}
-                    disabled={isLoadingButton}
+                    text="Reset"
+                    className="btn-primary light"
+                    onClick={resetForm}
                   />
-                ) : (
                   <Button
                     text={isLoadingButton ? <LoadingButton /> : "Simpan"}
-                    className="btn-primary dark w-full mr-2 mb-2 "
+                    className="btn-primary dark "
+                    type="submit"
                     onClick={onSubmit}
                     disabled={isLoadingButton}
                   />
-                )}
-                {editMode ? (
-                  <Button
-                    text="Batal"
-                    className="btn-primary light w-full"
-                    onClick={resetForm}
-                  />
-                ) : (
-                  <Button
-                    text="Reset"
-                    className="btn-primary light w-full"
-                    onClick={resetForm}
-                  />
-                )}
+                </div>
               </div>
             </div>
           </Card>
@@ -505,4 +580,4 @@ const Cars = () => {
   );
 };
 
-export default Cars;
+export default ArmyContents;

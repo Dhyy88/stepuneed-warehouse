@@ -20,7 +20,7 @@ class ErrorBoundary extends Component {
     if (this.state.hasError) {
       return (
         <div>
-          <h1>Error ki bodo, perbaiki caramu ngoding.</h1>
+          <h1>Terjadi Kesalahan.</h1>
           <p>{this.state.error && this.state.error.toString()}</p>
           <pre>{this.state.errorInfo && this.state.errorInfo.componentStack}</pre>
         </div>

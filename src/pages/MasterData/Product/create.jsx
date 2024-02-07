@@ -5,7 +5,6 @@ import ApiEndpoint from "../../../API/Api_EndPoint";
 import axios from "../../../API/Axios";
 import "swiper/swiper-bundle.min.css";
 import Textinput from "@/components/ui/Textinput";
-// import Select from "react-select";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Fileinput from "@/components/ui/Fileinput";
@@ -18,9 +17,13 @@ import { TreeSelect, Space } from "@arco-design/web-react";
 import "@arco-design/web-react/dist/css/arco.css";
 import Alert from "@/components/ui/Alert";
 import LoadingButton from "../../../components/LoadingButton";
+import { useNavigate } from "react-router-dom";
+
+import { CKEditor } from "@ckeditor/ckeditor5-react";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const CreateProduct = () => {
-  // START STATE GET DATA
+  const navigate = useNavigate();
   const [data_cars, setDataCars] = useState({
     data_cars: [],
     current_page: 1,
@@ -35,10 +38,7 @@ const CreateProduct = () => {
     paginate: 9999,
   });
 
-  // END STATE GET DATA
-
   const [category, setCategory] = useState("");
-
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [min_order, setMinOrder] = useState("");
@@ -49,41 +49,32 @@ const CreateProduct = () => {
   const [variant_name, setVariantName] = useState("");
   const [variant_options, setVariantOptions] = useState([]);
   const [error, setError] = useState("");
-
   const [car_models, setCarModel] = useState("");
-  const [price, setPrice] = useState([]);
   const [variants, setVariants] = useState([
     {
-      // car_model: "",
-      // variant_option: "",
       sku: "",
       price: "",
       is_primary: false,
       image: null,
     },
   ]);
-
+  const [price, setPrice] = useState([]);
   const [sku, setSku] = useState([]);
+  // const [sku, setSku] = useState("");
+  // const [price, setPrice] = useState("");
 
-  // START STATE SWITCH AREA
-  const [check_is_cars, setCheckCars] = useState(false);
   const [check_is_variant, setCheckIsVariant] = useState(false); // VARIANT SET STATE
   const [check_is_primary_variant, setCheckPrimaryVariant] = useState(false); // STATE VARIANT PRIMARY
   const [variantCarStatus, setVariantCarStatus] = useState(true);
-
   const [disabledForms, setDisabledForms] = useState([false]);
   const [selectedCategory, setSelectedCategory] = useState([]);
   const [visibleSubCategories, setVisibleSubCategories] = useState({});
   const [treeData, setTreeData] = useState([]);
-
   const [isSubmitGenerator, setIsSubmitGenerator] = useState(false);
   const [variant_generator_data, setIsVariantGeneratorData] = useState(null);
   const [selected_cars_by_uid, setSelectedCarsByUid] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [commonPrice, setCommonPrice] = useState("");
-
-  // END STATE SWITCH AREA
-
   const [isModalOpenCars, setIsModalOpenCars] = useState(false);
 
   const handleOpenModalCars = () => {
@@ -99,12 +90,6 @@ const CreateProduct = () => {
     const filesArray = Array.from(files).map((file) => file);
     setImages(filesArray);
   };
-
-  // const handleSwitchChange = (index) => {
-  //   const updatedDisabledForms = [...disabledForms];
-  //   updatedDisabledForms[index] = !updatedDisabledForms[index];
-  //   setDisabledForms(updatedDisabledForms);
-  // };
 
   const mapSelectedCategoryToTreeData = (category) => {
     return category.map((item) => {
@@ -144,8 +129,6 @@ const CreateProduct = () => {
     const title = treeNode.props?.title || "";
     return title.toLowerCase().includes(input.toLowerCase());
   };
-
-  // START VARIANT CONDITION AREA
 
   const handleSkuChange = (value, index) => {
     const updatedSku = [...sku];
@@ -219,14 +202,10 @@ const CreateProduct = () => {
   };
 
   const handleCancelModalCars = () => {
-    // setCheckCars(false);
     setIsModalOpenCars(false);
-    // setSelectedCarsByUid([]);
   };
 
   const handleSelectChange = (selected) => {
-    // setCheckCars(false);
-    // setSelectedCarsByUid([]);
     setVariantOptions(selected);
     const initialStatus = selected.reduce((acc, option) => {
       acc[option] = true;
@@ -243,15 +222,6 @@ const CreateProduct = () => {
     }
   };
 
-  // const handleApplyCommonPrice = () => {
-  //   const updatedVariants = variant_generator_data.map((variant, index) => ({
-  //     ...variant,
-  //     price: index === index ? commonPrice : variant.price,
-  //   }));
-  //   setVariants(updatedVariants);
-  //   setCommonPrice("");
-  // };
-
   const onSetupVariants = async () => {
     try {
       await handleVariantGenerator(selected_cars_by_uid);
@@ -261,10 +231,6 @@ const CreateProduct = () => {
       Swal.fire("Error", "Gagal mengatur variasi", "error");
     }
   };
-
-  // END VARIANT CONDITION AREA
-
-  // START REST API AREA
 
   async function getDataCars(query) {
     try {
@@ -324,10 +290,6 @@ const CreateProduct = () => {
     getCategory();
   }, []);
 
-  // END REST API AREA
-
-  // START USE EFFECT AREA
-
   useEffect(() => {
     const selectedCategoryTreeData =
       mapSelectedCategoryToTreeData(selectedCategory);
@@ -344,6 +306,7 @@ const CreateProduct = () => {
     setIsLoading(true);
     e.preventDefault();
     const active = is_active ? 1 : 0;
+    const is_variant = check_is_variant ? true : false;
 
     const formData = new FormData();
     formData.append("category", category);
@@ -352,25 +315,21 @@ const CreateProduct = () => {
     formData.append("min_order", min_order);
     formData.append("warranty", warranty);
     formData.append("is_active", active);
+    formData.append("check_is_variant", is_variant);
 
     const updatedVariants = variants.map((variant, index) => ({
       ...variant,
-      // variant_option: variant_options[index] || [],
-      // car_model: car_models[index] || [],
       price: price[index] || "",
       sku: sku[index] || "",
       image: variants[index].image,
-      is_primary:
-        check_is_primary_variant && index === check_is_primary_variant,
+      is_primary: variants[index].is_primary,
     }));
 
     if (check_is_variant) {
       formData.append("variant_name", variant_name);
-
       for (let i = 0; i < variant_options.length; i++) {
         formData.append("variant_options[]", variant_options[i]);
       }
-
       for (let i = 0; i < car_models.length; i++) {
         formData.append("car_models[]", car_models[i]);
       }
@@ -402,9 +361,10 @@ const CreateProduct = () => {
         }
       });
     } else {
-      formData.append(`variants[${0}][sku]`, sku || "");
-      formData.append(`variants[${0}][price]`, price || "");
-      // formData.append("price", price || "");
+      // formData.append(`variants[0][sku]`, sku || "");
+      // formData.append(`variants[0][price]`, price || "");
+      formData.append("sku", sku);
+      formData.append("price", price);
     }
 
     formData.append("primary_image", primary_image);
@@ -430,6 +390,8 @@ const CreateProduct = () => {
           );
           if (response.status === 200) {
             Swal.fire("Berhasil", "Produk telah ditambahkan", "success");
+            setIsLoading(false);
+            navigate("/products");
           } else {
             setValidation("Terjadi kesalahan saat mengirim data");
             Swal.fire({
@@ -451,6 +413,10 @@ const CreateProduct = () => {
   };
 
   // START USE EFFECT AREA
+
+  const previousPage = () => {
+    navigate(-1);
+  };
 
   return (
     <div className="lg:col-span-12 col-span-12">
@@ -568,15 +534,49 @@ const CreateProduct = () => {
               placeholder="Masukkan deskripsi produk..."
               value={description}
               onChange={setDescription}
+
               modules={{
                 toolbar: [
-                  [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                  ["bold", "italic", "underline", "strike"],
+                  [{ size: ["small", false, "large", "huge"] }],
+                  ["bold", "italic", "underline", "strike", "blockquote"],
                   [{ list: "ordered" }, { list: "bullet" }],
-                  ["clean"],
-                ],
+                  ["link", "image"],
+                  [
+                    { list: "ordered" },
+                    { list: "bullet" },
+                    { indent: "-1" },
+                    { indent: "+1" },
+                    { align: [] }
+                  ],
+                  [{ "color": ["#000000", "#e60000", "#ff9900", "#ffff00", "#008a00", "#0066cc", "#9933ff", "#ffffff", "#facccc", "#ffebcc", "#ffffcc", "#cce8cc", "#cce0f5", "#ebd6ff", "#bbbbbb", "#f06666", "#ffc266", "#ffff66", "#66b966", "#66a3e0", "#c285ff", "#888888", "#a10000", "#b26b00", "#b2b200", "#006100", "#0047b2", "#6b24b2", "#444444", "#5c0000", "#663d00", "#666600", "#003700", "#002966", "#3d1466", 'custom-color'] }],
+                ]
               }}
             />
+            {/* <CKEditor
+              editor={ClassicEditor}
+              data={description}
+              onChange={(event, editor) => {
+                const data = editor.getData();
+                setDescription(data);
+              }}
+              config={{
+                toolbar: [
+                  "heading",
+                  "|",
+                  "bold",
+                  "italic",
+                  "link",
+                  "bulletedList",
+                  "numberedList",
+                  "|",
+                  "blockQuote",
+                  "insertTable",
+                  "|",
+                  "undo",
+                  "redo",
+                ],
+              }}
+            /> */}
             {error && (
               <span className="text-danger-600 text-xs py-2">
                 {error.description}
@@ -704,27 +704,6 @@ const CreateProduct = () => {
                   >
                     Tambah model
                   </button>
-                  {/* <Button
-                    text="Tambah model"
-                    className=" btn-sm btn-primary light "
-                    style={{ height: 40, width: 40 }}
-                    onClick={handleOpenModalCars}
-                  /> */}
-                  {/* <Switch
-                    activeClass="bg-success-500"
-                    value={check_is_cars}
-                    onChange={() => {
-                      setCheckCars(!check_is_cars);
-                      if (!check_is_cars) {
-                        // getDataCars();
-                        setIsModalOpenCars(false);
-                      }
-                      setIsModalOpenCars(true);
-                    }}
-                    badge
-                    prevIcon="heroicons-outline:check"
-                    nextIcon="heroicons-outline:x"
-                  /> */}
                   <Modal
                     width={1500}
                     title="Model Mobil"
@@ -732,7 +711,7 @@ const CreateProduct = () => {
                     centered
                     footer
                     onCancel={handleCancelModalCars}
-                    style={{ maxWidth: "5000vh", overflow: "auto" }}
+                    // style={{ maxWidth: "5000vh", overflow: "auto" }}
                   >
                     <Card>
                       <div className="flex row w-full justify-between items-center mb-2 gap-5">
@@ -760,7 +739,7 @@ const CreateProduct = () => {
                         </div>
                       </div>
                     </Card>
-                    <Card>
+                    <Card className="mt-2">
                       <div className="flex row ">
                         <ul>
                           <div className="grid xl:grid-cols-10 md:grid-cols-10 grid-cols-1 gap-5 h-full ">
@@ -797,34 +776,6 @@ const CreateProduct = () => {
             </Card>
             {variant_generator_data?.length > 0 && (
               <Card title={`Variasi`} className="mt-5">
-                {/* <Card className="mb-5">
-                  <div className="flex justify-between">
-                    <div className="">
-                      <span className="text-success-500">
-                        Terapkan harga untuk semua variasi
-                      </span>
-                    </div>
-                    <div className="">
-                      <Button
-                        text="Terapkan Harga"
-                        className="btn-outline-success"
-                        onClick={() => handleApplyCommonPrice(-1)}
-                      />
-                    </div>
-                  </div>
-                  <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-5 mb-5">
-                    <div className="">
-                      <Textinput
-                        type="number"
-                        label="Harga Produk"
-                        placeholder=""
-                        value={commonPrice}
-                        onChange={(e) => setCommonPrice(e.target.value)}
-                      />
-                    </div>
-                  </div>
-                </Card> */}
-
                 {variant_generator_data?.map((item, index) => (
                   <Card key={index} className="mt-5">
                     <div className="flex justify-between mb-5">
@@ -844,17 +795,6 @@ const CreateProduct = () => {
                         </span>
                       </div>
                       <div className="flex row justify-end gap-10">
-                        {/* <div className="">
-                          <Switch
-                            label="Status"
-                            activeClass="bg-success-500"
-                            badge
-                            prevIcon="heroicons-outline:check"
-                            nextIcon="heroicons-outline:x"
-                            value={!disabledForms[index]}
-                            onChange={() => handleSwitchChange(index)}
-                          />
-                        </div> */}
                         <div className="">
                           <Switch
                             label="Utama"
@@ -875,17 +815,11 @@ const CreateProduct = () => {
                           label="SKU Variasi Produk *"
                           placeholder=""
                           disabled={disabledForms[index]}
-                          // value={sku[index] || ""}
                           value={variants[index] ? variants[index].sku : ""}
                           onChange={(e) =>
                             handleSkuChange(e.target.value, index)
                           }
                         />
-                        {/* {error && (
-                          <span className="text-danger-600 text-xs py-2">
-                            Silahkan masukkan sku produk
-                          </span>
-                        )} */}
                       </div>
                       <div className="">
                         <Textinput
@@ -898,11 +832,6 @@ const CreateProduct = () => {
                             handlePriceChange(e.target.value, index)
                           }
                         />
-                        {/* {error && (
-                          <span className="text-danger-600 text-xs py-2">
-                            Silahkan masukkan harga produk
-                          </span>
-                        )} */}
                       </div>
                       <div className="">
                         <label htmlFor=" hh" className="form-label ">
@@ -918,11 +847,6 @@ const CreateProduct = () => {
                           isClearable={true}
                           disabled={disabledForms[index]}
                         />
-                        {/* {error && (
-                          <span className="text-danger-600 text-xs py-2">
-                            Format Gambar JPG / JPEG
-                          </span>
-                        )} */}
                       </div>
                     </div>
                   </Card>
@@ -938,40 +862,28 @@ const CreateProduct = () => {
                   type="text"
                   label="SKU Produk *"
                   placeholder="Masukkan sku produk"
-                  // value={sku[0] || ""}
-                  value={variants[0] ? variants[0].sku : ""}
-                  onChange={(e) => handleSkuChange(e.target.value, 0)}
+                  value={sku}
+                  onChange={(e) => setSku(e.target.value)}
                 />
-                {/* {error && (
-                  <span className="text-danger-600 text-xs py-2">
-                    Silahkan masukkan sku produk
-                  </span>
-                )} */}
               </div>
               <div className="">
                 <Textinput
                   type="text"
                   label="Harga Produk *"
                   placeholder="Masukkan harga produk"
-                  value={variants[0] ? variants[0].price : ""}
-                  onChange={(e) => handlePriceChange(e.target.value, 0)}
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
                 />
-                {/* {error && (
-                  <span className="text-danger-600 text-xs py-2">
-                    Silahkan masukkan harga produk
-                  </span>
-                )} */}
               </div>
             </div>
           </>
         )}
         <div className="grid xl:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-5 mt-10">
-          <Button text="Batal" className="btn-primary light w-full" />
-          {/* <Button
-            text="Simpan"
-            className="btn-primary dark w-full"
-            onClick={onSubmit}
-          /> */}
+          <Button
+            text="Batal"
+            className="btn-primary light w-full"
+            onClick={previousPage}
+          />
           <Button
             text={isLoading ? <LoadingButton /> : "Simpan"}
             className="btn-primary dark w-full "

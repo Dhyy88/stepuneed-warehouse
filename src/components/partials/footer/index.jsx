@@ -21,9 +21,9 @@ const Footer = ({ className = "custom-class" }) => {
             COPYRIGHT &copy; 2024 Sumber Jaya Motor V.01, All rights Reserved
           </div>
           <div className="ltr:md:text-right rtl:md:text-end text-center text-sm">
-            Developer By{" "}
+            Development By{" "}
             <a
-              href="https://codeshaper.net"
+              // href="https://codeshaper.net"
               target="_blank"
               className="text-primary-500 font-semibold"
             >

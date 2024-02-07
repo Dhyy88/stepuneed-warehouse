@@ -10,7 +10,7 @@ import Button from "@/components/ui/Button";
 import Loading from "../../../components/Loading";
 import { useNavigate } from "react-router-dom";
 
-const Products = () => {
+const Bundles = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({
     data: [],
@@ -24,17 +24,15 @@ const Products = () => {
 
   const [query, setQuery] = useState({
     search: "",
-    is_active: "",
     paginate: 5,
   });
 
-  async function getDataProducts(query) {
+  async function getDataBundle(query) {
     setIsLoading(true);
     try {
-      const response = await axios.post(ApiEndpoint.PRODUCTS, {
+      const response = await axios.post(ApiEndpoint.BUNDLES, {
         page: query?.page,
         search: query?.search,
-        is_active: query?.is_active,
         paginate: 5,
       });
       setData(response?.data?.data);
@@ -50,7 +48,7 @@ const Products = () => {
   async function onDelete(uid) {
     try {
       const result = await Swal.fire({
-        title: "Apakah anda yakin menghapus produk ini?",
+        title: "Apakah anda yakin menghapus bundle ini?",
         text: "Anda tidak akan dapat mengembalikannya!",
         icon: "warning",
         showCancelButton: true,
@@ -59,15 +57,15 @@ const Products = () => {
       });
 
       if (result.isConfirmed) {
-        await axios.delete(`${ApiEndpoint.PRODUCTS}/${uid}`);
+        await axios.delete(`${ApiEndpoint.BUNDLES}/${uid}`);
         Swal.fire(
           "Berhasil!",
-          "Anda berhasil menghapus data produk ini.",
+          "Anda berhasil menghapus data bundle ini.",
           "success"
         );
-        getDataProducts(query);
+        getDataBundle(query);
       } else {
-        Swal.fire("Batal", "Hapus data produk dibatalkan.", "info");
+        Swal.fire("Batal", "Hapus data bundle dibatalkan.", "info");
       }
     } catch (err) {
       Swal.fire("Gagal", err.response.data.message, "error");
@@ -110,48 +108,33 @@ const Products = () => {
     return pageNumbers;
   };
 
-  
-
   useEffect(() => {
-    getDataProducts(query);
+    getDataBundle(query);
   }, [query]);
 
   return (
     <>
       <div className="grid grid-cols-12 gap-6">
         <div className="lg:col-span-12 col-span-12">
-          <Card title="Data Produk">
+          <Card title="Data Bundle">
             <div className="md:flex justify-between items-center mb-4">
               <div className="md:flex items-center gap-3">
                 <div className="row-span-3 md:row-span-4">
                   <Button
-                    text="Tambah Produk"
+                    text="Tambah Bundle Produk"
                     className="btn-primary dark w-full btn-sm "
-                    onClick={() => navigate(`/products/create`)}
+                    onClick={() => navigate(`/bundles/create`)}
                   />
                 </div>
               </div>
               <div className="md:flex items-center gap-3">
-                <div className="row-span-3 md:row-span-4">
-                  <select
-                    className="form-control py-2 w-max"
-                    value={query.is_active}
-                    onChange={(event) =>
-                      setQuery({ ...query, is_active: event.target.value })
-                    }
-                  >
-                    <option value="">Semua Status</option>
-                    <option value="1">Aktif</option>
-                    <option value="0">Nonaktif</option>
-                  </select>
-                </div>
                 <div className="row-span-3 md:row-span-4">
                   <Textinput
                     // value={query || ""}
                     onChange={(event) =>
                       setQuery({ ...query, search: event.target.value })
                     }
-                    placeholder="Cari produk..."
+                    placeholder="Cari produk bundle..."
                   />
                 </div>
               </div>
@@ -165,16 +148,13 @@ const Products = () => {
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
                             <th scope="col" className=" table-th ">
-                              Slug Produk
+                              Nama Bundle
                             </th>
                             <th scope="col" className=" table-th ">
-                              Nama Produk
+                              Total produk
                             </th>
                             <th scope="col" className=" table-th ">
                               Status
-                            </th>
-                            <th scope="col" className=" table-th ">
-                              Thumbnail
                             </th>
                             <th scope="col" className=" table-th ">
                               Aksi
@@ -193,16 +173,13 @@ const Products = () => {
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
                             <th scope="col" className=" table-th ">
-                              Slug Produk
+                              Nama Bundle
                             </th>
                             <th scope="col" className=" table-th ">
-                              Nama Produk
+                              Total produk
                             </th>
                             <th scope="col" className=" table-th ">
                               Status
-                            </th>
-                            <th scope="col" className=" table-th ">
-                              Thumbnail
                             </th>
                             <th scope="col" className=" table-th ">
                               Aksi
@@ -219,7 +196,7 @@ const Products = () => {
                         </div>
                         <div className="w-full flex justify-center text-secondary">
                           <span className="text-slate-900 dark:text-white text-[20px] transition-all duration-300">
-                            Produk belum tersedia
+                            Bundle belum tersedia
                           </span>
                         </div>
                       </div>
@@ -229,16 +206,13 @@ const Products = () => {
                       <thead className="bg-slate-200 dark:bg-slate-700">
                         <tr>
                           <th scope="col" className=" table-th ">
-                            Slug Produk
+                            Nama Bundle
                           </th>
                           <th scope="col" className=" table-th ">
-                            Nama Produk
+                            Total produk
                           </th>
                           <th scope="col" className=" table-th ">
                             Status
-                          </th>
-                          <th scope="col" className=" table-th ">
-                            Thumbnail
                           </th>
                           <th scope="col" className=" table-th ">
                             Aksi
@@ -248,8 +222,10 @@ const Products = () => {
                       <tbody className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
                         {data?.data?.map((item, index) => (
                           <tr key={index}>
-                            <td className="table-td">{item?.slug}</td>
-                            <td className="table-td">{item?.name} </td>
+                            <td className="table-td">{item?.name}</td>
+                            <td className="table-td">
+                              {item?.item_count} Produk{" "}
+                            </td>
                             <td className="table-td">
                               {item?.is_active === true ? (
                                 <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
@@ -261,26 +237,11 @@ const Products = () => {
                                 </span>
                               )}
                             </td>
-                            <td className="table-td">
-                              {item?.primary_image?.url ? (
-                                <img
-                                  src={item?.primary_image?.url}
-                                  alt=""
-                                  className="w-16 h-16 object-cover rounded-full"
-                                />
-                              ) : (
-                                <img
-                                  src={ProfileImageMen}
-                                  alt=""
-                                  className="w-16 h-16 object-cover rounded-full"
-                                />
-                              )}
-                            </td>
 
                             <td className="table-td">
                               <div className="flex space-x-3 rtl:space-x-reverse">
                                 <Tooltip
-                                  content="Detail Produk"
+                                  content="Detail Bundle"
                                   placement="top"
                                   arrow
                                   animation="shift-away"
@@ -289,10 +250,26 @@ const Products = () => {
                                     className="action-btn"
                                     type="button"
                                     onClick={() =>
-                                      navigate(`/products/detail/${item.uid}`)
+                                      navigate(`/bundles/detail/${item.uid}`)
                                     }
                                   >
                                     <Icon icon="heroicons:eye" />
+                                  </button>
+                                </Tooltip>
+                                <Tooltip
+                                  content="Edit"
+                                  placement="top"
+                                  arrow
+                                  animation="shift-away"
+                                >
+                                  <button
+                                    className="action-btn"
+                                    type="button"
+                                    onClick={() =>
+                                      navigate(`/bundles/update/${item.uid}`)
+                                    }
+                                  >
+                                    <Icon icon="heroicons:pencil-square" />
                                   </button>
                                 </Tooltip>
                                 <Tooltip
@@ -379,4 +356,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Bundles;

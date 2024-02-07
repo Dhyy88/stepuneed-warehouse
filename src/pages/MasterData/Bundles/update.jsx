@@ -12,20 +12,62 @@ import Textarea from "@/components/ui/Textarea";
 import { useNavigate } from "react-router-dom";
 import Alert from "@/components/ui/Alert";
 import LoadingButton from "../../../components/LoadingButton";
+import { useParams } from "react-router-dom";
 
-const CreateBundle = () => {
+const UpdateBundle = () => {
   const navigate = useNavigate();
-
+  let { uid } = useParams();
+  const [data, setData] = useState(null);
   const [dataProduct, setDataProduct] = useState([]);
   const [name, setName] = useState("");
   const [is_active, setIsActive] = useState(false);
   const [description, setDescription] = useState("");
-  const [variants, setVariants] = useState([""]);
-  const [prices, setPrices] = useState([""]);
-  const [quantities, setQuantities] = useState([""]);
+  //   const [variants, setVariants] = useState([""]);
+  //   const [prices, setPrices] = useState([""]);
+  //   const [quantities, setQuantities] = useState([""]);
+  const [variants, setVariants] = useState([]);
+  const [prices, setPrices] = useState([]);
+  const [quantities, setQuantities] = useState([]);
   const [selectedVariantDetails, setSelectedVariantDetails] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const getDataById = () => {
+    try {
+      if (uid) {
+        axios.get(`${ApiEndpoint.BUNDLES}/${uid}`).then((response) => {
+          const bundleData = response.data.data;
+          setData(bundleData);
+          setName(bundleData.name);
+          setIsActive(bundleData.is_active);
+          setDescription(bundleData.description);
+
+          if (bundleData.bundle_items && bundleData.bundle_items.length > 0) {
+            const variantsData = bundleData.bundle_items.map((item) => ({
+              variant: item.variant.uid,
+              price: item.bundle_price,
+              quantity: item.quantity,
+            }));
+
+            const variants = variantsData.map((variant) => variant.variant);
+            const prices = variantsData.map((variant) => variant.price);
+            const quantities = variantsData.map((variant) => variant.quantity);
+
+            setVariants(variants);
+            setPrices(prices);
+            setQuantities(quantities);
+          } else {
+            setVariants([]);
+            setPrices([]);
+            setQuantities([]);
+          }
+        });
+      }
+    } catch (error) {
+      setError(error.response.data.errors);
+      console.error("Error fetching data:", error);
+    }
+  };
 
   const previousPage = () => {
     navigate(-1);
@@ -130,6 +172,7 @@ const CreateBundle = () => {
         .filter((variant) => variant !== null);
 
       setDataProduct(formattedVariants);
+      console.log(formattedVariants);
     } catch (error) {
       console.error("Error fetching product variants:", error);
     }
@@ -138,6 +181,21 @@ const CreateBundle = () => {
   useEffect(() => {
     fetchVariants();
   }, []);
+
+  useEffect(() => {
+    getDataById();
+  }, [uid]);
+
+  useEffect(() => {
+    if (data) {
+      const initialSelectedVariantDetails = data.bundle_items.map((item) => ({
+        value: item.variant.uid,
+        label: `${item.variant.product.name} - ${item.variant.sku}`,
+        extra: `Rp. ${item.bundle_price}`,
+      }));
+      setSelectedVariantDetails(initialSelectedVariantDetails);
+    }
+  }, [data]);
 
   const renderVariantInputs = (index) => (
     <div key={index}>
@@ -153,7 +211,9 @@ const CreateBundle = () => {
             placeholder="Pilih Produk..."
             options={dataProduct}
             value={selectedVariantDetails[index]}
-            onChange={(value) => handleVariantChange(value, index)}
+            onChange={(value) => {
+              handleVariantChange(value, index);
+            }}
           />
         </div>
         <div className="">
@@ -203,7 +263,7 @@ const CreateBundle = () => {
     setIsLoading(true);
     const confirmation = await Swal.fire({
       title: "Konfirmasi",
-      text: "Apakah Anda yakin ingin membuat Bundle?",
+      text: "Apakah Anda yakin ingin memperbaharui bundle ini?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: "Ya",
@@ -225,12 +285,12 @@ const CreateBundle = () => {
           })),
         };
 
-        await axios.post(ApiEndpoint.CREATE_BUNDLES, formData);
-        Swal.fire("Berhasil!", "Bundle berhasil dibuat.", "success");
+        await axios.post(`${ApiEndpoint.BUNDLES}/${uid}`, formData);
+        Swal.fire("Berhasil!", "Bundle berhasil diperbaharui.", "success");
         setIsLoading(false);
         navigate("/bundles");
       } catch (error) {
-        Swal.fire("Error!", "Terjadi kesalahan saat membuat Bundle", "error");
+        Swal.fire("Error!", "Terjadi kesalahan saat memperbaharui Bundle", "error");
         if (
           error.response &&
           error.response.data &&
@@ -238,7 +298,7 @@ const CreateBundle = () => {
         ) {
           setError(error.response.data.errors);
         } else {
-          setError("Terjadi kesalahan saat membuat Bundle.");
+          setError("Terjadi kesalahan saat memperbaharui Bundle.");
         }
         setIsLoading(false);
       }
@@ -319,7 +379,7 @@ const CreateBundle = () => {
             onClick={previousPage}
           />
           <Button
-            text={isLoading ? <LoadingButton /> : "Simpan"}
+            text={isLoading ? <LoadingButton /> : "Ubah"}
             className="btn-primary dark w-full "
             type="submit"
             onClick={onSubmit}
@@ -331,4 +391,4 @@ const CreateBundle = () => {
   );
 };
 
-export default CreateBundle;
+export default UpdateBundle;
