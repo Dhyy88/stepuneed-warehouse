@@ -11,8 +11,8 @@ axios.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`;
     }
     config.headers.Accept = 'application/json';
-    // config.baseURL = 'http://192.168.1.50:8000/api';
-    config.baseURL = 'https://api.sjm-auto.com/api';
+    config.baseURL = 'http://192.168.1.50:8000/api';
+    // config.baseURL = 'https://api.sjm-auto.com/api';
     return config;
   },
   function (error) {

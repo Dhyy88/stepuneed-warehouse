@@ -13,7 +13,7 @@ export const menuItems = [
     title: "Master Data",
   },
   {
-    title: "POS",
+    title: "Master Produk",
     icon: "heroicons-outline:rectangle-group",
     link: "/app/home",
     child: [
@@ -95,7 +95,7 @@ export const menuItems = [
       },
       {
         childtitle: "Sales Internal",
-        childlink: "/cooming-soon"
+        childlink: "/coming-soon"
       }
     ]
   },
@@ -124,7 +124,7 @@ export const topMenu = [
     link: "/app/home",
     megamenu: [
       {
-        megamenutitle: "POS (Point Of Sale)",
+        megamenutitle: "Master Produk",
         megamenuicon: "heroicons-outline:rectangle-group",
         singleMegamenu: [
           {

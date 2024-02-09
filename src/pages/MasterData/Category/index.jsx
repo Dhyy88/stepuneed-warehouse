@@ -43,7 +43,7 @@ const Categories = () => {
       const response = await axios.post(ApiEndpoint.CATEGORY, {
         page: query?.page,
         search: query?.search,
-        paginate: 5,
+        paginate: 8,
         with_child: 1,
         level: 1,
       });
@@ -525,7 +525,7 @@ const Categories = () => {
               </div>
               <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
                 <Textinput
-                  label="Nama Kategory *"
+                  label="Nama Kategori *"
                   type="text"
                   placeholder="Masukkan nama kategori"
                   onChange={(e) => setName(e.target.value)}

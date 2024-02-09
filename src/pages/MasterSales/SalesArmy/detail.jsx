@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom";
 import Tooltip from "@/components/ui/Tooltip";
 import Button from "@/components/ui/Button";
 import Swal from "sweetalert2";
-import BasicArea from "../../chart/appex-chart/BasicArea";
 import { useNavigate } from "react-router-dom";
 import LoadingButton from "../../../components/LoadingButton";
 import Alert from "@/components/ui/Alert";

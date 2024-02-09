@@ -19,9 +19,6 @@ import Alert from "@/components/ui/Alert";
 import LoadingButton from "../../../components/LoadingButton";
 import { useNavigate } from "react-router-dom";
 
-import { CKEditor } from "@ckeditor/ckeditor5-react";
-import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-
 const CreateProduct = () => {
   const navigate = useNavigate();
   const [data_cars, setDataCars] = useState({
@@ -60,9 +57,6 @@ const CreateProduct = () => {
   ]);
   const [price, setPrice] = useState([]);
   const [sku, setSku] = useState([]);
-  // const [sku, setSku] = useState("");
-  // const [price, setPrice] = useState("");
-
   const [check_is_variant, setCheckIsVariant] = useState(false); // VARIANT SET STATE
   const [check_is_primary_variant, setCheckPrimaryVariant] = useState(false); // STATE VARIANT PRIMARY
   const [variantCarStatus, setVariantCarStatus] = useState(true);
@@ -540,7 +534,7 @@ const CreateProduct = () => {
                   [{ size: ["small", false, "large", "huge"] }],
                   ["bold", "italic", "underline", "strike", "blockquote"],
                   [{ list: "ordered" }, { list: "bullet" }],
-                  ["link", "image"],
+                  ["link"],
                   [
                     { list: "ordered" },
                     { list: "bullet" },

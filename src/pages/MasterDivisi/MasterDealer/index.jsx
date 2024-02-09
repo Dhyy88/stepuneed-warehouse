@@ -33,7 +33,7 @@ const Dealers = () => {
       const response = await axios.post(ApiEndpoint.DEALER, {
         page: query?.page,
         search: query?.search,
-        paginate: 5,
+        paginate: 8,
       });
       setData(response.data.data);
       setIsLoading(false);
@@ -197,7 +197,7 @@ const Dealers = () => {
   return (
     <>
       <div className="grid grid-cols-12 gap-6">
-        <div className="lg:col-span-9 col-span-12">
+        <div className="lg:col-span-8 col-span-12">
           <Card title="Data Dealer">
             <div className="md:flex justify-between items-center mb-4">
               <div className="md:flex items-center gap-3">
@@ -423,7 +423,7 @@ const Dealers = () => {
             {/*end*/}
           </Card>
         </div>
-        <div className="lg:col-span-3 col-span-12">
+        <div className="lg:col-span-4 col-span-12">
           <Card title={editMode ? "Ubah Dealer" : "Tambah Dealer"}>
             <div className="text-sm text-slate-600 font-normal bg-white dark:bg-slate-900 dark:text-slate-300 rounded p-5">
               <div className="text-base text-slate-600 dark:text-slate-300 mb-4">

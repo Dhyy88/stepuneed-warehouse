@@ -33,7 +33,7 @@ const Bundles = () => {
       const response = await axios.post(ApiEndpoint.BUNDLES, {
         page: query?.page,
         search: query?.search,
-        paginate: 5,
+        paginate: 8,
       });
       setData(response?.data?.data);
       setIsLoading(false);

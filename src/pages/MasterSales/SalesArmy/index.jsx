@@ -34,7 +34,7 @@ const SalesArmy = () => {
     status: "",
     search: "",
     gender: "",
-    paginate: 5,
+    paginate: 8,
     dealer: "",
     site: "",
     is_active: "",
@@ -203,7 +203,7 @@ const SalesArmy = () => {
   return (
     <>
       <div className="grid grid-cols-12 gap-6">
-        <div className="lg:col-span-9 col-span-12">
+        <div className="lg:col-span-8 col-span-12">
           <Card title="Data Army">
             <div className="md:flex justify-between items-center mb-4">
               <div className="md:flex items-center gap-3">
@@ -575,7 +575,7 @@ const SalesArmy = () => {
             </div>
           </Card>
         </div>
-        <div className="lg:col-span-3 col-span-12">
+        <div className="lg:col-span-4 col-span-12">
           <Card title={"Tambah Army"}>
             <div className="text-sm text-slate-600 font-normal bg-white dark:bg-slate-900 dark:text-slate-300 rounded p-5">
               <div className="text-base text-slate-600 dark:text-slate-300 mb-4">

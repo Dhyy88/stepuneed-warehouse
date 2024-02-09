@@ -35,7 +35,7 @@ const Products = () => {
         page: query?.page,
         search: query?.search,
         is_active: query?.is_active,
-        paginate: 5,
+        paginate: 8,
       });
       setData(response?.data?.data);
       setIsLoading(false);

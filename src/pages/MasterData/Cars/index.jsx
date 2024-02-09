@@ -33,7 +33,7 @@ const Cars = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingButton, setIsLoadingButton] = useState(false);
   const [error, setError] = useState(null);
-  const [query, setQuery] = useState({ search: "", paginate: 5 });
+  const [query, setQuery] = useState({ search: "", paginate: 7 });
   const [editMode, setEditMode] = useState(false);
 
   async function getDataCars(query) {
@@ -199,7 +199,7 @@ const Cars = () => {
   return (
     <>
       <div className="grid grid-cols-12 gap-6">
-        <div className="lg:col-span-9 col-span-12">
+        <div className="lg:col-span-8 col-span-12">
           <Card title="Model Mobil">
             <div className="md:flex justify-between items-center mb-4">
               <div className="md:flex items-center gap-3">
@@ -379,7 +379,7 @@ const Cars = () => {
             {/*end*/}
           </Card>
         </div>
-        <div className="lg:col-span-3 col-span-12">
+        <div className="lg:col-span-4 col-span-12">
           <Card title={"Tambah Model Mobil"}>
             <div className="text-sm text-slate-600 font-normal bg-white dark:bg-slate-900 dark:text-slate-300 rounded p-5">
               <div className="text-base text-slate-600 dark:text-slate-300 mb-4">

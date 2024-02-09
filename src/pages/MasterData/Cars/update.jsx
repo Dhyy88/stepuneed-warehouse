@@ -24,10 +24,10 @@ const UpdateCars = () => {
     try {
       if (uid) {
         axios.get(`${ApiEndpoint.CARS}/${uid}`).then((response) => {
-          setData(response.data.data);
-          setBrand(response.data.data.brand);
-          setModel(response.data.data.model);
-          setYearInputs(response.data.data.year);
+          setData(response?.data?.data);
+          setBrand(response?.data?.data?.brand);
+          setModel(response?.data?.data?.model);
+          setYearInputs(response?.data?.data?.year);
         });
       }
     } catch (error) {
