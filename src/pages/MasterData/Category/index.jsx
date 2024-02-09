@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import Button from "@/components/ui/Button";
 import Loading from "../../../components/Loading";
 import LoadingButton from "../../../components/LoadingButton";
+import Alert from "@/components/ui/Alert";
 
 const Categories = () => {
   const [data, setData] = useState({
@@ -504,6 +505,15 @@ const Categories = () => {
         <div className="lg:col-span-3 col-span-12">
           <Card title={editMode ? "Ubah Kategori" : "Tambah Kategori"}>
             <div className="text-sm text-slate-600 font-normal bg-white dark:bg-slate-900 dark:text-slate-300 rounded p-5">
+              <Alert
+                // dismissible
+                icon="heroicons-outline:exclamation"
+                className="light-mode alert-success mb-5"
+              >
+                <p>
+                 Form parent kategori dikhususkan untuk kategori yang memiliki sub kategori !
+                </p>
+              </Alert>
               <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
                 <label htmlFor=" hh" className="form-label ">
                   Parent Kategori *
