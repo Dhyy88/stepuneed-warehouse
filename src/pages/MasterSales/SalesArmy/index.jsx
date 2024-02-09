@@ -205,17 +205,17 @@ const SalesArmy = () => {
       <div className="grid grid-cols-12 gap-6">
         <div className="lg:col-span-8 col-span-12">
           <Card title="Data Army">
-            <div className="md:flex justify-between items-center mb-4">
-              <div className="md:flex items-center gap-3">
+            <div className="flex items-center mb-4 justify-between ">
+              <div className="flex items-center gap-3">
                 <div className="row-span-3 md:row-span-4 mb-2">
                   <select
-                    className="form-control py-2 w-max"
+                    className="form-control py-2 "
                     value={query.dealer}
                     onChange={(event) =>
                       setQuery({ ...query, dealer: event.target.value })
                     }
                   >
-                    <option value="">Semua Dealer</option>
+                    <option value="">Dealer</option>
                     {dealer?.data?.map((dealer) => (
                       <option key={dealer.uid} value={dealer.uid}>
                         {dealer.name}
@@ -225,13 +225,13 @@ const SalesArmy = () => {
                 </div>
                 <div className="row-span-3 md:row-span-4 mb-2">
                   <select
-                    className="form-control py-2 w-max"
+                    className="form-control py-2 "
                     value={query.site}
                     onChange={(event) =>
                       setQuery({ ...query, site: event.target.value })
                     }
                   >
-                    <option value="">Semua Cabang</option>
+                    <option value="">Cabang</option>
                     {site?.data?.map((site) => (
                       <option key={site.uid} value={site.uid}>
                         {site.name}
@@ -241,13 +241,13 @@ const SalesArmy = () => {
                 </div>
                 <div className="row-span-3 md:row-span-4 mb-2">
                   <select
-                    className="form-control py-2 w-max"
+                    className="form-control py-2 "
                     value={query.status}
                     onChange={(event) =>
                       setQuery({ ...query, status: event.target.value })
                     }
                   >
-                    <option value="">Semua Status Data</option>
+                    <option value="">Status Data</option>
                     <option value="approved">Disetujui</option>
                     <option value="rejected">Ditolak</option>
                     <option value="review">Review</option>
@@ -256,32 +256,32 @@ const SalesArmy = () => {
                 </div>
                 <div className="row-span-3 md:row-span-4 mb-2">
                   <select
-                    className="form-control py-2 w-max"
+                    className="form-control py-2 "
                     value={query.is_active}
                     onChange={(event) =>
                       setQuery({ ...query, is_active: event.target.value })
                     }
                   >
-                    <option value="">Semua Status Akun</option>
+                    <option value="">Status Akun</option>
                     <option value="1">Aktif</option>
                     <option value="0">Nonaktif</option>
                   </select>
                 </div>
                 <div className="row-span-3 md:row-span-4 mb-2">
                   <select
-                    className="form-control py-2 w-max"
+                    className="form-control py-2 "
                     value={query.gender}
                     onChange={(event) =>
                       setQuery({ ...query, gender: event.target.value })
                     }
                   >
-                    <option value="">Semua Gender</option>
+                    <option value="">Gender</option>
                     <option value="L">Laki-laki</option>
                     <option value="P">Perempuan</option>
                   </select>
                 </div>
               </div>
-              <div className="md:flex items-center gap-3">
+              <div className="md:flex items-center gap-3 ml-3">
                 <div className="row-span-3 md:row-span-4 mb-2">
                   <Textinput
                     type="text"
