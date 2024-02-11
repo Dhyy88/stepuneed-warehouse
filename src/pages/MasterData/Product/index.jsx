@@ -296,6 +296,22 @@ const Products = () => {
                                   </button>
                                 </Tooltip>
                                 <Tooltip
+                                  content="Edit"
+                                  placement="top"
+                                  arrow
+                                  animation="shift-away"
+                                >
+                                  <button
+                                    className="action-btn"
+                                    type="button"
+                                    onClick={() =>
+                                      navigate(`/products/update/${item.uid}`)
+                                    }
+                                  >
+                                    <Icon icon="heroicons:pencil-square" />
+                                  </button>
+                                </Tooltip>
+                                <Tooltip
                                   content="Hapus"
                                   placement="top"
                                   arrow
