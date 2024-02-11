@@ -311,11 +311,19 @@ const DetailBundles = () => {
                 {data?.bundle_items.map((item, index) => (
                   <Card noborder bodyClass="p-0" key={index}>
                     <div className="image-box">
-                      <img
-                        src={item.variant.image.url}
-                        alt=""
-                        className="rounded-t-md w-full h-full object-cover"
-                      />
+                      {item?.variant?.image?.url ? (
+                        <img
+                          src={item?.variant?.image?.url}
+                          alt=""
+                          className="rounded-t-md w-full h-full object-cover"
+                        />
+                      ) : (
+                        <img
+                          src={item?.variant?.product?.primary_image?.url}
+                          alt=""
+                          className="rounded-t-md w-full h-full object-cover"
+                        />
+                      )}
                     </div>
                     <div className="p-4 text-center">
                       <div className="card-title ">
