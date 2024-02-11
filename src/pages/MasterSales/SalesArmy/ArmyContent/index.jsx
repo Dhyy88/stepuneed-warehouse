@@ -107,7 +107,7 @@ const ArmyContents = () => {
         page: query?.page,
         search: query?.search,
         is_active: query?.is_active,
-        paginate: 5,
+        paginate: 999999,
       });
       setDataProducts(response?.data?.data);
       setIsLoading(false);
@@ -139,6 +139,8 @@ const ArmyContents = () => {
         Swal.fire("Sukses", "Data konten berhasil ditambahkan.", "success");
         getDataContent(query);
         resetForm();
+        getDataBundle(query);
+        getDataProducts(query);
         setIsLoadingButton(false);
       } catch (err) {
         setError(err.response.data.errors);
@@ -174,6 +176,9 @@ const ArmyContents = () => {
           "success"
         );
         getDataContent(query);
+        resetForm();
+        getDataBundle(query);
+        getDataProducts(query);
       } else {
         Swal.fire("Batal", "Hapus data konten dibatalkan.", "info");
       }
@@ -235,15 +240,22 @@ const ArmyContents = () => {
     label: product.name,
   }));
 
-  const contentOptions = [
-    { label: "Bundle", options: bundleOptions },
-    { label: "Product", options: productOptions },
-  ];
-
   const typeContent = [
     { value: "bundle", label: "Bundle" },
     { value: "product", label: "Produk" },
   ];
+
+  const getContentOptions = () => {
+    if (content_type && content_type.value === "bundle") {
+      return [{ label: "", options: bundleOptions }];
+    } else if (content_type && content_type.value === "product") {
+      return [{ label: "", options: productOptions }];
+    } else {
+      return [];
+    }
+  };
+
+  const contentOptionsToShow = getContentOptions();
 
   useEffect(() => {
     getDataContent(query);
@@ -393,7 +405,7 @@ const ArmyContents = () => {
                                 {item?.content?.item_count} Produk
                               </td>
                             ) : (
-                              <td className="table-td">0 Produk</td>
+                              <td className="table-td">1 Produk</td>
                             )}
 
                             {item?.content?.total_price ? (
@@ -401,7 +413,9 @@ const ArmyContents = () => {
                                 Rp {item?.content?.total_price}
                               </td>
                             ) : (
-                              <td className="table-td">Rp 0</td>
+                              <td className="table-td">
+                                Rp {item?.content?.primary_variant?.price}
+                              </td>
                             )}
 
                             <td className="table-td">
@@ -541,15 +555,13 @@ const ArmyContents = () => {
                   Pilih Produk / Bundle *
                 </label>
                 <Select
-                  styles={styles}
                   className="react-select"
                   classNamePrefix="select"
                   placeholder="Pilih data..."
-                  options={contentOptions}
+                  options={contentOptionsToShow}
                   value={selected_uid}
                   onChange={(selectedOption) => setSelectedUid(selectedOption)}
                 />
-
                 {error && (
                   <span className="text-danger-600 text-xs py-2">
                     {error.content_uid}
