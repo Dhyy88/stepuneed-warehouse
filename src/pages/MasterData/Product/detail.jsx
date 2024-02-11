@@ -4,18 +4,10 @@ import Icon from "@/components/ui/Icon";
 import ApiEndpoint from "../../../API/Api_EndPoint";
 import axios from "../../../API/Axios";
 import { useParams } from "react-router-dom";
-import Button from "@/components/ui/Button";
-import Textinput from "@/components/ui/Textinput";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import LoadingButton from "../../../components/LoadingButton";
-import Alert from "@/components/ui/Alert";
-import { Modal } from "antd";
-import Select from "react-select";
 import Loading from "../../../components/Loading";
-
-import ProfileImageMen from "@/assets/images/avatar/13.png";
-import ProfileIdentity from "@/assets/images/avatar/selvie.jpg";
+import Switch from "@/components/ui/Switch";
 import Product from "@/assets/images/all-img/login-bg.png";
 
 const DetailProducts = () => {
@@ -23,13 +15,14 @@ const DetailProducts = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [is_active, setIsActive] = useState("");
 
   const getDataById = () => {
     try {
       if (uid) {
         axios.get(`${ApiEndpoint.PRODUCTS}/${uid}`).then((response) => {
           setData(response?.data?.data);
+          setIsActive(response?.data?.data?.is_active);
         });
       }
     } catch (error) {
@@ -40,6 +33,67 @@ const DetailProducts = () => {
   useEffect(() => {
     getDataById();
   }, [uid]);
+
+  const handleChangeStatus = async () => {
+    try {
+      const statusActive = is_active === "active" ? 0 : 1;
+      const nonActive = is_active === "off" ? 1 : 0;
+      const payload = {
+        uid: uid,
+        active: statusActive,
+        off: nonActive,
+      };
+
+      const confirmation = await Swal.fire({
+        title: "Konfirmasi",
+        text: "Apakah Anda yakin ingin mengubah status produk ini?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonText: "Ya, Ubah",
+        cancelButtonText: "Batal",
+      });
+
+      if (confirmation.isConfirmed) {
+        const response = await axios.get(
+          `${ApiEndpoint.PRODUCTS}/${uid}/toggle-active`,
+          payload
+        );
+
+        setIsActive(!is_active);
+        getDataById();
+      } else {
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  async function onDelete(uid) {
+    try {
+      const result = await Swal.fire({
+        title: "Apakah anda yakin menghapus produk ini?",
+        text: "Anda tidak akan dapat mengembalikannya!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Ya, Hapus",
+        cancelButtonText: "Batal",
+      });
+
+      if (result.isConfirmed) {
+        await axios.delete(`${ApiEndpoint.PRODUCTS}/${uid}`);
+        Swal.fire(
+          "Berhasil!",
+          "Anda berhasil menghapus data produk ini.",
+          "success"
+        );
+        navigate(`/products`);
+      } else {
+        Swal.fire("Batal", "Hapus data produk dibatalkan.", "info");
+      }
+    } catch (err) {
+      Swal.fire("Gagal", err.response.data.message, "error");
+    }
+  }
 
   return (
     <div>
@@ -79,24 +133,6 @@ const DetailProducts = () => {
           <div className="profile-info-500 md:flex md:text-start text-center flex-1 max-w-[516px] md:space-y-0 space-y-4">
             <div className="flex-1">
               <div className="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
-                Status
-              </div>
-              <div className="text-sm text-slate-600 font-light dark:text-slate-300">
-                {data?.is_active === true && (
-                  <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
-                    Aktif
-                  </span>
-                )}
-                {data?.is_active === false && (
-                  <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-danger-500 bg-danger-500">
-                    Nonaktif
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="flex-1">
-              <div className="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
                 SKU Utama
               </div>
               <div className="text-sm text-slate-600 font-light dark:text-slate-300">
@@ -105,10 +141,37 @@ const DetailProducts = () => {
             </div>
             <div className="flex-1">
               <div className="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
-                Harga Produk
+                Status Produk
               </div>
               <div className="text-sm text-slate-600 font-light dark:text-slate-300">
-                Rp {data?.primary_variant?.price}
+                <Switch
+                  label={data?.is_active ? "Aktif" : "Nonaktif"}
+                  activeClass="bg-success-500"
+                  value={is_active}
+                  onChange={handleChangeStatus}
+                  badge
+                  prevIcon="heroicons-outline:check"
+                  nextIcon="heroicons-outline:x"
+                />
+              </div>
+            </div>
+            <div className="flex-1">
+              <div className="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
+                Aksi
+              </div>
+              <div className="text-sm text-slate-600 font-light dark:text-slate-300">
+                <button
+                  className="inline-flex items-center justify-center h-10 w-10 bg-danger-500 text-lg border rounded border-danger-500 text-white mr-2"
+                  onClick={() => onDelete(uid)}
+                >
+                  <Icon icon="heroicons:trash" />
+                </button>
+                <button
+                  className="inline-flex items-center justify-center h-10 w-10 bg-primary-500 text-lg border rounded border-primary-500 text-white"
+                  onClick={() => navigate(`/products/update/${uid}`)}
+                >
+                  <Icon icon="heroicons:pencil" />
+                </button>
               </div>
             </div>
           </div>
@@ -136,17 +199,17 @@ const DetailProducts = () => {
                   </div>
                   <div className="flex-1">
                     <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                      Produk Konten Army
+                      Status Produk Konten Army
                     </div>
                     <div className="text-base text-slate-600 dark:text-slate-50 mt-2">
                       {data?.is_display_in_army_content === true && (
                         <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
-                          Tersedia
+                          Tampil
                         </span>
                       )}
                       {data?.is_display_in_army_content === false && (
                         <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-danger-500 bg-danger-500">
-                          Belum Tersedia
+                          Tidak Tampil
                         </span>
                       )}
                     </div>
@@ -162,7 +225,11 @@ const DetailProducts = () => {
                       Garansi Produk
                     </div>
                     <div className="text-base text-slate-600 dark:text-slate-50">
-                      {data?.warranty ? <>{data?.warranty}</> : <span>-</span>}
+                      {data?.warranty ? (
+                        <>{data?.warranty} Bulan</>
+                      ) : (
+                        <span>-</span>
+                      )}
                     </div>
                   </div>
                 </li>
@@ -184,19 +251,17 @@ const DetailProducts = () => {
                   </ul>
                 </Card>
                 <Card title="Gambar produk" className="mt-2">
-                  <ul className="list space-y-8 ">
-                    <li className="flex space-x-3 rtl:space-x-reverse">
-                      {data?.images?.map((item, index) => (
-                        <div className="image-box" key={index}>
-                          <img
-                            src={item?.url}
-                            alt=""
-                            className="rounded-t-md w-full h-full object-cover"
-                          />
-                        </div>
-                      ))}
-                    </li>
-                  </ul>
+                  <div className="grid grid-cols-3 gap-4">
+                    {data?.images?.map((item, index) => (
+                      <div className="image-box" key={index}>
+                        <img
+                          src={item?.url}
+                          alt=""
+                          className="rounded-t-md w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </Card>
               </Card>
             </div>
