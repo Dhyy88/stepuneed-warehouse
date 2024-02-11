@@ -86,14 +86,15 @@ const Users = () => {
           birth: birth,
         });
 
-        Swal.fire("Sukses", "Pengguna berhasil ditambahkan", "success");
+        Swal.fire("Berhasil", "Pengguna berhasil ditambahkan", "success");
         getHO(query);
         resetForm();
         setIsLoadingButton(false)
+        // setError(null);
       } catch (err) {
         setError(err.response.data.errors);
-        Swal.fire("Gagal", err.response.data.message, "error");
         setIsLoadingButton(false)
+        Swal.fire("Gagal", err.response.data.message, "error");
       }
     } else {
       setIsLoadingButton(false)
@@ -589,7 +590,7 @@ const Users = () => {
               </div>
               <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
                 <Textinput
-                  label="No Telepon *"
+                  label="No Telepon"
                   type="number"
                   placeholder="Masukkan no telepon pengguna"
                   onChange={(e) => setPhoneNumber(e.target.value)}
@@ -603,7 +604,7 @@ const Users = () => {
               </div>
               <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
                 <Textinput
-                  label="Tanggal Lahir *"
+                  label="Tanggal Lahir"
                   type="date"
                   placeholder="Masukkan no telepon pengguna"
                   onChange={(e) => setBirth(e.target.value)}

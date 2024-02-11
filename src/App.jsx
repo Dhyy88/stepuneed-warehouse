@@ -39,6 +39,7 @@ const DetailUser = lazy(() => import("./pages/MasterUser/MasterAccountUser/detai
 const Products = lazy(() => import("./pages/MasterData/Product"));
 const CreateProduct = lazy(() => import("./pages/MasterData/Product/create"));
 const DetailProducts = lazy(() => import("./pages/MasterData/Product/detail"));
+const UpdateProduct = lazy(() => import("./pages/MasterData/Product/update"));
 const Bundles = lazy(() => import("./pages/MasterData/Bundles"));
 const CreateBundle = lazy(() => import("./pages/MasterData/Bundles/create"));
 const UpdateBundle = lazy(() => import("./pages/MasterData/Bundles/update"));
@@ -76,6 +77,8 @@ function App() {
               <Route path="products" element={<Products />} />
               <Route path="products/create" element={<CreateProduct />} />
               <Route path="products/detail/:uid" element={<DetailProducts />} />
+              <Route path="products/update/:uid" element={<UpdateProduct />} />
+              
               <Route path="bundles" element={<Bundles />} />
               <Route path="bundles/create" element={<CreateBundle />} />
               <Route path="bundles/detail/:uid" element={<DetailBundles />} />
