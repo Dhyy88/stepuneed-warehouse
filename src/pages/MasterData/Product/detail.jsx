@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 import Loading from "../../../components/Loading";
 import Switch from "@/components/ui/Switch";
 import Product from "@/assets/images/all-img/login-bg.png";
+import Button from "@/components/ui/Button";
 
 const DetailProducts = () => {
   let { uid } = useParams();
@@ -71,24 +72,41 @@ const DetailProducts = () => {
   async function onDelete(uid) {
     try {
       const result = await Swal.fire({
-        title: "Apakah anda yakin menghapus produk ini?",
+        icon: "question",
+        title: "Apakah Anda yakin ingin menghapus produk ini?",
         text: "Anda tidak akan dapat mengembalikannya!",
-        icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Ya, Hapus",
         cancelButtonText: "Batal",
       });
 
       if (result.isConfirmed) {
-        await axios.delete(`${ApiEndpoint.PRODUCTS}/${uid}`);
-        Swal.fire(
-          "Berhasil!",
-          "Anda berhasil menghapus data produk ini.",
-          "success"
-        );
-        navigate(`/products`);
-      } else {
-        Swal.fire("Batal", "Hapus data produk dibatalkan.", "info");
+        const { value: input } = await Swal.fire({
+          icon: "warning",
+          title: "Verifikasi",
+          text: `Silahkan ketik "hapusdata" untuk melanjutkan verifikasi hapus data !`,
+          input: "text",
+          showCancelButton: true,
+          confirmButtonText: "Konfirmasi",
+          cancelButtonText: "Batal",
+          inputValidator: (value) => {
+            if (!value || value.trim().toLowerCase() !== "hapusdata") {
+              return 'Anda harus memasukkan kata "hapusdata" untuk melanjutkan verifikasi hapus data!';
+            }
+          },
+        });
+
+        if (input && input.trim().toLowerCase() === "hapusdata") {
+          await axios.delete(`${ApiEndpoint.PRODUCTS}/${uid}`);
+          Swal.fire(
+            "Berhasil!",
+            "Anda berhasil menghapus data produk ini.",
+            "success"
+          );
+          navigate(`/products`);
+        } else {
+          Swal.fire("Batal", "Hapus data produk dibatalkan.", "info");
+        }
       }
     } catch (err) {
       Swal.fire("Gagal", err.response.data.message, "error");
@@ -141,6 +159,14 @@ const DetailProducts = () => {
             </div>
             <div className="flex-1">
               <div className="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
+                Slug
+              </div>
+              <div className="text-sm text-slate-600 font-light dark:text-slate-300">
+                {data?.slug}
+              </div>
+            </div>
+            <div className="flex-1">
+              <div className="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
                 Status Produk
               </div>
               <div className="text-sm text-slate-600 font-light dark:text-slate-300">
@@ -153,25 +179,6 @@ const DetailProducts = () => {
                   prevIcon="heroicons-outline:check"
                   nextIcon="heroicons-outline:x"
                 />
-              </div>
-            </div>
-            <div className="flex-1">
-              <div className="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
-                Aksi
-              </div>
-              <div className="text-sm text-slate-600 font-light dark:text-slate-300">
-                <button
-                  className="inline-flex items-center justify-center h-10 w-10 bg-danger-500 text-lg border rounded border-danger-500 text-white mr-2"
-                  onClick={() => onDelete(uid)}
-                >
-                  <Icon icon="heroicons:trash" />
-                </button>
-                <button
-                  className="inline-flex items-center justify-center h-10 w-10 bg-primary-500 text-lg border rounded border-primary-500 text-white"
-                  onClick={() => navigate(`/products/update/${uid}`)}
-                >
-                  <Icon icon="heroicons:pencil" />
-                </button>
               </div>
             </div>
           </div>
@@ -236,33 +243,86 @@ const DetailProducts = () => {
               </ul>
             </Card>
             <div className="lg:col-span-4 col-span-12">
-              <Card className="mb-4">
-                <Card title="Deskripsi">
-                  <ul className="list space-y-8">
-                    <li className="flex space-x-3 rtl:space-x-reverse">
-                      <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                        <Icon icon="heroicons:arrow-right" />
-                      </div>
-                      <div
-                        className="flex-1"
-                        dangerouslySetInnerHTML={{ __html: data?.description }}
+              <Card bodyClass="p-0 mb-4" noborder>
+                <header className={`px-4 pt-4 pb-3 flex items-center`}>
+                  <h6 className={`card-title mb-0  text-slate-900`}>
+                    Gambar Produk
+                  </h6>
+                </header>
+                <div className=" py-3 px-5 grid grid-cols-3 gap-4">
+                  {data?.images?.map((item, index) => (
+                    <div className="image-box" key={index}>
+                      <img
+                        src={item?.url}
+                        alt=""
+                        className="rounded-t-md w-full h-full object-cover"
                       />
-                    </li>
-                  </ul>
-                </Card>
-                <Card title="Gambar produk" className="mt-2">
-                  <div className="grid grid-cols-3 gap-4">
-                    {data?.images?.map((item, index) => (
-                      <div className="image-box" key={index}>
-                        <img
-                          src={item?.url}
-                          alt=""
-                          className="rounded-t-md w-full h-full object-cover"
+                    </div>
+                  ))}
+                </div>
+              </Card>
+
+              <Card bodyClass="p-0 mb-4" noborder>
+                <header className={`px-4 pt-4 pb-3 flex items-center`}>
+                  <h6 className={`card-title mb-0  text-slate-900`}>
+                    Deskripsi Produk
+                  </h6>
+                </header>
+                <div className="py-3 px-5">
+                  <span
+                    className="text-sm"
+                    dangerouslySetInnerHTML={{ __html: data?.description }}
+                  />
+                </div>
+              </Card>
+              <Card bodyClass="p-0" noborder>
+                <header
+                  className={`border-b px-4 pt-4 pb-3 flex items-center  border-danger-500`}
+                >
+                  <h6 className={`card-title mb-0  text-danger-500`}>
+                    Danger Zone
+                  </h6>
+                </header>
+                <div className="py-3 px-5">
+                  <div className="card-title2 mb-2">Perbaharui Produk</div>
+                  <div className="flex row justfiy-between gap-2">
+                    <div className="flex-1">
+                      <div className="text-sm">
+                        Harap memperhatikan kembali data dari produk yang ingin
+                        diperbaharui.
+                      </div>
+                    </div>
+                    <div className="w-32">
+                      <div className="">
+                        <Button
+                          text="Perbaharui Produk"
+                          className="btn-warning dark w-full btn-sm "
+                          onClick={() => navigate(`/products/update/${uid}`)}
                         />
                       </div>
-                    ))}
+                    </div>
                   </div>
-                </Card>
+                </div>
+                <div className="py-3 px-5">
+                  <div className="card-title2 mb-2">Hapus Produk</div>
+                  <div className="flex row justfiy-between gap-2">
+                    <div className="flex-1">
+                      <div className="text-sm">
+                        Setelah Anda menghapus produk, tidak ada akses untuk
+                        mengembalikan data. Harap mempertimbangkannya kembali.
+                      </div>
+                    </div>
+                    <div className="w-32">
+                      <div className="">
+                        <Button
+                          text="Hapus Produk"
+                          className="btn-danger dark w-full btn-sm "
+                          onClick={() => onDelete(uid)}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </Card>
             </div>
           </div>
@@ -361,7 +421,9 @@ const DetailProducts = () => {
                           {data?.variants?.map((item, index) => (
                             <tr key={index}>
                               <td className="table-td">{item?.sku}</td>
-                              <td className="table-td">Rp {item?.price}</td>
+                              <td className="table-td">
+                                Rp {item?.price.toLocaleString("id-ID")}
+                              </td>
                               <td className="table-td">
                                 {item?.variant_attribute ? (
                                   <span>{item?.variant_attribute}</span>
@@ -389,11 +451,7 @@ const DetailProducts = () => {
                                   <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
                                     Utama
                                   </span>
-                                ) : (
-                                  <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-danger-500 bg-danger-500">
-                                    -
-                                  </span>
-                                )}
+                                ) : null}
                               </td>
                             </tr>
                           ))}

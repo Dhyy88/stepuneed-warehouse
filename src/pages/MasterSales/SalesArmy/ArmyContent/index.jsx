@@ -160,27 +160,44 @@ const ArmyContents = () => {
   async function onDelete(uid) {
     try {
       const result = await Swal.fire({
-        title: "Apakah anda yakin menghapus konten ini?",
+        icon: "question",
+        title: "Apakah Anda yakin ingin menghapus konten ini?",
         text: "Anda tidak akan dapat mengembalikannya!",
-        icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Ya, Hapus",
         cancelButtonText: "Batal",
       });
 
       if (result.isConfirmed) {
-        await axios.delete(`${ApiEndpoint.ARMY_CONTENT}/${uid}`);
-        Swal.fire(
-          "Berhasil!",
-          "Anda berhasil menghapus data konten ini.",
-          "success"
-        );
-        getDataContent(query);
-        resetForm();
-        getDataBundle(query);
-        getDataProducts(query);
-      } else {
-        Swal.fire("Batal", "Hapus data konten dibatalkan.", "info");
+        const { value: input } = await Swal.fire({
+          icon: "warning",
+          title: "Verifikasi",
+          text: `Silahkan ketik "hapusdata" untuk melanjutkan verifikasi hapus data !`,
+          input: "text",
+          showCancelButton: true,
+          confirmButtonText: "Konfirmasi",
+          cancelButtonText: "Batal",
+          inputValidator: (value) => {
+            if (!value || value.trim().toLowerCase() !== "hapusdata") {
+              return 'Anda harus memasukkan kata "hapusdata" untuk melanjutkan verifikasi hapus data!';
+            }
+          },
+        });
+
+        if (input && input.trim().toLowerCase() === "hapusdata") {
+          await axios.delete(`${ApiEndpoint.ARMY_CONTENT}/${uid}`);
+          Swal.fire(
+            "Berhasil!",
+            "Anda berhasil menghapus data konten ini.",
+            "success"
+          );
+          getDataContent(query);
+          resetForm();
+          getDataBundle(query);
+          getDataProducts(query);
+        } else {
+          Swal.fire("Batal", "Hapus data konten dibatalkan.", "info");
+        }
       }
     } catch (err) {
       Swal.fire("Gagal", err.response.data.message, "error");
@@ -410,11 +427,17 @@ const ArmyContents = () => {
 
                             {item?.content?.total_price ? (
                               <td className="table-td">
-                                Rp {item?.content?.total_price}
+                                Rp{" "}
+                                {item?.content?.total_price.toLocaleString(
+                                  "id-ID"
+                                )}
                               </td>
                             ) : (
                               <td className="table-td">
-                                Rp {item?.content?.primary_variant?.price}
+                                Rp{" "}
+                                {item?.content?.primary_variant?.price.toLocaleString(
+                                  "id-ID"
+                                )}
                               </td>
                             )}
 

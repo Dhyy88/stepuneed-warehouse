@@ -86,12 +86,14 @@ const Fileinput = ({
               </span>
             </div>
             {!multiple && preview && selectedFile && (
-              <div className="w-[150px] h-[150px] mx-auto mt-6  ">
-                <img
-                  src={selectedFile ? URL.createObjectURL(selectedFile) : ""}
-                  className="w-full  h-full block rounded object-contain border p-2  border-slate-200"
-                  alt={selectedFile?.name}
-                />
+              <div className="flex flex-wrap space-x-5 rtl:space-x-reverse justify-center">
+                <div className="xl:w-1/5 md:w-1/3 w-1/2 rounded mt-6 border p-2  border-slate-200  ">
+                  <img
+                    src={selectedFile ? URL.createObjectURL(selectedFile) : ""}
+                    className="object-cover w-full h-full rounded"
+                    alt={selectedFile?.name}
+                  />
+                </div>
               </div>
             )}
             {multiple && preview && selectedFiles.length > 0 && (

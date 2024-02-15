@@ -10,7 +10,7 @@ export const menuItems = [
   //Menu Master Inventory
   {
     isHeadr: true,
-    title: "Master Data",
+    title: "Master Data SJM",
   },
   {
     title: "Master Produk",
@@ -31,10 +31,6 @@ export const menuItems = [
           },
         ],
       },
-      {
-        childtitle: "Data Bundle Produk",
-        childlink: "/bundles"
-      },  
       {
         childtitle: "Data Kategori",
         childlink: "/categories",
@@ -73,14 +69,26 @@ export const menuItems = [
   },
 
   {
-    title: "Master Produk Army",
-    icon: "heroicons-outline:clipboard",
-    link: "/army/contents",
+    isHeadr: true,
+    title: "Master Data Sales",
   },
 
   {
-    isHeadr: true,
-    title: "Master Data Pengguna",
+    title: "Master Produk",
+    icon: "heroicons-outline:rectangle-group",
+    link: "/app/home",
+    child: [
+      {
+        childtitle: "Data Bundle Produk",
+        childlink: "/bundles",
+        isHide: false,
+      },
+      {
+        childtitle: "Data Konten Army",
+        childlink: "/army/contents",
+        // isHide: true,
+      }
+    ]
   },
 
   //Menu Master Sales
@@ -99,6 +107,13 @@ export const menuItems = [
       }
     ]
   },
+
+  {
+    isHeadr: true,
+    title: "Master Data Pengguna",
+  },
+
+  
 
   //Menu Master Pengguna
   {
@@ -124,9 +139,13 @@ export const topMenu = [
     link: "/app/home",
     megamenu: [
       {
-        megamenutitle: "Master Produk",
+        megamenutitle: "Master Produk SJM",
         megamenuicon: "heroicons-outline:rectangle-group",
         singleMegamenu: [
+          {
+            m_childtitle: "Data Mobil",
+            m_childlink: "/cars",
+          },
           {
             m_childtitle: "Data Kategori",
             m_childlink: "/categories",
@@ -135,6 +154,13 @@ export const topMenu = [
             m_childtitle: "Data Produk",
             m_childlink: "/products",
           },
+        ],
+      },
+      {
+        megamenutitle: "Master Produk Sales",
+        megamenuicon: "heroicons-outline:rectangle-group",
+        singleMegamenu: [
+        
           {
             m_childtitle: "Data Bundle Produk",
             m_childlink: "/bundles",
@@ -167,10 +193,6 @@ export const topMenu = [
           {
             m_childtitle: "Data Dealer",
             m_childlink: "/dealers",
-          },
-          {
-            m_childtitle: "Data Mobil",
-            m_childlink: "/cars",
           },
         ],
       },

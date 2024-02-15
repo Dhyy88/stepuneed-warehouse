@@ -104,24 +104,41 @@ const Cars = () => {
   async function onDelete(uid) {
     try {
       const result = await Swal.fire({
-        title: "Apakah anda yakin menghapus model mobil ini?",
+        icon: "question",
+        title: "Apakah Anda yakin ingin menghapus model mobil ini?",
         text: "Anda tidak akan dapat mengembalikannya!",
-        icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Ya, Hapus",
         cancelButtonText: "Batal",
       });
 
       if (result.isConfirmed) {
-        await axios.delete(`${ApiEndpoint.CARS}/${uid}`);
-        Swal.fire(
-          "Berhasil!",
-          "Anda berhasil menghapus data model mobil ini.",
-          "success"
-        );
-        getDataCars(query);
-      } else {
-        Swal.fire("Batal", "Hapus data model mobil dibatalkan.", "info");
+        const { value: input } = await Swal.fire({
+          icon: "warning",
+          title: "Verifikasi",
+          text: `Silahkan ketik "hapusdata" untuk melanjutkan verifikasi hapus data !`,
+          input: "text",
+          showCancelButton: true,
+          confirmButtonText: "Konfirmasi",
+          cancelButtonText: "Batal",
+          inputValidator: (value) => {
+            if (!value || value.trim().toLowerCase() !== "hapusdata") {
+              return 'Anda harus memasukkan kata "hapusdata" untuk melanjutkan verifikasi hapus data!';
+            }
+          },
+        });
+
+        if (input && input.trim().toLowerCase() === "hapusdata") {
+          await axios.delete(`${ApiEndpoint.CARS}/${uid}`);
+          Swal.fire(
+            "Berhasil!",
+            "Anda berhasil menghapus data model mobil ini.",
+            "success"
+          );
+          getDataCars(query);
+        } else {
+          Swal.fire("Batal", "Hapus data model mobil dibatalkan.", "info");
+        }
       }
     } catch (err) {
       Swal.fire("Gagal", err.response.data.message, "error");

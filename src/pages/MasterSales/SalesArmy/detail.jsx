@@ -423,6 +423,22 @@ const DetailArmy = () => {
 
                 <li className="flex space-x-3 rtl:space-x-reverse">
                   <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
+                    <Icon icon="heroicons:swatch" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
+                      Kode Referral Sales
+                    </div>
+                    {data?.army_profile?.referral_code?.code ? (
+                      <>{data?.army_profile?.referral_code?.code}</>
+                    ) : (
+                      <span>Belum ada kode referral</span>
+                    )}
+                  </div>
+                </li>
+
+                <li className="flex space-x-3 rtl:space-x-reverse">
+                  <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
                     <Icon icon="heroicons:truck" />
                   </div>
                   <div className="flex-1">
@@ -452,6 +468,7 @@ const DetailArmy = () => {
                     )}
                   </div>
                 </li>
+               
               </ul>
             </Card>
             <Card className="mb-4">

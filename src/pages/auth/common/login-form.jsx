@@ -9,30 +9,38 @@ import Button from "@/components/ui/Button";
 import LoadingButton from "../../../components/LoadingButton";
 import ApiEndpoint from "../../../API/Api_EndPoint";
 import axios from "../../../API/Axios";
+import Icon from "@/components/ui/Icon";
 
 const schema = yup
   .object({
-    email: yup.string().email("Email tidak valid").required("Email is Required"),
+    email: yup
+      .string()
+      .email("Email tidak valid")
+      .required("Email is Required"),
     password: yup.string().required("Kata sandi wajib di isi"),
   })
   .required();
 
 const LoginForm = () => {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoadingButton, setIsLoadingButton] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const navigate = useNavigate();
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(!isPasswordVisible);
+  };
 
   const loginHandler = async (e) => {
     setIsLoadingButton(true);
     e.preventDefault();
-  
+
     const formData = new FormData();
-  
+
     formData.append("email", email);
     formData.append("password", password);
-  
+
     try {
       const response = await axios.post(ApiEndpoint.LOGIN, formData);
       localStorage.setItem("token", response?.data?.data?.token);
@@ -40,22 +48,30 @@ const LoginForm = () => {
       setIsLoadingButton(false);
       navigate("/dashboard");
     } catch (error) {
-      Swal.fire({
-        icon: "error",
-        title: "Error",
-        text: error.response?.data?.message,
-      });
+      if (error.response && error.response.status === 500) {
+        Swal.fire({
+          icon: "error",
+          title: "Terjadi Kesalahan Server",
+          text: "Mohon maaf, terjadi kesalahan pada server.",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.response?.data?.message || "Terjadi kesalahan.",
+        });
+      }
       setIsLoadingButton(false);
     }
-    setIsLoadingButton(false)
-  };  
+    setIsLoadingButton(false);
+  };
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
       navigate("/dashboard");
     }
   }, []);
-  
+
   const {
     register,
     formState: { errors },
@@ -77,17 +93,40 @@ const LoginForm = () => {
         onChange={(e) => setEmail(e.target.value)}
         placeholder="Masukkan email anda"
       />
-      <Textinput
-        name="password"
-        label="Kata Sandi"
-        type="password"
-        register={register}
-        error={errors.password}
-        className="h-[48px]"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-        placeholder="****************"
-      />
+
+      <div className="flex items-center mb-2">
+        <div className="w-full relative">
+          <Textinput
+            name="password"
+            label="Kata Sandi"
+            type={isPasswordVisible ? "text" : "password"}
+            register={register}
+            error={errors.password}
+            className="h-[48px] form-control  py-2 pr-10"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="****************"
+          />
+
+          <div
+            className={`absolute top-0 right-0 ${
+              errors.password ? "pr-10" : "pr-2"
+            } pt-1 mt-10`}
+          >
+            <button
+              type="button"
+              className="action-btn flex"
+              onClick={togglePasswordVisibility}
+            >
+              {isPasswordVisible ? (
+                <Icon icon="heroicons:eye-slash" />
+              ) : (
+                <Icon icon="heroicons:eye" />
+              )}
+            </button>
+          </div>
+        </div>
+      </div>
 
       <Button
         text={isLoadingButton ? <LoadingButton /> : "Masuk"}

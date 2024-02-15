@@ -47,32 +47,32 @@ const Products = () => {
     setIsLoading(false);
   }
 
-  async function onDelete(uid) {
-    try {
-      const result = await Swal.fire({
-        title: "Apakah anda yakin menghapus produk ini?",
-        text: "Anda tidak akan dapat mengembalikannya!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonText: "Ya, Hapus",
-        cancelButtonText: "Batal",
-      });
+  // async function onDelete(uid) {
+  //   try {
+  //     const result = await Swal.fire({
+  //       title: "Apakah anda yakin menghapus produk ini?",
+  //       text: "Anda tidak akan dapat mengembalikannya!",
+  //       icon: "warning",
+  //       showCancelButton: true,
+  //       confirmButtonText: "Ya, Hapus",
+  //       cancelButtonText: "Batal",
+  //     });
 
-      if (result.isConfirmed) {
-        await axios.delete(`${ApiEndpoint.PRODUCTS}/${uid}`);
-        Swal.fire(
-          "Berhasil!",
-          "Anda berhasil menghapus data produk ini.",
-          "success"
-        );
-        getDataProducts(query);
-      } else {
-        Swal.fire("Batal", "Hapus data produk dibatalkan.", "info");
-      }
-    } catch (err) {
-      Swal.fire("Gagal", err.response.data.message, "error");
-    }
-  }
+  //     if (result.isConfirmed) {
+  //       await axios.delete(`${ApiEndpoint.PRODUCTS}/${uid}`);
+  //       Swal.fire(
+  //         "Berhasil!",
+  //         "Anda berhasil menghapus data produk ini.",
+  //         "success"
+  //       );
+  //       getDataProducts(query);
+  //     } else {
+  //       Swal.fire("Batal", "Hapus data produk dibatalkan.", "info");
+  //     }
+  //   } catch (err) {
+  //     Swal.fire("Gagal", err.response.data.message, "error");
+  //   }
+  // }
 
   const handlePrevPagination = () => {
     if (data.prev_page_url) {
@@ -109,8 +109,6 @@ const Products = () => {
 
     return pageNumbers;
   };
-
-  
 
   useEffect(() => {
     getDataProducts(query);
@@ -295,7 +293,7 @@ const Products = () => {
                                     <Icon icon="heroicons:eye" />
                                   </button>
                                 </Tooltip>
-                                <Tooltip
+                                {/* <Tooltip
                                   content="Edit"
                                   placement="top"
                                   arrow
@@ -310,8 +308,8 @@ const Products = () => {
                                   >
                                     <Icon icon="heroicons:pencil-square" />
                                   </button>
-                                </Tooltip>
-                                <Tooltip
+                                </Tooltip> */}
+                                {/* <Tooltip
                                   content="Hapus"
                                   placement="top"
                                   arrow
@@ -325,7 +323,7 @@ const Products = () => {
                                   >
                                     <Icon icon="heroicons:trash" />
                                   </button>
-                                </Tooltip>
+                                </Tooltip> */}
                               </div>
                             </td>
                           </tr>

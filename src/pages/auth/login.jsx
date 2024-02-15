@@ -5,6 +5,9 @@ import { ToastContainer } from "react-toastify";
 import useDarkMode from "@/hooks/useDarkMode";
 import bgImage from "@/assets/images/all-img/page-bg.png";
 import LogoWhite from "@/assets/images/logo/logo-white.svg";
+import LogoColor from "@/assets/images/logo/logo.svg";
+import LogoLogin from "@/assets/images/logo/logo-login.svg";
+
 import Logo from "@/assets/images/logo/logo.svg";
 const login = () => {
   const [isDark] = useDarkMode();
@@ -21,7 +24,7 @@ const login = () => {
           <div className="left-columns lg:w-1/2 lg:block hidden">
             <div className="logo-box-3">
               <Link to="/" className="">
-                <img src={LogoWhite} alt="" />
+                <img src={LogoLogin} className="h-[100px]" alt="" />
               </Link>
             </div>
           </div>

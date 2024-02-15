@@ -370,7 +370,7 @@ const CreateProduct = () => {
     Swal.fire({
       icon: "warning",
       title: "Konfirmasi",
-      text: "Anda yakin daya yang dimasukkan sudah benar?",
+      text: "Anda yakin data yang dimasukkan sudah benar?",
       showCancelButton: true,
       confirmButtonText: "Ya, Tambahkan",
       cancelButtonText: "Batal",
@@ -523,6 +523,7 @@ const CreateProduct = () => {
             <label htmlFor=" hh" className="form-label ">
               Deskripsi Produk *
             </label>
+            
             <ReactQuill
               theme="snow"
               placeholder="Masukkan deskripsi produk..."
@@ -534,7 +535,7 @@ const CreateProduct = () => {
                   [{ size: ["small", false, "large", "huge"] }],
                   ["bold", "italic", "underline", "strike", "blockquote"],
                   [{ list: "ordered" }, { list: "bullet" }],
-                  ["link"],
+                  ["link", "image"],
                   [
                     { list: "ordered" },
                     { list: "bullet" },

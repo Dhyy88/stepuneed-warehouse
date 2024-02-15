@@ -78,6 +78,8 @@ const UpdateProduct = () => {
   const [primaryImageOld, setPrimaryImageOld] = useState(null);
   const [imageOld, setImageOld] = useState([]);
   const [variantImages, setVariantImages] = useState([]);
+  // const [variantSKU, setVariantSKU] = useState([]);
+  // const [variantPrice, setVariantPrice] = useState([]);
 
   const [deleted_images, setDeletedImages] = useState([]);
 
@@ -97,13 +99,13 @@ const UpdateProduct = () => {
           setVariantImages(
             response?.data?.data?.variants.map((variant) => variant.image)
           );
-
           if (productUid?.variants && productUid?.variants.length > 0) {
             const variantsData = productUid.variants.map((variant) => ({
               sku: variant.sku,
               price: variant.price,
               is_primary: variant.is_primary,
             }));
+            console.log(variantsData);
             setVariants(variantsData);
             const primaryVariantIndex = variantsData.findIndex(
               (variant) => variant.is_primary
@@ -117,6 +119,7 @@ const UpdateProduct = () => {
             setVariantName(productUid?.variant_type?.variant_name);
             setVariantOptions(productUid?.variant_type?.variant_options);
             setSelectedCarsByUid(productUid?.variant_type?.car_models || []);
+            // console.log(productUid?.variant_type?.car_models);
             setCheckIsVariant(true);
           } else {
             setCheckIsVariant(false);
@@ -366,29 +369,23 @@ const UpdateProduct = () => {
 
   async function handleVariantGenerator(selectedCars) {
     try {
-      if (variant_options.length || selectedCars.length) {
-        const requestData = {};
-        if (variant_options.length) {
-          requestData.variant_name = variant_name;
+      const requestData = {};
 
-          if (variant_options.length > 0) {
-            requestData.variant_options = variant_options || [];
-          }
-        }
-
-        if (selectedCars.length > 0) {
-          requestData.car_models = selectedCars;
-        }
-
-        const response = await axios.post(
-          ApiEndpoint.VARIANT_GENERATOR,
-          requestData
-        );
-
-        setDataVariantGenerator(response?.data?.data);
-      } else {
-        throw new Error("error");
+      if (variant_name && variant_options.length > 0) {
+        requestData.variant_name = variant_name;
+        requestData.variant_options = variant_options || [];
       }
+
+      if (selectedCars.length > 0) {
+        requestData.car_models = selectedCars;
+      }
+
+      const response = await axios.post(
+        ApiEndpoint.VARIANT_GENERATOR,
+        requestData
+      );
+
+      setDataVariantGenerator(response?.data?.data);
     } catch (error) {
       // Swal.fire("Gagal", "Masukkan minimal 1 opsi variasi", "error");
     }
@@ -401,7 +398,7 @@ const UpdateProduct = () => {
   }, [data_variant_generator, isSubmitGenerator]);
 
   const onSubmit = async (e) => {
-    setIsLoading(true);
+    // setIsLoading(true);
     e.preventDefault();
     const active = is_active ? 1 : 0;
     const is_variant = check_is_variant ? true : false;
@@ -415,41 +412,41 @@ const UpdateProduct = () => {
     formData.append("is_active", active);
     formData.append("check_is_variant", is_variant);
 
-    const updatedVariants = variants.map((variant, index) => ({
-      ...variant,
-      image: variants[index].image,
-      is_primary: variants[index].is_primary,
-    }));
-
     if (check_is_variant) {
       formData.append("variant_name", variant_name);
+
       for (let i = 0; i < variant_options.length; i++) {
         formData.append("variant_options[]", variant_options[i]);
+        console.log(variant_options[i]);
       }
       for (let i = 0; i < selected_cars_by_uid.length; i++) {
         formData.append("car_models[]", selected_cars_by_uid[i]);
+        console.log(selected_cars_by_uid[i]);
       }
-
-      updatedVariants.forEach((variant, index) => {
-        formData.append(`variants[${index}][sku]`, variant.sku || "");
-        formData.append(`variants[${index}][price]`, variant.price || "");
+      console.log(variant_generator_data);
+      variant_generator_data.forEach((variantGenerator, index) => {
+        formData.append(`variants[${index}][sku]`, variants[index].sku || "");
+        formData.append(
+          `variants[${index}][price]`,
+          variants[index].price || ""
+        );
         formData.append(
           `variants[${index}][is_primary]`,
-          variant.is_primary ? 1 : 0
+          variants[index].is_primary ? 1 : 0
         );
 
-        if (variant && variant.image) {
-          formData.append(`variants[${index}][image]`, variant?.image);
+        if (variants && variants[index].image) {
+          formData.append(`variants[${index}][image]`, variants[index]?.image);
         }
 
-        if (variant && variant_generator_data[index]?.variant?.option) {
+        if (variants && variant_generator_data[index]?.variant?.option) {
           formData.append(
             `variants[${index}][variant_option]`,
             variant_generator_data[index]?.variant?.option || ""
           );
         }
 
-        if (variant && variant_generator_data[index]?.car_model?.uid) {
+        if (variants && variant_generator_data[index]?.car_model?.uid) {
           formData.append(
             `variants[${index}][car_model]`,
             variant_generator_data[index]?.car_model?.uid || ""
@@ -511,8 +508,6 @@ const UpdateProduct = () => {
       }
     });
   };
-
-  // START USE EFFECT AREA
 
   const previousPage = () => {
     navigate(-1);
@@ -745,7 +740,7 @@ const UpdateProduct = () => {
               className="light-mode alert-warning mb-5"
             >
               <p>
-                Format gambar JPG/JPEG dengan rasio 1:1 , Abaikan form ini jika
+                Format gambar JPG/JPEG dengan rasio 1:1. Abaikan form ini jika
                 tidak ingin mengubah gambar dan untuk menghapus gambar silahkan
                 ceklis gambar yang ingin dihapus !
               </p>
@@ -775,8 +770,8 @@ const UpdateProduct = () => {
                       <Checkbox
                         label="Hapus Gambar"
                         activeClass="ring-danger-500 bg-danger-500"
-                        value={deleted_images.includes(item.uid)} // Check if the image UID is included in deleted_images
-                        onChange={() => handleDeleteImage(item.uid)} // Pass the image UID to handleDeleteImage
+                        value={deleted_images.includes(item.uid)}
+                        onChange={() => handleDeleteImage(item.uid)}
                       />
                     </div>
                   </div>
@@ -816,12 +811,16 @@ const UpdateProduct = () => {
             <Alert
               // dismissible
               icon="heroicons-outline:exclamation"
-              className="light-mode alert-success mb-5"
+              className="light-mode alert-warning mb-5"
             >
               <p>
-                Untuk fungsi memilih model mobil, anda akan menerbitkan produk
+                1. Untuk fungsi memilih model mobil, anda akan menerbitkan produk
                 dengan tipe mobil tertentu. Jika tidak memilih, maka produk ini
-                berlaku untuk semua tipe mobil!
+                berlaku untuk semua tipe mobil !
+              </p>
+              <p>
+                2. Ketika mengubah Opsi variasi ataupun Model Mobil, mohon untuk
+                menekan tombol terapkan variasi !
               </p>
             </Alert>
             <Card title="Variasi Produk" className="mb-5">

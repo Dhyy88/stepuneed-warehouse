@@ -180,24 +180,45 @@ const Categories = () => {
       setIsLoadingButton(false);
     }
   };
-
+  
   async function onDelete(uid) {
     try {
       const result = await Swal.fire({
-        title: "Apakah anda yakin menghapus kategori ini?",
+        icon: "question",
+        title: "Apakah Anda yakin ingin menghapus kategori ini?",
         text: "Anda tidak akan dapat mengembalikannya!",
-        icon: "warning",
         showCancelButton: true,
         confirmButtonText: "Ya, Hapus",
         cancelButtonText: "Batal",
       });
 
       if (result.isConfirmed) {
-        await axios.delete(`${ApiEndpoint.CATEGORY}/${uid}`);
-        Swal.fire("Berhasil!", "Data kategori berhasil dihapus.", "success");
-        getCategory(query);
-      } else {
-        Swal.fire("Batal", "Hapus data kategori dibatalkan.", "info");
+        const { value: input } = await Swal.fire({
+          icon: "warning",
+          title: "Verifikasi",
+          text: `Silahkan ketik "hapusdata" untuk melanjutkan verifikasi hapus data !`,
+          input: "text",
+          showCancelButton: true,
+          confirmButtonText: "Konfirmasi",
+          cancelButtonText: "Batal",
+          inputValidator: (value) => {
+            if (!value || value.trim().toLowerCase() !== "hapusdata") {
+              return 'Anda harus memasukkan kata "hapusdata" untuk melanjutkan verifikasi hapus data!';
+            }
+          },
+        });
+
+        if (input && input.trim().toLowerCase() === "hapusdata") {
+          await axios.delete(`${ApiEndpoint.CATEGORY}/${uid}`);
+          Swal.fire(
+            "Berhasil!",
+            "Anda berhasil menghapus data kategori ini.",
+            "success"
+          );
+          getCategory(query);
+        } else {
+          Swal.fire("Batal", "Hapus data kategori dibatalkan.", "info");
+        }
       }
     } catch (err) {
       Swal.fire("Gagal", err.response.data.message, "error");
@@ -508,7 +529,7 @@ const Categories = () => {
               <Alert
                 // dismissible
                 icon="heroicons-outline:exclamation"
-                className="light-mode alert-success mb-5"
+                className="light-mode alert-warning mb-5"
               >
                 <p>
                  Form parent kategori dikhususkan untuk kategori yang memiliki sub kategori !

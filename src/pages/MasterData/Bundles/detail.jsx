@@ -48,6 +48,50 @@ const DetailBundles = () => {
     }
   };
 
+  async function onDelete(uid) {
+    try {
+      const result = await Swal.fire({
+        icon: "question",
+        title: "Apakah Anda yakin ingin menghapus bundle ini?",
+        text: "Anda tidak akan dapat mengembalikannya!",
+        showCancelButton: true,
+        confirmButtonText: "Ya, Hapus",
+        cancelButtonText: "Batal",
+      });
+
+      if (result.isConfirmed) {
+        const { value: input } = await Swal.fire({
+          icon: "warning",
+          title: "Verifikasi",
+          text: `Silahkan ketik "hapusdata" untuk melanjutkan verifikasi hapus data !`,
+          input: "text",
+          showCancelButton: true,
+          confirmButtonText: "Konfirmasi",
+          cancelButtonText: "Batal",
+          inputValidator: (value) => {
+            if (!value || value.trim().toLowerCase() !== "hapusdata") {
+              return 'Anda harus memasukkan kata "hapusdata" untuk melanjutkan verifikasi hapus data!';
+            }
+          },
+        });
+
+        if (input && input.trim().toLowerCase() === "hapusdata") {
+          await axios.delete(`${ApiEndpoint.BUNDLES}/${uid}`);
+          Swal.fire(
+            "Berhasil!",
+            "Anda berhasil menghapus data bundle ini.",
+            "success"
+          );
+          navigate(`/bundles`);
+        } else {
+          Swal.fire("Batal", "Hapus data bundle dibatalkan.", "info");
+        }
+      }
+    } catch (err) {
+      Swal.fire("Gagal", err.response.data.message, "error");
+    }
+  }
+
   async function onDeleteProducts(uid, uidProduct) {
     try {
       const result = await Swal.fire({
@@ -206,7 +250,7 @@ const DetailBundles = () => {
     <div>
       <div className="space-y-5 profile-page">
         <div className="profiel-wrap px-[35px] pb-10 md:pt-[84px] pt-10 rounded-lg bg-white dark:bg-slate-800 lg:flex lg:space-y-0 space-y-6 justify-between items-end relative z-[1]">
-          <div className="bg-slate-900 dark:bg-slate-700 absolute left-0 top-0 md:h-1/2 h-[150px] w-full z-[-1] rounded-t-lg"></div>
+          <div className="bg-slate-900 dark:bg-slate-700 absolute left-0 top-0 md:h-1/2 h-[150px] w-full z-[-1] rounded-t-lg mb-5"></div>
           <div className="profile-box flex-none md:text-start text-center">
             <div className="md:flex items-end  rtl:space-x-reverse">
               <div className="flex-1 mt-10">
@@ -219,60 +263,6 @@ const DetailBundles = () => {
               </div>
             </div>
           </div>
-
-          <div className="profile-info-500 md:flex md:text-start text-center flex-1 max-w-[516px] md:space-y-0 space-y-4">
-            <div className="flex-1">
-              <div className="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
-                Status
-              </div>
-              <div className="text-sm text-slate-600 font-light dark:text-slate-300">
-                {data?.is_active === true && (
-                  <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
-                    Aktif
-                  </span>
-                )}
-                {data?.is_active === false && (
-                  <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-danger-500 bg-danger-500">
-                    Nonaktif
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="flex-1">
-              <div className="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
-                Status Content
-              </div>
-              <div className="text-sm text-slate-600 font-light dark:text-slate-300">
-                {data?.is_display_in_army_content === true && (
-                  <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
-                    Tampil
-                  </span>
-                )}
-                {data?.is_display_in_army_content === false && (
-                  <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-danger-500 bg-danger-500">
-                    Tidak Tampil
-                  </span>
-                )}
-              </div>
-            </div>
-            <div className="flex-1">
-              <div className="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
-                Total Produk
-              </div>
-              <div className="text-sm text-slate-600 font-light dark:text-slate-300">
-                {data?.item_count} Produk
-              </div>
-            </div>
-            <div className="flex-1">
-              <div className="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
-                Total Harga
-              </div>
-              <div className="text-sm text-slate-600 font-light dark:text-slate-300">
-                Rp {data?.total_price}
-              </div>
-            </div>
-          </div>
         </div>
 
         <div className="grid grid-cols-12 gap-6 ">
@@ -280,9 +270,52 @@ const DetailBundles = () => {
             <Card title="Info Bundle" className="mb-4">
               <ul className="list space-y-8">
                 <li className="flex space-x-3 rtl:space-x-reverse">
-                  <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                    <Icon icon="heroicons:arrow-right" />
+                  <div className="flex-1">
+                    <div className="uppercase font-3xl text-slate-500 dark:text-slate-300 mb-1 leading-[12px] mb-3">
+                      Total Produk
+                    </div>
+                    {data?.item_count} Produk
                   </div>
+                  <div className="flex-1">
+                    <div className="uppercase font-3xl text-slate-500 dark:text-slate-300 mb-1 leading-[12px] mb-3">
+                      Total Harga
+                    </div>
+                    Rp {data?.total_price.toLocaleString("id-ID")}
+                  </div>
+                </li>
+                <li className="flex space-x-3 rtl:space-x-reverse">
+                  <div className="flex-1">
+                    <div className="uppercase font-3xl text-slate-500 dark:text-slate-300 mb-1 leading-[12px] mb-3">
+                      Status Bundle
+                    </div>
+                    {data?.is_active === true && (
+                      <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
+                        Aktif
+                      </span>
+                    )}
+                    {data?.is_active === false && (
+                      <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-danger-500 bg-danger-500">
+                        Nonaktif
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <div className="uppercase font-3xl text-slate-500 dark:text-slate-300 mb-1 leading-[12px] mb-3">
+                      Status Konten
+                    </div>
+                    {data?.is_display_in_army_content === true && (
+                      <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
+                        Tampil
+                      </span>
+                    )}
+                    {data?.is_display_in_army_content === false && (
+                      <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-danger-500 bg-danger-500">
+                        Tidak Tampil
+                      </span>
+                    )}
+                  </div>
+                </li>
+                <li className="flex space-x-3 rtl:space-x-reverse">
                   <div className="flex-1">
                     <div className="uppercase font-3xl text-slate-500 dark:text-slate-300 mb-1 leading-[12px] mb-3">
                       Deskripsi Bundle
@@ -292,106 +325,168 @@ const DetailBundles = () => {
                 </li>
               </ul>
             </Card>
-            <Card className="mb-4">
-              <div className="grid justify-items-center ">
-                <div className="flex row justify-items-center gap-5 align-center w-full">
-                  <Button
-                    text="Tambah Produk"
-                    className=" btn-outline-primary w-full"
-                    onClick={() => handleOpenModalCars()}
-                  />
+
+            <Card bodyClass="p-0" noborder>
+              <header
+                className={`border-b px-4 pt-4 pb-3 flex items-center  border-danger-500`}
+              >
+                <h6 className={`card-title mb-0  text-danger-500`}>
+                  Danger Zone
+                </h6>
+              </header>
+              <div className="py-3 px-5">
+                <div className="card-title2 mb-2">Perbaharui Bundle</div>
+                <div className="flex row justfiy-between gap-2">
+                  <div className="flex-1">
+                    <div className="text-sm">
+                      Harap memperhatikan kembali data dari bundle yang ingin
+                      diperbaharui.
+                    </div>
+                  </div>
+                  <div className="w-32">
+                    <div className="">
+                      <Button
+                        text="Perbaharui Bundle"
+                        className="btn-warning dark w-full btn-sm "
+                        onClick={() => navigate(`/bundles/update/${uid}`)}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="py-3 px-5">
+                <div className="card-title2 mb-2">Hapus Bundle</div>
+                <div className="flex row justfiy-between gap-2">
+                  <div className="flex-1">
+                    <div className="text-sm">
+                      Setelah Anda menghapus bundle, tidak ada akses untuk
+                      mengembalikan data. Harap mempertimbangkannya kembali.
+                    </div>
+                  </div>
+                  <div className="w-32">
+                    <div className="">
+                      <Button
+                        text="Hapus Bundle"
+                        className="btn-danger dark w-full btn-sm "
+                        onClick={() => onDelete(uid)}
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </Card>
           </div>
 
           <div className="lg:col-span-8 col-span-12">
-            <Card title="Produk Bundle" className="mb-4">
-              <div className="grid xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4 card-height-auto">
-                {data?.bundle_items.map((item, index) => (
-                  <Card noborder bodyClass="p-0" key={index}>
-                    <div className="image-box">
-                      {item?.variant?.image?.url ? (
-                        <img
-                          src={item?.variant?.image?.url}
-                          alt=""
-                          className="rounded-t-md w-full h-full object-cover"
-                        />
-                      ) : (
-                        <img
-                          src={item?.variant?.product?.primary_image?.url}
-                          alt=""
-                          className="rounded-t-md w-full h-full object-cover"
-                        />
-                      )}
-                    </div>
-                    <div className="p-4 text-center">
-                      <div className="card-title ">
-                        {item.variant.product.name}
-                      </div>
-                      <div className="text-sm mt-2">{item.variant.sku}</div>
-                      <div className="text-sm mt-2">
-                        {item?.variant?.product?.is_active === true && (
-                          <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
-                            Produk Aktif
-                          </span>
-                        )}
-                        {item?.variant?.product?.is_active === false && (
-                          <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-danger-500 bg-danger-500">
-                            Produk Nonaktif
-                          </span>
-                        )}
-                      </div>
-                    </div>
+            <Card bodyClass="p-0" noborder>
+              <header
+                className={`border-b px-6 pt-6 pb-5 flex items-center  border-slate-800`}
+              >
+                <div className="flex w-full justify-between">
+                  <h6 className={`card-title mb-0  text-slate-800`}>
+                    Produk Bundle
+                  </h6>
+                  <Button
+                    text="Tambah Produk"
+                    className=" btn-primary btn-sm"
+                    onClick={() => handleOpenModalCars()}
+                  />
+                </div>
+              </header>
 
-                    <Card>
-                      <div className="">
-                        <div className="flex row justify-between mb-2">
-                          <div className="">
-                            <div className="text-sm">Harga Bundle</div>
-                          </div>
-                          <div className="">
-                            <div className="text-sm ">
-                              Rp {item?.bundle_price}
+              <div className="py-4 px-6">
+                <div className="grid xl:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4 card-height-auto">
+                  {data?.bundle_items.map((item, index) => (
+                    <Card noborder bodyClass="p-0" key={index}>
+                      <div className="image-box">
+                        {item?.variant?.image?.url ? (
+                          <img
+                            src={item?.variant?.image?.url}
+                            alt=""
+                            className="rounded-t-md w-full h-full object-cover"
+                          />
+                        ) : (
+                          <img
+                            src={item?.variant?.product?.primary_image?.url}
+                            alt=""
+                            className="rounded-t-md w-full h-full object-cover"
+                          />
+                        )}
+                      </div>
+                      <div className="p-4 text-center">
+                        <div className="card-title ">
+                          {item.variant.product.name}
+                        </div>
+                        <div className="text-sm mt-2">{item.variant.sku}</div>
+                        <div className="text-sm mt-2">
+                          {item?.variant?.product?.is_active === true && (
+                            <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
+                              Produk Aktif
+                            </span>
+                          )}
+                          {item?.variant?.product?.is_active === false && (
+                            <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-danger-500 bg-danger-500">
+                              Produk Nonaktif
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      <Card>
+                        <div className="">
+                          <div className="flex row justify-between mb-2">
+                            <div className="">
+                              <div className="text-sm">Harga Bundle</div>
+                            </div>
+                            <div className="">
+                              <div className="text-sm ">
+                                Rp {item?.bundle_price.toLocaleString("id-ID")}
+                              </div>
                             </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div className="flex row justify-between mb-2">
-                        <div className="">
-                          <div className="text-sm">Harga Dasar</div>
-                        </div>
-                        <div className="">
-                          <div className="text-sm ">Rp {item?.base_price}</div>
-                        </div>
-                      </div>
-
-                      <div className="flex row justify-between mb-2">
-                        <div className="">
-                          <div className="text-sm">Total Harga</div>
-                        </div>
-                        <div className="">
-                          <div className="text-sm ">
-                            Rp {item?.total_bundle_price}
+                        <div className="flex row justify-between mb-2">
+                          <div className="">
+                            <div className="text-sm">Harga Dasar</div>
+                          </div>
+                          <div className="">
+                            <div className="text-sm ">
+                              Rp {item?.base_price.toLocaleString("id-ID")}
+                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-5 mt-10 mb-4">
-                        <Button
-                          text={isLoading ? <LoadingButton /> : "Hapus Produk"}
-                          className="btn-danger light w-full "
-                          type="submit"
-                          onClick={() => onDeleteProducts(uid, item.uid)}
-                          disabled={isLoading}
-                        />
-                      </div>
+                        <div className="flex row justify-between mb-2">
+                          <div className="">
+                            <div className="text-sm">Total Harga</div>
+                          </div>
+                          <div className="">
+                            <div className="text-sm ">
+                              Rp{" "}
+                              {item?.total_bundle_price.toLocaleString("id-ID")}
+                            </div>
+                          </div>
+                        </div>
+
+                        <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-5 mt-10 mb-4">
+                          <Button
+                            text={
+                              isLoading ? <LoadingButton /> : "Hapus Produk"
+                            }
+                            className="btn-danger light w-full "
+                            type="submit"
+                            onClick={() => onDeleteProducts(uid, item.uid)}
+                            disabled={isLoading}
+                          />
+                        </div>
+                      </Card>
                     </Card>
-                  </Card>
-                ))}
+                  ))}
+                </div>
               </div>
             </Card>
+
             <Modal
               open={isModalProducts}
               centered
