@@ -172,19 +172,19 @@ const ArmyContents = () => {
         const { value: input } = await Swal.fire({
           icon: "warning",
           title: "Verifikasi",
-          text: `Silahkan ketik "hapusdata" untuk melanjutkan verifikasi hapus data !`,
+          text: `Silahkan ketik "hapus" untuk melanjutkan verifikasi hapus data !`,
           input: "text",
           showCancelButton: true,
           confirmButtonText: "Konfirmasi",
           cancelButtonText: "Batal",
           inputValidator: (value) => {
-            if (!value || value.trim().toLowerCase() !== "hapusdata") {
-              return 'Anda harus memasukkan kata "hapusdata" untuk melanjutkan verifikasi hapus data!';
+            if (!value || value.trim().toLowerCase() !== "hapus") {
+              return 'Anda harus memasukkan kata "hapus" untuk melanjutkan verifikasi hapus data!';
             }
           },
         });
 
-        if (input && input.trim().toLowerCase() === "hapusdata") {
+        if (input && input.trim().toLowerCase() === "hapus") {
           await axios.delete(`${ApiEndpoint.ARMY_CONTENT}/${uid}`);
           Swal.fire(
             "Berhasil!",

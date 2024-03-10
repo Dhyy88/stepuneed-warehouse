@@ -57,19 +57,19 @@ const Sites = () => {
         const { value: input } = await Swal.fire({
           icon: "warning",
           title: "Verifikasi",
-          text: `Silahkan ketik "hapusdata" untuk melanjutkan verifikasi hapus data !`,
+          text: `Silahkan ketik "hapus" untuk melanjutkan verifikasi hapus data !`,
           input: "text",
           showCancelButton: true,
           confirmButtonText: "Konfirmasi",
           cancelButtonText: "Batal",
           inputValidator: (value) => {
-            if (!value || value.trim().toLowerCase() !== "hapusdata") {
-              return 'Anda harus memasukkan kata "hapusdata" untuk melanjutkan verifikasi hapus data!';
+            if (!value || value.trim().toLowerCase() !== "hapus") {
+              return 'Anda harus memasukkan kata "hapus" untuk melanjutkan verifikasi hapus data!';
             }
           },
         });
 
-        if (input && input.trim().toLowerCase() === "hapusdata") {
+        if (input && input.trim().toLowerCase() === "hapus") {
           await axios.delete(`${ApiEndpoint.SITES}/${uid}`);
           Swal.fire(
             "Berhasil!",
@@ -101,7 +101,7 @@ const Sites = () => {
                   <Button
                     text="Tambah Cabang"
                     className="btn-primary dark w-full btn-sm "
-                    onClick={() => navigate(`/sites/create`)}
+                    onClick={() => navigate(`/site/create`)}
                   />
                 </div>
               </div>
@@ -267,7 +267,7 @@ const Sites = () => {
                                     className="action-btn"
                                     type="button"
                                     onClick={() =>
-                                      navigate(`/sites/update/${item.uid}`)
+                                      navigate(`/site/update/${item.uid}`)
                                     }
                                   >
                                     <Icon icon="heroicons:pencil-square" />

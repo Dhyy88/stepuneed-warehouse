@@ -125,7 +125,7 @@ const Products = () => {
                   <Button
                     text="Tambah Produk"
                     className="btn-primary dark w-full btn-sm "
-                    onClick={() => navigate(`/products/create`)}
+                    onClick={() => navigate(`/product/create`)}
                   />
                 </div>
               </div>
@@ -163,10 +163,10 @@ const Products = () => {
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
                             <th scope="col" className=" table-th ">
-                              Slug Produk
+                              Nama Produk
                             </th>
                             <th scope="col" className=" table-th ">
-                              Nama Produk
+                              Slug Produk
                             </th>
                             <th scope="col" className=" table-th ">
                               Status
@@ -191,10 +191,10 @@ const Products = () => {
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
                             <th scope="col" className=" table-th ">
-                              Slug Produk
+                              Nama Produk
                             </th>
                             <th scope="col" className=" table-th ">
-                              Nama Produk
+                              Slug Produk
                             </th>
                             <th scope="col" className=" table-th ">
                               Status
@@ -227,10 +227,10 @@ const Products = () => {
                       <thead className="bg-slate-200 dark:bg-slate-700">
                         <tr>
                           <th scope="col" className=" table-th ">
-                            Slug Produk
+                            Nama Produk
                           </th>
                           <th scope="col" className=" table-th ">
-                            Nama Produk
+                            Slug Produk
                           </th>
                           <th scope="col" className=" table-th ">
                             Status
@@ -246,8 +246,8 @@ const Products = () => {
                       <tbody className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
                         {data?.data?.map((item, index) => (
                           <tr key={index}>
-                            <td className="table-td">{item?.slug}</td>
                             <td className="table-td">{item?.name} </td>
+                            <td className="table-td">{item?.slug}</td>
                             <td className="table-td">
                               {item?.is_active === true ? (
                                 <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
@@ -287,7 +287,7 @@ const Products = () => {
                                     className="action-btn"
                                     type="button"
                                     onClick={() =>
-                                      navigate(`/products/detail/${item.uid}`)
+                                      navigate(`/product/detail/${item.uid}`)
                                     }
                                   >
                                     <Icon icon="heroicons:eye" />

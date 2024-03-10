@@ -87,7 +87,7 @@ const CreateBundle = () => {
               ? {
                   value: dataProduct.primary_variant.uid,
                   label: `${dataProduct.name} - ${dataProduct.primary_variant.sku}`,
-                  extra: `Rp ${dataProduct.primary_variant.price}`,
+                  extra: `Rp ${dataProduct.primary_variant.price.toLocaleString("id-ID")}`,
                 }
               : null;
           } else {
@@ -102,7 +102,7 @@ const CreateBundle = () => {
               return dataProduct.variants.map((variant) => ({
                 value: variant.uid,
                 label: `${dataProduct.name} - ${variant.sku}`,
-                extra: `Rp. ${variant.price}`,
+                extra: `Rp. ${variant.price.toLocaleString("id-ID")}`,
               }));
             } else {
               const primaryVariant = dataProduct.primary_variant;
@@ -111,7 +111,7 @@ const CreateBundle = () => {
                     {
                       value: primaryVariant.uid,
                       label: `${dataProduct.name} - ${primaryVariant.sku}`,
-                      extra: `Rp ${primaryVariant.price}`,
+                      extra: `Rp ${primaryVariant.price.toLocaleString("id-ID")}`,
                     },
                   ]
                 : [];
@@ -121,7 +121,7 @@ const CreateBundle = () => {
                 ...dataProduct.variants.map((variant) => ({
                   value: variant.uid,
                   label: `${dataProduct.name} - ${variant.sku}`,
-                  extra: `Rp ${variant.price}`,
+                  extra: `Rp ${variant.price.toLocaleString("id-ID")}`,
                 })),
               ];
             }
@@ -158,7 +158,7 @@ const CreateBundle = () => {
         </div>
         <div className="">
           <Textinput
-            label="Harga Bundle *"
+            label="Harga Produk Bundle *"
             type="number"
             placeholder="Tentukan nilai harga bundle"
             value={prices[index]}
@@ -168,7 +168,7 @@ const CreateBundle = () => {
         <div className="flex justify-between items-end space-x-5">
           <div className="flex-1">
             <Textinput
-              label="Jumlah Bundle *"
+              label="Jumlah Produk Bundle *"
               type="number"
               placeholder="Tentukan nilai jumlah bundle"
               value={quantities[index]}
@@ -193,6 +193,7 @@ const CreateBundle = () => {
           <div>
             <p>Produk: {selectedVariantDetails[index].label}</p>
             <p>Harga Produk: {selectedVariantDetails[index].extra}</p>
+           
           </div>
         </Alert>
       )}
@@ -230,12 +231,12 @@ const CreateBundle = () => {
         setIsLoading(false);
         navigate("/bundles");
       } catch (error) {
-        Swal.fire("Error!", "Terjadi kesalahan saat membuat Bundle", "error");
         if (
           error.response &&
           error.response.data &&
           error.response.data.errors
-        ) {
+          ) {
+          Swal.fire("Error!", error.response.data.message, "error");
           setError(error.response.data.errors);
         } else {
           setError("Terjadi kesalahan saat membuat Bundle.");

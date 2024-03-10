@@ -129,7 +129,7 @@ const UpdateBundle = () => {
               ? {
                   value: dataProduct.primary_variant.uid,
                   label: `${dataProduct.name} - ${dataProduct.primary_variant.sku}`,
-                  extra: `Rp ${dataProduct.primary_variant.price}`,
+                  extra: `Rp ${dataProduct.primary_variant.price.toLocaleString("id-ID")}`,
                 }
               : null;
           } else {
@@ -144,7 +144,7 @@ const UpdateBundle = () => {
               return dataProduct.variants.map((variant) => ({
                 value: variant.uid,
                 label: `${dataProduct.name} - ${variant.sku}`,
-                extra: `Rp. ${variant.price}`,
+                extra: `Rp. ${variant.price.toLocaleString("id-ID")}`,
               }));
             } else {
               const primaryVariant = dataProduct.primary_variant;
@@ -153,7 +153,7 @@ const UpdateBundle = () => {
                     {
                       value: primaryVariant.uid,
                       label: `${dataProduct.name} - ${primaryVariant.sku}`,
-                      extra: `Rp ${primaryVariant.price}`,
+                      extra: `Rp ${primaryVariant.price.toLocaleString("id-ID")}`,
                     },
                   ]
                 : [];
@@ -163,7 +163,7 @@ const UpdateBundle = () => {
                 ...dataProduct.variants.map((variant) => ({
                   value: variant.uid,
                   label: `${dataProduct.name} - ${variant.sku}`,
-                  extra: `Rp ${variant.price}`,
+                  extra: `Rp ${variant.price.toLocaleString("id-ID")}`,
                 })),
               ];
             }
@@ -172,7 +172,7 @@ const UpdateBundle = () => {
         .filter((variant) => variant !== null);
 
       setDataProduct(formattedVariants);
-      console.log(formattedVariants);
+      // console.log(formattedVariants);
     } catch (error) {
       console.error("Error fetching product variants:", error);
     }
@@ -218,7 +218,7 @@ const UpdateBundle = () => {
         </div>
         <div className="">
           <Textinput
-            label="Harga Bundle *"
+            label="Harga Produk Bundle *"
             type="number"
             placeholder="Tentukan nilai harga bundle"
             value={prices[index]}
@@ -228,7 +228,7 @@ const UpdateBundle = () => {
         <div className="flex justify-between items-end space-x-5">
           <div className="flex-1">
             <Textinput
-              label="Jumlah Bundle *"
+              label="Jumlah Produk Bundle *"
               type="number"
               placeholder="Tentukan nilai jumlah bundle"
               value={quantities[index]}
@@ -290,7 +290,7 @@ const UpdateBundle = () => {
         setIsLoading(false);
         navigate("/bundles");
       } catch (error) {
-        Swal.fire("Error!", "Terjadi kesalahan saat memperbaharui Bundle", "error");
+        Swal.fire("Error!", error?.response?.data?.message, "error");
         if (
           error.response &&
           error.response.data &&

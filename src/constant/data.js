@@ -27,7 +27,7 @@ export const menuItems = [
           },
           {
             multiTitle: "Tambah Produk",
-            multiLink: "products/create",
+            multiLink: "product/create",
           },
         ],
       },
@@ -55,7 +55,7 @@ export const menuItems = [
       },
       {
         childtitle: "Tambah Cabang",
-        childlink: "/sites/create",
+        childlink: "/site/create",
         // isHide: true,
       }
     ]
@@ -85,7 +85,7 @@ export const menuItems = [
       },
       {
         childtitle: "Data Konten Army",
-        childlink: "/army/contents",
+        childlink: "/contents/army",
         // isHide: true,
       }
     ]
@@ -167,7 +167,7 @@ export const topMenu = [
           },
           {
             m_childtitle: "Data Konten Army",
-            m_childlink: "/army/contents",
+            m_childlink: "/contents/army",
           },
         ],
       },
@@ -181,7 +181,7 @@ export const topMenu = [
           },
           {
             m_childtitle: "Tambah Cabang",
-            m_childlink: "/sites/create",
+            m_childlink: "/site/create",
           },
         ],
       },

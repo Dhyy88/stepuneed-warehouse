@@ -62,7 +62,7 @@ function App() {
               <Route path="army" element={<SalesArmy />} />
               <Route path="army/detail/:uid" element={<DetailArmy />} />
               <Route path="army/review/:uid" element={<ReviewArmy />} />
-              <Route path="army/contents" element={<ArmyContents />} />
+              <Route path="contents/army" element={<ArmyContents />} />
 
               {/* Route Sales Internal */}
               <Route path="salesInternal" element={<SalesInternal />} />
@@ -70,14 +70,14 @@ function App() {
               {/* Route Divisi */}
               <Route path="dealers" element={<Dealers />} />
               <Route path="sites" element={<Sites />} />
-              <Route path="sites/create" element={ <Suspense fallback={<Loading />}> <CreateSiteProtect /> </Suspense> } />
-              <Route path="sites/update/:uid" element={ <Suspense fallback={<Loading />}> <UpdateSiteProtect /> </Suspense> } />
+              <Route path="site/create" element={ <Suspense fallback={<Loading />}> <CreateSiteProtect /> </Suspense> } />
+              <Route path="site/update/:uid" element={ <Suspense fallback={<Loading />}> <UpdateSiteProtect /> </Suspense> } />
               
               {/* Route Master Data */}
               <Route path="products" element={<Products />} />
-              <Route path="products/create" element={<CreateProduct />} />
-              <Route path="products/detail/:uid" element={<DetailProducts />} />
-              <Route path="products/update/:uid" element={<UpdateProduct />} />
+              <Route path="product/create" element={<CreateProduct />} />
+              <Route path="product/detail/:uid" element={<DetailProducts />} />
+              <Route path="product/update/:uid" element={<UpdateProduct />} />
               
               <Route path="bundles" element={<Bundles />} />
               <Route path="bundles/create" element={<CreateBundle />} />

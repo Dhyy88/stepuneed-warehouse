@@ -63,19 +63,19 @@ const DetailBundles = () => {
         const { value: input } = await Swal.fire({
           icon: "warning",
           title: "Verifikasi",
-          text: `Silahkan ketik "hapusdata" untuk melanjutkan verifikasi hapus data !`,
+          text: `Silahkan ketik "hapus" untuk melanjutkan verifikasi hapus data !`,
           input: "text",
           showCancelButton: true,
           confirmButtonText: "Konfirmasi",
           cancelButtonText: "Batal",
           inputValidator: (value) => {
-            if (!value || value.trim().toLowerCase() !== "hapusdata") {
-              return 'Anda harus memasukkan kata "hapusdata" untuk melanjutkan verifikasi hapus data!';
+            if (!value || value.trim().toLowerCase() !== "hapus") {
+              return 'Anda harus memasukkan kata "hapus" untuk melanjutkan verifikasi hapus data!';
             }
           },
         });
 
-        if (input && input.trim().toLowerCase() === "hapusdata") {
+        if (input && input.trim().toLowerCase() === "hapus") {
           await axios.delete(`${ApiEndpoint.BUNDLES}/${uid}`);
           Swal.fire(
             "Berhasil!",
@@ -433,6 +433,16 @@ const DetailBundles = () => {
                       </div>
 
                       <Card>
+                        <div className="flex row justify-between mb-2">
+                          <div className="">
+                            <div className="text-sm">Harga Dasar</div>
+                          </div>
+                          <div className="">
+                            <div className="text-sm ">
+                              Rp {item?.base_price.toLocaleString("id-ID")}
+                            </div>
+                          </div>
+                        </div>
                         <div className="">
                           <div className="flex row justify-between mb-2">
                             <div className="">
@@ -445,14 +455,13 @@ const DetailBundles = () => {
                             </div>
                           </div>
                         </div>
-
                         <div className="flex row justify-between mb-2">
                           <div className="">
-                            <div className="text-sm">Harga Dasar</div>
+                            <div className="text-sm">Jumlah</div>
                           </div>
                           <div className="">
                             <div className="text-sm ">
-                              Rp {item?.base_price.toLocaleString("id-ID")}
+                              {item?.quantity} Produk
                             </div>
                           </div>
                         </div>

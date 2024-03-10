@@ -1,6 +1,7 @@
 const ApiEndpoint = {
   // AUTH AREA
     LOGIN: 'ho/auth/login',
+    LOGOUT: 'ho/auth/logout',
     DETAIL: 'ho/account',
     CHANGE_PASSWORD: 'ho/account/password/change',
 
@@ -11,6 +12,7 @@ const ApiEndpoint = {
    // SALES EXTERNAL AREA 
     SALES_EXTERNAL: 'ho/armies',
     CREATE_SALES_EXTERNAL: 'ho/armies/create',
+    CUSTOMER_SALES_EXTERNAL: 'ho/army-customers',
 
     // DEALER AREA
     DEALER: 'ho/dealers',

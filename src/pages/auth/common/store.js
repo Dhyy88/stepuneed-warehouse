@@ -51,16 +51,23 @@ export const authSlice = createSlice({
         });
       }
     },
+    
+    handleLogout: async (state, action) => {
+      try {
+        // await axios.get(ApiEndpoint.LOGOUT);
+        
+        state.isAuth = action.payload;
 
-    handleLogout: (state, action) => {
-      state.isAuth = action.payload;
-      // remove isAuth from local storage
-      window.localStorage.removeItem("token");
-      window.localStorage.removeItem("is_spv");
-      window.location.href = '/';
-      toast.success("User logged out successfully", {
-        position: "top-right",
-      });
+        window.localStorage.removeItem("token");
+        window.localStorage.removeItem("is_spv");
+        window.location.href = '/';
+        
+        toast.success("User logged out successfully", {
+          position: "top-right",
+        });
+      } catch (error) {
+        console.error("Logout failed:", error);
+      }
     },
   },
 });

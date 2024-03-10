@@ -8,7 +8,8 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../../components/Loading";
 import Switch from "@/components/ui/Switch";
-import Product from "@/assets/images/all-img/login-bg.png";
+// import Product from "@/assets/images/all-img/login-bg.png";
+import Product from "@/assets/images/logo/logopng.png";
 import Button from "@/components/ui/Button";
 
 const DetailProducts = () => {
@@ -84,19 +85,19 @@ const DetailProducts = () => {
         const { value: input } = await Swal.fire({
           icon: "warning",
           title: "Verifikasi",
-          text: `Silahkan ketik "hapusdata" untuk melanjutkan verifikasi hapus data !`,
+          text: `Silahkan ketik "hapus" untuk melanjutkan verifikasi hapus data !`,
           input: "text",
           showCancelButton: true,
           confirmButtonText: "Konfirmasi",
           cancelButtonText: "Batal",
           inputValidator: (value) => {
-            if (!value || value.trim().toLowerCase() !== "hapusdata") {
-              return 'Anda harus memasukkan kata "hapusdata" untuk melanjutkan verifikasi hapus data!';
+            if (!value || value.trim().toLowerCase() !== "hapus") {
+              return 'Anda harus memasukkan kata "hapus" untuk melanjutkan verifikasi hapus data!';
             }
           },
         });
 
-        if (input && input.trim().toLowerCase() === "hapusdata") {
+        if (input && input.trim().toLowerCase() === "hapus") {
           await axios.delete(`${ApiEndpoint.PRODUCTS}/${uid}`);
           Swal.fire(
             "Berhasil!",
@@ -297,7 +298,7 @@ const DetailProducts = () => {
                         <Button
                           text="Perbaharui Produk"
                           className="btn-warning dark w-full btn-sm "
-                          onClick={() => navigate(`/products/update/${uid}`)}
+                          onClick={() => navigate(`/product/update/${uid}`)}
                         />
                       </div>
                     </div>

@@ -88,8 +88,8 @@ const Categories = () => {
                   ))}
               </td>
 
-              <td className="table-td">{category.slug}</td>
               <td className="table-td">{category.name}</td>
+              <td className="table-td">{category.slug}</td>
               <td className="table-td">
                 <div className="flex space-x-3 rtl:space-x-reverse">
                   <Tooltip
@@ -168,7 +168,7 @@ const Categories = () => {
 
         Swal.fire({
           icon: "success",
-          text: "Selamat data kategori berhasil disimpan!",
+          text: "Data kategori berhasil diterbitkan!",
         });
         getCategory(query);
         setIsLoadingButton(false);
@@ -180,7 +180,7 @@ const Categories = () => {
       setIsLoadingButton(false);
     }
   };
-  
+
   async function onDelete(uid) {
     try {
       const result = await Swal.fire({
@@ -196,19 +196,19 @@ const Categories = () => {
         const { value: input } = await Swal.fire({
           icon: "warning",
           title: "Verifikasi",
-          text: `Silahkan ketik "hapusdata" untuk melanjutkan verifikasi hapus data !`,
+          text: `Silahkan ketik "hapus" untuk melanjutkan verifikasi hapus data !`,
           input: "text",
           showCancelButton: true,
           confirmButtonText: "Konfirmasi",
           cancelButtonText: "Batal",
           inputValidator: (value) => {
-            if (!value || value.trim().toLowerCase() !== "hapusdata") {
-              return 'Anda harus memasukkan kata "hapusdata" untuk melanjutkan verifikasi hapus data!';
+            if (!value || value.trim().toLowerCase() !== "hapus") {
+              return 'Anda harus memasukkan kata "hapus" untuk melanjutkan verifikasi hapus data!';
             }
           },
         });
 
-        if (input && input.trim().toLowerCase() === "hapusdata") {
+        if (input && input.trim().toLowerCase() === "hapus") {
           await axios.delete(`${ApiEndpoint.CATEGORY}/${uid}`);
           Swal.fire(
             "Berhasil!",
@@ -395,12 +395,11 @@ const Categories = () => {
                           <tr>
                             <th scope="col" className=" table-th "></th>
                             <th scope="col" className=" table-th ">
-                              Slug Kategori
-                            </th>
-                            <th scope="col" className=" table-th ">
                               Nama Kategori
                             </th>
-
+                            <th scope="col" className=" table-th ">
+                              Slug Kategori
+                            </th>
                             <th scope="col" className=" table-th ">
                               Aksi
                             </th>
@@ -419,10 +418,10 @@ const Categories = () => {
                           <tr>
                             <th scope="col" className=" table-th "></th>
                             <th scope="col" className=" table-th ">
-                              Slug Kategori
+                              Nama Kategori
                             </th>
                             <th scope="col" className=" table-th ">
-                              Nama Kategori
+                              Slug Kategori
                             </th>
                             <th scope="col" className=" table-th ">
                               Aksi
@@ -450,10 +449,10 @@ const Categories = () => {
                         <tr>
                           <th scope="col" className=" table-th "></th>
                           <th scope="col" className=" table-th ">
-                            Slug Kategori
-                          </th>
+                              Nama Kategori
+                            </th>
                           <th scope="col" className=" table-th ">
-                            Nama Kategori
+                            Slug Kategori
                           </th>
                           <th scope="col" className=" table-th ">
                             Aksi
@@ -532,7 +531,8 @@ const Categories = () => {
                 className="light-mode alert-warning mb-5"
               >
                 <p>
-                 Form parent kategori dikhususkan untuk kategori yang memiliki sub kategori !
+                  Form parent kategori dikhususkan untuk kategori yang memiliki
+                  sub kategori !
                 </p>
               </Alert>
               <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
