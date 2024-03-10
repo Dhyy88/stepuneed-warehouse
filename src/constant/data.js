@@ -44,17 +44,17 @@ export const menuItems = [
 
   //Menu Master Cabang
   {
-    title: "Master Cabang",
+    title: "Master Cabang SJM",
     icon: "heroicons-outline:building-office-2",
     link: "/app/home",
     child: [
       {
-        childtitle: "Data Cabang",
+        childtitle: "Data Cabang SJM",
         childlink: "/sites",
         isHide: false,
       },
       {
-        childtitle: "Tambah Cabang",
+        childtitle: "Tambah Cabang SJM",
         childlink: "/site/create",
         // isHide: true,
       }
@@ -62,11 +62,7 @@ export const menuItems = [
   },
 
   //Menu Master Dealer
-  {
-    title: "Master Dealer",
-    icon: "heroicons-outline:truck",
-    link: "/dealers",
-  },
+ 
 
   {
     isHeadr: true,
@@ -91,6 +87,8 @@ export const menuItems = [
     ]
   },
 
+ 
+
   //Menu Master Sales
   {
     title: "Sales",
@@ -106,6 +104,12 @@ export const menuItems = [
         childlink: "/coming-soon"
       }
     ]
+  },
+
+  {
+    title: "Master Dealer Sales",
+    icon: "heroicons-outline:truck",
+    link: "/dealers",
   },
 
   {
@@ -172,26 +176,26 @@ export const topMenu = [
         ],
       },
       {
-        megamenutitle: "Master Cabang",
+        megamenutitle: "Master Cabang SJM",
         megamenuicon: "heroicons-outline:building-office-2",
         singleMegamenu: [
           {
-            m_childtitle: "Data Cabang",
+            m_childtitle: "Data Cabang SJM",
             m_childlink: "/sites",
           },
           {
-            m_childtitle: "Tambah Cabang",
+            m_childtitle: "Tambah Cabang SJM",
             m_childlink: "/site/create",
           },
         ],
       },
 
       {
-        megamenutitle: "Master Dealer",
+        megamenutitle: "Master Dealer Sales",
         megamenuicon: "heroicons-outline:truck",
         singleMegamenu: [
           {
-            m_childtitle: "Data Dealer",
+            m_childtitle: "Data Dealer Sales",
             m_childlink: "/dealers",
           },
         ],
