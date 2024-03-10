@@ -68,7 +68,8 @@ const Cars = () => {
         await axios.post(ApiEndpoint.CREATE_CARS, {
           brand: brand,
           model: model,
-          year: yearInputs.map((yearInput) => parseInt(yearInput)),
+          year: yearInputs.map((yearInput) => yearInput.toString()),
+          // year: yearInputs.map((yearInput) => parseInt(yearInput)),
         });
         Swal.fire("Berhasil", "Model mobil telah ditambahkan", "success");
         getDataCars(query);
@@ -83,23 +84,6 @@ const Cars = () => {
       setIsLoadingButton(false);
     }
   };
-
-  async function onDetail(uid) {
-    try {
-      if (uid) {
-        axios.get(`${ApiEndpoint.CARS}/${uid}`).then((response) => {
-          setDataUid(response?.data?.data);
-          setUid(response?.data?.data?.uid);
-          setFullName(response?.data?.data?.full_name);
-          setBrand(response?.data?.data?.brand);
-          setModel(response?.data?.data?.model);
-          setYear(response?.data?.data?.year);
-        });
-      }
-    } catch (error) {
-      // setError(error.response.data.errors);
-    }
-  }
 
   async function onDelete(uid) {
     try {
