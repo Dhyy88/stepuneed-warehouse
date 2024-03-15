@@ -23,6 +23,7 @@ const CreateSite = () => {
   const [type, setType] = useState("");
 
   const typeSite = [
+    { value: "storewh", label: "Toko & Gudang" },
     { value: "store", label: "Toko" },
     { value: "warehouse", label: "Gudang" },
   ];
@@ -142,11 +143,11 @@ const CreateSite = () => {
   return (
     <>
       <div className="lg:col-span-12 col-span-12">
-        <Card title={"Tambah Cabang"}>
+        <Card title={"Tambah Cabang SJM"}>
           <div className="grid xl:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-5 mb-5">
             <div className="">
               <Textinput
-                label="Kode Cabang"
+                label="Kode Cabang *"
                 type="text"
                 placeholder="Masukkan kode cabang"
                 value={site_code}

@@ -45,7 +45,7 @@ const DetailArmy = () => {
     try {
       const response = await axios.post(ApiEndpoint.CUSTOMER_SALES_EXTERNAL, {
         page: query?.page,
-        paginate: 9999,
+        paginate: 7,
         search: query?.search,
         armies: [uid],
       });
@@ -161,14 +161,14 @@ const DetailArmy = () => {
   }, [uid]);
 
   const handlePrevPagination = () => {
-    if (data.prev_page_url) {
-      setQuery({ ...query, page: data.current_page - 1 });
+    if (customer.prev_page_url) {
+      setQuery({ ...query, page: customer.current_page - 1 });
     }
   };
 
   const handleNextPagination = () => {
-    if (data.next_page_url) {
-      setQuery({ ...query, page: data.current_page + 1 });
+    if (customer.next_page_url) {
+      setQuery({ ...query, page: customer.current_page + 1 });
     }
   };
 
@@ -177,13 +177,13 @@ const DetailArmy = () => {
   };
 
   const handleLastPagination = () => {
-    setQuery({ ...query, page: data?.last_page });
+    setQuery({ ...query, page: customer?.last_page });
   };
 
   const generatePageNumbers = () => {
-    const totalPages = data?.last_page;
+    const totalPages = customer?.last_page;
     const maxPageNumbers = 5;
-    const currentPage = data?.current_page;
+    const currentPage = customer?.current_page;
     const middlePage = Math.floor(maxPageNumbers / 2);
     const startPage = Math.max(currentPage - middlePage, 1);
     const endPage = Math.min(startPage + maxPageNumbers - 1, totalPages);
@@ -493,9 +493,6 @@ const DetailArmy = () => {
                     </div>
                     {data?.email}
                   </div>
-                </li>
-
-                <li className="flex space-x-3 rtl:space-x-reverse">
                   <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
                     <Icon icon="heroicons:swatch" />
                   </div>
@@ -803,60 +800,59 @@ const DetailArmy = () => {
                         </tbody>
                       </table>
                     )}
-                  </div>
-
-                  {/* <div className="custom-class flex justify-end mt-4">
-                    <ul className="pagination">
-                      <li>
-                        <button
-                          className="text-xl leading-4 text-slate-900 dark:text-white h-6  w-6 flex  items-center justify-center flex-col prev-next-btn "
-                          onClick={handleFirstPagination}
-                        >
-                          <Icon icon="heroicons-outline:chevron-double-left" />
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="text-xl leading-4 text-slate-900 dark:text-white h-6  w-6 flex  items-center justify-center flex-col prev-next-btn "
-                          onClick={handlePrevPagination}
-                        >
-                          <Icon icon="heroicons-outline:chevron-left" />
-                        </button>
-                      </li>
-
-                      {generatePageNumbers().map((pageNumber) => (
-                        <li key={pageNumber.page}>
+                    <div className="custom-class flex justify-end mt-4">
+                      <ul className="pagination">
+                        <li>
                           <button
-                            className={`${
-                              pageNumber.active ? "active" : ""
-                            } page-link`}
-                            onClick={() =>
-                              setQuery({ ...query, page: pageNumber.page })
-                            }
+                            className="text-xl leading-4 text-slate-900 dark:text-white h-6  w-6 flex  items-center justify-center flex-col prev-next-btn "
+                            onClick={handleFirstPagination}
                           >
-                            {pageNumber.page}
+                            <Icon icon="heroicons-outline:chevron-double-left" />
                           </button>
                         </li>
-                      ))}
+                        <li>
+                          <button
+                            className="text-xl leading-4 text-slate-900 dark:text-white h-6  w-6 flex  items-center justify-center flex-col prev-next-btn "
+                            onClick={handlePrevPagination}
+                          >
+                            <Icon icon="heroicons-outline:chevron-left" />
+                          </button>
+                        </li>
 
-                      <li>
-                        <button
-                          className="text-xl leading-4 text-slate-900 dark:text-white h-6  w-6 flex  items-center justify-center flex-col prev-next-btn "
-                          onClick={handleNextPagination}
-                        >
-                          <Icon icon="heroicons-outline:chevron-right" />
-                        </button>
-                      </li>
-                      <li>
-                        <button
-                          className="text-xl leading-4 text-slate-900 dark:text-white h-6  w-6 flex  items-center justify-center flex-col prev-next-btn "
-                          onClick={handleLastPagination}
-                        >
-                          <Icon icon="heroicons-outline:chevron-double-right" />
-                        </button>
-                      </li>
-                    </ul>
-                  </div> */}
+                        {generatePageNumbers().map((pageNumber) => (
+                          <li key={pageNumber.page}>
+                            <button
+                              className={`${
+                                pageNumber.active ? "active" : ""
+                              } page-link`}
+                              onClick={() =>
+                                setQuery({ ...query, page: pageNumber.page })
+                              }
+                            >
+                              {pageNumber.page}
+                            </button>
+                          </li>
+                        ))}
+
+                        <li>
+                          <button
+                            className="text-xl leading-4 text-slate-900 dark:text-white h-6  w-6 flex  items-center justify-center flex-col prev-next-btn "
+                            onClick={handleNextPagination}
+                          >
+                            <Icon icon="heroicons-outline:chevron-right" />
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            className="text-xl leading-4 text-slate-900 dark:text-white h-6  w-6 flex  items-center justify-center flex-col prev-next-btn "
+                            onClick={handleLastPagination}
+                          >
+                            <Icon icon="heroicons-outline:chevron-double-right" />
+                          </button>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
                 </div>
               </div>
             </Card>

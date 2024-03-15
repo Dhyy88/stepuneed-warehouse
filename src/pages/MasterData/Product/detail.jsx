@@ -160,10 +160,19 @@ const DetailProducts = () => {
             </div>
             <div className="flex-1">
               <div className="text-base text-slate-900 dark:text-slate-300 font-medium mb-1">
-                Slug
+                Status Konten
               </div>
               <div className="text-sm text-slate-600 font-light dark:text-slate-300">
-                {data?.slug}
+                {data?.is_display_in_army_content === true && (
+                  <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
+                    Tampil
+                  </span>
+                )}
+                {data?.is_display_in_army_content === false && (
+                  <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-danger-500 bg-danger-500">
+                    Tidak Tampil
+                  </span>
+                )}
               </div>
             </div>
             <div className="flex-1">
@@ -197,30 +206,7 @@ const DetailProducts = () => {
                     <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
                       Minimal pesanan
                     </div>
-                    {data?.minimal_order}
-                  </div>
-                </li>
-
-                <li className="flex space-x-3 rtl:space-x-reverse">
-                  <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                    <Icon icon="heroicons:bookmark" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                      Status Produk Konten Army
-                    </div>
-                    <div className="text-base text-slate-600 dark:text-slate-50 mt-2">
-                      {data?.is_display_in_army_content === true && (
-                        <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
-                          Tampil
-                        </span>
-                      )}
-                      {data?.is_display_in_army_content === false && (
-                        <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-danger-500 bg-danger-500">
-                          Tidak Tampil
-                        </span>
-                      )}
-                    </div>
+                    {data?.minimal_order} Produk
                   </div>
                 </li>
 

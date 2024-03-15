@@ -26,7 +26,7 @@ const SalesArmy = () => {
   });
   const [email, setEmail] = useState("");
   const [dealer, setDealer] = useState("");
-  const [site, setSite] = useState("");
+  const [site, setSite] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingButton, setIsLoadingButton] = useState(false);
   const [error, setError] = useState(null);
@@ -82,8 +82,11 @@ const SalesArmy = () => {
 
   const getSite = async () => {
     try {
-      const response = await axios.get(ApiEndpoint.STORE_LIST);
-      setSite(response?.data);
+      const store_response = await axios.get(ApiEndpoint.STORE_LIST);
+      const whstore_response = await axios.get(ApiEndpoint.STORE_WH_LIST);
+      const site_response = [...store_response?.data?.data, ...whstore_response?.data?.data];
+
+      setSite(site_response);
     } catch (error) {
       Swal.fire("Gagal", error.response.data.message, "error");
     }
@@ -617,9 +620,9 @@ const SalesArmy = () => {
                   className="react-select mt-2"
                   classNamePrefix="select"
                   placeholder="Pilih cabang..."
-                  options={site?.data?.map((site) => ({
-                    value: site.uid,
-                    label: site.name,
+                  options={site?.map((branch) => ({
+                    value: branch.uid,
+                    label: branch.name,
                   }))}
                   onChange={(selectedOption) => setSelectedSite(selectedOption)}
                   value={selectedSite}

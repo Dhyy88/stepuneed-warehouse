@@ -269,7 +269,7 @@ const Users = () => {
     <>
       <div className="grid grid-cols-12 gap-6">
         <div className="lg:col-span-9 col-span-12">
-          <Card title="Data Pengguna">
+          <Card title="Data Admin SJM">
             <div className="md:flex justify-end items-center mb-4">
               <div className="md:flex items-center gap-3">
                 <div className="row-span-3 md:row-span-4 mb-2">
@@ -373,7 +373,7 @@ const Users = () => {
                         </div>
                         <div className="w-full flex justify-center text-secondary">
                           <span className="text-slate-900 dark:text-white text-[20px] transition-all duration-300">
-                            Pengguna belum tersedia
+                            Admin SJM belum tersedia
                           </span>
                         </div>
                       </div>
@@ -539,13 +539,13 @@ const Users = () => {
           </Card>
         </div>
         <div className="lg:col-span-3 col-span-12">
-          <Card title={editMode ? "Ubah Pengguna" : "Tambah Pengguna"}>
+          <Card title={editMode ? "Ubah Admin SJM" : "Tambah Admin SJM"}>
             <div className="text-sm text-slate-600 font-normal bg-white dark:bg-slate-900 dark:text-slate-300 rounded p-5">
               <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
                 <Textinput
                   label="Email *"
                   type="email"
-                  placeholder="Masukkan email pengguna"
+                  placeholder="Masukkan email admin"
                   onChange={(e) => setEmail(e.target.value)}
                   value={email}
                 />
@@ -559,7 +559,7 @@ const Users = () => {
                 <Textinput
                   label="Nama Depan *"
                   type="text"
-                  placeholder="Masukkan nama depan pengguna"
+                  placeholder="Masukkan nama depan admin"
                   onChange={(e) => setFirstName(e.target.value)}
                   value={first_name}
                 />
@@ -573,7 +573,7 @@ const Users = () => {
                 <Textinput
                   label="Nama Belakang *"
                   type="text"
-                  placeholder="Masukkan nama belakang pengguna"
+                  placeholder="Masukkan nama belakang admin"
                   onChange={(e) => setLastName(e.target.value)}
                   value={last_name}
                 />
@@ -609,7 +609,7 @@ const Users = () => {
                 <Textinput
                   label="No Telepon"
                   type="number"
-                  placeholder="Masukkan no telepon pengguna"
+                  placeholder="Masukkan no telepon admin"
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   value={phone_number}
                 />
@@ -623,7 +623,7 @@ const Users = () => {
                 <Textinput
                   label="Tanggal Lahir"
                   type="date"
-                  placeholder="Masukkan no telepon pengguna"
+                  placeholder="Masukkan no telepon admin"
                   onChange={(e) => setBirth(e.target.value)}
                   value={birth}
                 />

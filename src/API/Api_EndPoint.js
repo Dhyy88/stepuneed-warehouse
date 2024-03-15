@@ -27,6 +27,7 @@ const ApiEndpoint = {
     CREATE_SITES: 'ho/sites/create',
     STORE_LIST: 'ho/sites/store',
     WAREHOUSE_LIST: 'ho/sites/warehouse',
+    STORE_WH_LIST: 'ho/sites/store-warehouse',
 
     //CATEGORY
     CATEGORY: 'ho/categories',
@@ -48,7 +49,12 @@ const ApiEndpoint = {
 
     //ADMINISTRATIVE AREA PUBLIC
     GET_PROVINCE: 'administrative-area/provinces',
-    GET_CITIES: 'administrative-area/cities'
+    GET_CITIES: 'administrative-area/cities',
+
+    //PERMISSION AREA
+    GET_PERMISSION : 'ho/roles/permission-list',
+    ROLE : 'ho/roles',
+    POST_ROLES: 'ho/hos'
   }
   
   export default ApiEndpoint

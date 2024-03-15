@@ -24,6 +24,7 @@ const UpdateSite = () => {
   const [type, setType] = useState("");
 
   const typeSite = [
+    { value: "storewh", label: "Toko & Gudang" },
     { value: "store", label: "Toko" },
     { value: "warehouse", label: "Gudang" },
   ];
@@ -37,20 +38,20 @@ const UpdateSite = () => {
     try {
       if (uid) {
         axios.get(`${ApiEndpoint.SITES}/${uid}`).then((response) => {
-          setData(response.data.data);
-          setSiteCode(response.data.data.code);
-          setSiteName(response.data.data.name);
-          setAddress(response.data.data.address);
+          setData(response?.data?.data);
+          setSiteCode(response?.data?.data?.code);
+          setSiteName(response?.data?.data?.name);
+          setAddress(response?.data?.data?.address);
           setSelectedProvince({
-            value: response.data.data.province.uid,
-            label: response.data.data.province.name,
+            value: response?.data?.data?.province?.uid,
+            label: response?.data?.data?.province?.name,
           });
           setSelectedCity({
-            value: response.data.data.city.uid,
-            label: response.data.data.city.name,
+            value: response?.data?.data?.city?.uid,
+            label: response?.data?.data?.city?.name,
           });
           setType(
-            typeSite.find((type) => type.value === response.data.data.type)
+            typeSite.find((type) => type.value === response?.data?.data?.type)
           );
         });
       }
@@ -177,11 +178,11 @@ const UpdateSite = () => {
   return (
     <>
       <div className="lg:col-span-12 col-span-12">
-        <Card title={"Ubah Cabang"}>
+        <Card title={"Ubah Cabang SJM"}>
           <div className="grid xl:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-5 mb-5">
             <div className="">
               <Textinput
-                label="Kode Cabang"
+                label="Kode Cabang *"
                 type="text"
                 placeholder="Masukkan kode cabang"
                 value={site_code}

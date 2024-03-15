@@ -62,7 +62,6 @@ export const menuItems = [
   },
 
   //Menu Master Dealer
- 
 
   {
     isHeadr: true,
@@ -87,8 +86,6 @@ export const menuItems = [
     ]
   },
 
- 
-
   //Menu Master Sales
   {
     title: "Sales",
@@ -112,19 +109,29 @@ export const menuItems = [
     link: "/dealers",
   },
 
-  {
-    isHeadr: true,
-    title: "Master Data Pengguna",
-  },
-
-  
+  // {
+  //   isHeadr: true,
+  //   title: "Master Data Pengguna",
+  //   isHide: true,
+  // },
 
   //Menu Master Pengguna
   {
-    title: "User Admin",
+    title: "Pengguna",
     icon: "heroicons-outline:users",
-    link: "/users",
-    isHide: true,
+    link: "/app/home",
+    child: [
+      {
+        childtitle: "Admin SJM",
+        childlink: "/users",
+        childicon: "heroicons-outline:users",
+      },
+      {
+        childtitle: "Role Admin SJM",
+        childlink: "/permissions",
+        childicon: "heroicons-outline:shield-exclamation",
+      },
+    ]
   },
 ];
 
@@ -219,10 +226,23 @@ export const topMenu = [
 
   //Menu Master Pengguna
   {
-    title: "User Admin",
-    icon: "heroicons-outline:users",
-    link: "/users",
+    title: "Pengguna",
+    icon: "heroicons-outline:chip",
+    link: "/app/home",
     isHide: true,
+    child: [
+      {
+        childtitle: "Admin SJM",
+        link: "/users",
+        childicon: "heroicons-outline:users",
+      },
+      {
+        childtitle: "Role Admin SJM",
+        link: "/permissions",
+        childicon: "heroicons-outline:shield-exclamation",
+      },
+   
+    ],
   },
 
 

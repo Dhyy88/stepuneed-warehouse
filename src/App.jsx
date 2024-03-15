@@ -34,6 +34,9 @@ const UpdateSite = lazy(() => import("./pages/MasterDivisi/MasterSite/update"));
 // Master User
 const Users = lazy(() => import("./pages/MasterUser/MasterAccountUser"));
 const DetailUser = lazy(() => import("./pages/MasterUser/MasterAccountUser/detail"));
+const Permissions = lazy(() => import("./pages/MasterUser/MasterPermission"));
+const CreatePermission = lazy(() => import('./pages/MasterUser/MasterPermission/create'));
+const UpdatePermission = lazy(() => import('./pages/MasterUser/MasterPermission/update'));
 
 // Master Data
 const Products = lazy(() => import("./pages/MasterData/Product"));
@@ -93,6 +96,11 @@ function App() {
               <Route path="profile/setting/password" element={<PasswordSetting />} />
               <Route path="users" element={ <Suspense fallback={<Loading />}> <UserProtect /> </Suspense> } />
               <Route path="users/detail/:uid" element={<DetailUser />} />
+
+              {/* Route Permission */}
+              <Route path="permissions" element={<Permissions />} />
+              <Route path="permission/create" element={<CreatePermission />} />
+              <Route path="permission/update/:uid" element={<UpdatePermission />} />
               
               {/* Route Error */}
               <Route path="*" element={<Navigate to="/404" />} />
