@@ -255,7 +255,7 @@ const DetailUser = () => {
               >
                 <h6 className={`card-title mb-0  text-slate-500`}>Info Akun</h6>
               </header>
-              <div className="py-3 px-5">
+              <div className="py-5 px-5">
                 <ul className="list space-y-8">
                   <li className="flex space-x-3 rtl:space-x-reverse">
                     <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
@@ -385,7 +385,7 @@ const DetailUser = () => {
                 </div>
               </header>
 
-              <div className="py-3 px-5">
+              <div className="py-5 px-5">
                 <div className="flex-1 row grid grid-cols-2">
                   {data?.profile?.sub_role.length === 0 ? (
                     <div className="col-span-5">Role belum diatur</div>
