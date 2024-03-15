@@ -139,12 +139,12 @@ const DetailProducts = () => {
                 </div>
               </div>
               <div className="flex-1">
-                <div className="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]">
+                <div className="text-3xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]">
                   {data?.name ? <>{data?.name}</> : <span>-</span>}
                 </div>
-                <div className="text-sm font-light text-slate-600 dark:text-slate-400">
+                {/* <div className="text-sm font-light text-slate-600 dark:text-slate-400">
                   {data?.uid}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

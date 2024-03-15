@@ -232,7 +232,7 @@ const DetailArmy = () => {
                   )}
                 </div>
                 <div className="text-sm font-light text-slate-600 dark:text-slate-400">
-                  {data?.uid}
+                  {data?.email}
                 </div>
               </div>
             </div>
@@ -484,15 +484,7 @@ const DetailArmy = () => {
             <Card title="Info Akun" className="mb-4">
               <ul className="list space-y-8">
                 <li className="flex space-x-3 rtl:space-x-reverse">
-                  <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                    <Icon icon="heroicons:envelope" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                      Email
-                    </div>
-                    {data?.email}
-                  </div>
+                  
                   <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
                     <Icon icon="heroicons:swatch" />
                   </div>

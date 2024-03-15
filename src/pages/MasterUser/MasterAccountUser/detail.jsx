@@ -205,7 +205,7 @@ const DetailUser = () => {
                   {data?.profile?.first_name} {data?.profile?.last_name}
                 </div>
                 <div className="text-sm font-light text-slate-600 dark:text-slate-400">
-                  {data?.uid}
+                  {data?.email}
                 </div>
               </div>
             </div>
@@ -259,40 +259,6 @@ const DetailUser = () => {
                 <ul className="list space-y-8">
                   <li className="flex space-x-3 rtl:space-x-reverse">
                     <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                      <Icon icon="heroicons:envelope" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                        Email
-                      </div>
-                      {data?.email}
-                    </div>
-
-                    {data?.profile?.gender && (
-                      <>
-                        <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                          <Icon icon="heroicons:face-smile" />
-                        </div>
-
-                        <div className="flex-1">
-                          <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                            Jenis Kelamin
-                          </div>
-                          <div className="text-base text-slate-600 dark:text-slate-50">
-                            {data?.profile?.gender === "L" && (
-                              <span>Laki-laki</span>
-                            )}
-                            {data?.profile?.gender === "P" && (
-                              <span>Perempuan</span>
-                            )}
-                          </div>
-                        </div>
-                      </>
-                    )}
-                  </li>
-
-                  <li className="flex space-x-3 rtl:space-x-reverse">
-                    <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
                       <Icon icon="heroicons:phone-arrow-up-right" />
                     </div>
 
@@ -314,6 +280,29 @@ const DetailUser = () => {
                         {data?.profile?.birth}
                       </div>
                     </div>
+                  </li>
+                  <li className="flex space-x-3 rtl:space-x-reverse">
+                    {data?.profile?.gender && (
+                      <>
+                        <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
+                          <Icon icon="heroicons:face-smile" />
+                        </div>
+
+                        <div className="flex-1">
+                          <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
+                            Jenis Kelamin
+                          </div>
+                          <div className="text-base text-slate-600 dark:text-slate-50">
+                            {data?.profile?.gender === "L" && (
+                              <span>Laki-laki</span>
+                            )}
+                            {data?.profile?.gender === "P" && (
+                              <span>Perempuan</span>
+                            )}
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </li>
                 </ul>
               </div>
@@ -347,29 +336,37 @@ const DetailUser = () => {
                         mengakses fitur tertentu !
                       </h6>
                       <div className="text-base text-slate-600 dark:text-slate-300">
-                        <div className="grid grid-cols-2 gap-4">
-                          {data_role?.data?.map((role) => (
-                            <Card key={role.uid} bodyClass="p-2" noborder>
-                              <Checkbox
-                                label={role.name}
-                                value={checkedRoles[role.uid] || false}
-                                onChange={() =>
-                                  handleRoleCheckboxChange(role.uid)
-                                }
-                              />
-                              <ul className="list-disc list-inside pl-7">
-                                {role.permissions.map((permission) => (
-                                  <li
-                                    key={permission.access}
-                                    className="text-slate-600 text-sm dark:text-slate-300"
-                                  >
-                                    {permission.name}
-                                  </li>
-                                ))}
-                              </ul>
-                            </Card>
-                          ))}
-                        </div>
+                        {data_role &&
+                        data_role.data &&
+                        data_role.data.length > 0 ? (
+                          <div className="grid grid-cols-2 gap-4">
+                            {data_role.data.map((role) => (
+                              <Card key={role.uid} bodyClass="p-2" noborder>
+                                <Checkbox
+                                  label={role.name}
+                                  value={checkedRoles[role.uid] || false}
+                                  onChange={() =>
+                                    handleRoleCheckboxChange(role.uid)
+                                  }
+                                />
+                                <ul className="list-disc list-inside pl-7">
+                                  {role.permissions.map((permission) => (
+                                    <li
+                                      key={permission.access}
+                                      className="text-slate-600 text-sm dark:text-slate-300"
+                                    >
+                                      {permission.name}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </Card>
+                            ))}
+                          </div>
+                        ) : (
+                          <div className="text-base text-slate-600 dark:text-slate-300">
+                            Role belum tersedia
+                          </div>
+                        )}
                       </div>
                     </Card>
                     <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-5 mt-10">

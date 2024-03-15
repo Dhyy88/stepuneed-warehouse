@@ -254,12 +254,12 @@ const DetailBundles = () => {
           <div className="profile-box flex-none md:text-start text-center">
             <div className="md:flex items-end  rtl:space-x-reverse">
               <div className="flex-1 mt-10">
-                <div className="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]">
+                <div className="text-4xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]">
                   {data?.name}
                 </div>
-                <div className="text-sm font-light text-slate-600 dark:text-slate-400">
+                {/* <div className="text-sm font-light text-slate-600 dark:text-slate-400">
                   {data?.uid}
-                </div>
+                </div> */}
               </div>
             </div>
           </div>

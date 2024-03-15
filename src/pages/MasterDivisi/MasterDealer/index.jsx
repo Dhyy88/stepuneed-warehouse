@@ -265,9 +265,9 @@ const Dealers = () => {
                       <table className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700">
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
-                            <th scope="col" className=" table-th ">
+                            {/* <th scope="col" className=" table-th ">
                               ID Dealer
-                            </th>
+                            </th> */}
                             <th scope="col" className=" table-th ">
                               Nama
                             </th>
@@ -301,9 +301,9 @@ const Dealers = () => {
                     <table className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700">
                       <thead className="bg-slate-200 dark:bg-slate-700">
                         <tr>
-                          <th scope="col" className=" table-th ">
+                          {/* <th scope="col" className=" table-th ">
                             ID Dealer
-                          </th>
+                          </th> */}
                           <th scope="col" className=" table-th ">
                             Nama
                           </th>
@@ -321,7 +321,7 @@ const Dealers = () => {
                       <tbody className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
                         {data?.data?.map((item, index) => (
                           <tr key={index}>
-                            <td className="table-td">{item.uid}</td>
+                            {/* <td className="table-td">{item.uid}</td> */}
                             <td className="table-td">{item?.name} </td>
                             <td className="table-td">{item?.address}</td>
                             <td className="table-td">{item?.army_count}</td>
