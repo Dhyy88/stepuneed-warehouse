@@ -105,7 +105,6 @@ const UpdateProduct = () => {
               price: variant.price,
               is_primary: variant.is_primary,
             }));
-            console.log(variantsData);
             setVariants(variantsData);
             const primaryVariantIndex = variantsData.findIndex(
               (variant) => variant.is_primary
@@ -408,7 +407,7 @@ const UpdateProduct = () => {
     formData.append("name", name);
     formData.append("description", description);
     formData.append("min_order", min_order);
-    formData.append("warranty", warranty);
+    formData.append("warranty", warranty || "");
     formData.append("is_active", active);
     formData.append("check_is_variant", is_variant);
 
@@ -515,7 +514,7 @@ const UpdateProduct = () => {
 
   return (
     <div className="lg:col-span-12 col-span-12">
-      <Card title={"Tambah Produk"}>
+      <Card title={"Perbaharui Produk"}>
         <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-5 mb-5">
           <div className="">
             <label htmlFor=" hh" className="form-label ">
@@ -611,6 +610,12 @@ const UpdateProduct = () => {
               label="Garansi produk (optional) "
               placeholder="Garansi produk berupa angka per bulan"
               value={warranty}
+              // onChange={(e) => {
+              //   const value = e.target.value;
+              //   if (value === "" || (!isNaN(value) && parseFloat(value) >= 0)) {
+              //     setWarranty(value);
+              //   }
+              // }}
               onChange={(e) => setWarranty(e.target.value)}
             />
             {error && (

@@ -38,7 +38,7 @@ const CreateProduct = () => {
   const [category, setCategory] = useState("");
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
-  const [min_order, setMinOrder] = useState("");
+  const [min_order, setMinOrder] = useState("1");
   const [warranty, setWarranty] = useState("");
   const [is_active, setIsActive] = useState(false);
   const [primary_image, setPrimaryImage] = useState(null);
@@ -495,7 +495,12 @@ const CreateProduct = () => {
               label="Minimal Pesanan *"
               placeholder="Masukkan angka minimal pesanan"
               value={min_order}
-              onChange={(e) => setMinOrder(e.target.value)}
+              onChange={(e) => {
+                const value = parseInt(e.target.value, 10);
+                if (!isNaN(value) && value > 0) {
+                  setMinOrder(value);
+                }
+              }}
             />
             {error && (
               <span className="text-danger-600 text-xs py-2">
@@ -509,7 +514,12 @@ const CreateProduct = () => {
               label="Garansi produk (optional) "
               placeholder="Garansi produk berupa angka per bulan"
               value={warranty}
-              onChange={(e) => setWarranty(e.target.value)}
+              onChange={(e) => {
+                const value = e.target.value;
+                if (value === "" || (!isNaN(value) && parseFloat(value) >= 0)) {
+                  setWarranty(value);
+                }
+              }}
             />
             {error && (
               <span className="text-danger-600 text-xs py-2">
@@ -523,13 +533,12 @@ const CreateProduct = () => {
             <label htmlFor=" hh" className="form-label ">
               Deskripsi Produk *
             </label>
-            
+
             <ReactQuill
               theme="snow"
               placeholder="Masukkan deskripsi produk..."
               value={description}
               onChange={setDescription}
-
               modules={{
                 toolbar: [
                   [{ size: ["small", false, "large", "huge"] }],
@@ -541,10 +550,51 @@ const CreateProduct = () => {
                     { list: "bullet" },
                     { indent: "-1" },
                     { indent: "+1" },
-                    { align: [] }
+                    { align: [] },
                   ],
-                  [{ "color": ["#000000", "#e60000", "#ff9900", "#ffff00", "#008a00", "#0066cc", "#9933ff", "#ffffff", "#facccc", "#ffebcc", "#ffffcc", "#cce8cc", "#cce0f5", "#ebd6ff", "#bbbbbb", "#f06666", "#ffc266", "#ffff66", "#66b966", "#66a3e0", "#c285ff", "#888888", "#a10000", "#b26b00", "#b2b200", "#006100", "#0047b2", "#6b24b2", "#444444", "#5c0000", "#663d00", "#666600", "#003700", "#002966", "#3d1466", 'custom-color'] }],
-                ]
+                  [
+                    {
+                      color: [
+                        "#000000",
+                        "#e60000",
+                        "#ff9900",
+                        "#ffff00",
+                        "#008a00",
+                        "#0066cc",
+                        "#9933ff",
+                        "#ffffff",
+                        "#facccc",
+                        "#ffebcc",
+                        "#ffffcc",
+                        "#cce8cc",
+                        "#cce0f5",
+                        "#ebd6ff",
+                        "#bbbbbb",
+                        "#f06666",
+                        "#ffc266",
+                        "#ffff66",
+                        "#66b966",
+                        "#66a3e0",
+                        "#c285ff",
+                        "#888888",
+                        "#a10000",
+                        "#b26b00",
+                        "#b2b200",
+                        "#006100",
+                        "#0047b2",
+                        "#6b24b2",
+                        "#444444",
+                        "#5c0000",
+                        "#663d00",
+                        "#666600",
+                        "#003700",
+                        "#002966",
+                        "#3d1466",
+                        "custom-color",
+                      ],
+                    },
+                  ],
+                ],
               }}
             />
             {/* <CKEditor
