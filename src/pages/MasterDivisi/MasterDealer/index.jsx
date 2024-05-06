@@ -10,6 +10,7 @@ import Swal from "sweetalert2";
 import Button from "@/components/ui/Button";
 import Loading from "../../../components/Loading";
 import LoadingButton from "../../../components/LoadingButton";
+import Select from "react-select";
 
 const Dealers = () => {
   const [data, setData] = useState({
@@ -19,6 +20,9 @@ const Dealers = () => {
     prev_page_url: null,
     next_page_url: null,
   });
+  const [data_brand, setDataBrand] = useState(null);
+  const [brand_select, setBrandSelect] = useState(null);
+
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingButton, setIsLoadingButton] = useState(false);
   const [error, setError] = useState(null);
@@ -43,6 +47,12 @@ const Dealers = () => {
     }
   }
 
+  const getBrand = () => {
+    axios.get(ApiEndpoint.BRANDS_CARS).then((response) => {
+      setDataBrand(response?.data?.data);
+    });
+  };
+
   const onSubmit = async () => {
     setIsLoadingButton(true);
     const confirmResult = await Swal.fire({
@@ -59,6 +69,7 @@ const Dealers = () => {
         await axios.post(ApiEndpoint.CREATE_DEALER, {
           name: name,
           address: address,
+          brand: brand_select?.value,
         });
         Swal.fire("Sukses", "Dealer berhasil ditambahkan", "success");
         getDataDealer(query);
@@ -125,6 +136,10 @@ const Dealers = () => {
 
       setName(dealerData.name);
       setAddress(dealerData.address);
+      setBrandSelect({
+        value: dealerData.car_brand?.uid,
+        label: dealerData.car_brand?.brand,
+      });
       setData({ ...data, uid: dealerData.uid });
       setError("");
       setEditMode(true);
@@ -149,6 +164,7 @@ const Dealers = () => {
         await axios.post(`${ApiEndpoint.DEALER}/${data.uid}`, {
           name: name,
           address: address,
+          brand: brand_select?.value,
         });
 
         Swal.fire("Berhasil", "Dealer berhasil diubah", "success");
@@ -205,10 +221,15 @@ const Dealers = () => {
     getDataDealer(query);
   }, [query]);
 
+  useEffect(() => {
+    getBrand();
+  }, []);
+
   const resetForm = () => {
     setName("");
     setAddress("");
     setEditMode(false);
+    setBrandSelect(null);
   };
 
   return (
@@ -238,10 +259,10 @@ const Dealers = () => {
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
                             <th scope="col" className=" table-th ">
-                              ID Dealer
+                              Nama Dealer
                             </th>
                             <th scope="col" className=" table-th ">
-                              Nama
+                              Brand Dealer
                             </th>
                             <th scope="col" className=" table-th ">
                               Alamat
@@ -265,11 +286,11 @@ const Dealers = () => {
                       <table className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700">
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
-                            {/* <th scope="col" className=" table-th ">
-                              ID Dealer
-                            </th> */}
                             <th scope="col" className=" table-th ">
-                              Nama
+                              Nama Dealer
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Brand Dealer
                             </th>
                             <th scope="col" className=" table-th ">
                               Alamat
@@ -301,11 +322,11 @@ const Dealers = () => {
                     <table className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700">
                       <thead className="bg-slate-200 dark:bg-slate-700">
                         <tr>
-                          {/* <th scope="col" className=" table-th ">
-                            ID Dealer
-                          </th> */}
                           <th scope="col" className=" table-th ">
-                            Nama
+                            Nama Dealer
+                          </th>
+                          <th scope="col" className=" table-th ">
+                            Brand Dealer
                           </th>
                           <th scope="col" className=" table-th ">
                             Alamat
@@ -321,31 +342,15 @@ const Dealers = () => {
                       <tbody className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
                         {data?.data?.map((item, index) => (
                           <tr key={index}>
-                            {/* <td className="table-td">{item.uid}</td> */}
                             <td className="table-td">{item?.name} </td>
+                            <td className="table-td">
+                              {item?.car_brand?.brand}
+                            </td>
                             <td className="table-td">{item?.address}</td>
                             <td className="table-td">{item?.army_count}</td>
 
                             <td className="table-td">
                               <div className="flex space-x-3 rtl:space-x-reverse">
-                                {/* <Tooltip
-                                  content="Detail Dealer"
-                                  placement="top"
-                                  arrow
-                                  animation="shift-away"
-                                >
-                                  <button
-                                    className="action-btn"
-                                    type="button"
-                                    onClick={() =>
-                                      navigate(
-                                        `/detail-sales-external/${item.uid}`
-                                      )
-                                    }
-                                  >
-                                    <Icon icon="heroicons:eye" />
-                                  </button>
-                                </Tooltip> */}
                                 <Tooltip
                                   content="Edit"
                                   placement="top"
@@ -465,6 +470,26 @@ const Dealers = () => {
                   placeholder="Masukkan alamat dealer"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
+                />
+              </div>
+              <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
+                <label htmlFor="hh" className="form-label">
+                  Brand Mobil *
+                </label>
+                <Select
+                  className="react-select mb-2 w-full "
+                  classNamePrefix="select"
+                  placeholder="Pilih brand..."
+                  options={data_brand?.map((item) => ({
+                    value: item.uid,
+                    label: item.brand,
+                  }))}
+                  onChange={(optionSelect) => setBrandSelect(optionSelect)}
+                  value={brand_select}
+                  showSearch
+                  style={{
+                    height: 40,
+                  }}
                 />
               </div>
               <div className="text-base text-end text-slate-600 dark:text-slate-300">
