@@ -24,8 +24,9 @@ const SalesArmy = () => {
     prev_page_url: null,
     next_page_url: null,
   });
+  const [data_spv, setDataSPV] = useState([]);
   const [email, setEmail] = useState("");
-  const [dealer, setDealer] = useState("");
+  const [dealer, setDealer] = useState([]);
   const [site, setSite] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingButton, setIsLoadingButton] = useState(false);
@@ -39,9 +40,12 @@ const SalesArmy = () => {
     site: "",
     is_active: "",
   });
-  const [queryDealer, setQueryDealer] = useState({ search: "" });
+  const [query_spv, setQuerySPV] = useState({
+    dealer: "",
+  });
   const [selectedDealer, setSelectedDealer] = useState(null);
   const [selectedSite, setSelectedSite] = useState(null);
+  const [selectedSPV, setSelectedSPV] = useState(null);
 
   async function getDataSalesExternal(query) {
     setIsLoading(true);
@@ -64,27 +68,31 @@ const SalesArmy = () => {
     }
   }
 
-  async function getDataDealer(queryDealer) {
-    setIsLoading(true);
+  async function getSPVData(query_spv) {
     try {
-      const response = await axios.post(ApiEndpoint.DEALER, {
-        page: queryDealer?.page,
-        search: queryDealer?.search,
-        paginate: 5,
+      const response = await axios.post(ApiEndpoint.SPV_ARMIES, {
+        dealer: query_spv?.dealer,
       });
-      setDealer(response.data.data);
-      setIsLoading(false);
+      setDataSPV(response?.data?.data);
     } catch (err) {
       setError(err);
-      setIsLoading(false);
     }
   }
+
+  const getDealer = () => {
+    axios.get(ApiEndpoint.DEALER).then((response) => {
+      setDealer(response?.data?.data);
+    });
+  };
 
   const getSite = async () => {
     try {
       const store_response = await axios.get(ApiEndpoint.STORE_LIST);
       const whstore_response = await axios.get(ApiEndpoint.STORE_WH_LIST);
-      const site_response = [...store_response?.data?.data, ...whstore_response?.data?.data];
+      const site_response = [
+        ...store_response?.data?.data,
+        ...whstore_response?.data?.data,
+      ];
 
       setSite(site_response);
     } catch (error) {
@@ -109,6 +117,7 @@ const SalesArmy = () => {
           email: email,
           dealer: selectedDealer?.value,
           site: selectedSite?.value,
+          spv: selectedSPV?.value,
         });
         Swal.fire("Sukses", "Data sales berhasil ditambahkan.", "success");
         getDataSalesExternal(query);
@@ -206,17 +215,30 @@ const SalesArmy = () => {
 
   useEffect(() => {
     getDataSalesExternal(query);
-    getDataDealer(queryDealer);
-  }, [query, queryDealer]);
+  }, [query]);
 
   useEffect(() => {
     getSite();
+    getDealer();
   }, []);
+  
+  useEffect(() => {
+    if (selectedDealer) {
+      setQuerySPV({ dealer: selectedDealer.value });
+    }
+  }, [selectedDealer]);
+
+  useEffect(() => {
+    if (query_spv.dealer) {
+      getSPVData(query_spv);
+    }
+  }, [query_spv]);
 
   const resetForm = () => {
     setEmail("");
     setSelectedSite(null);
     setSelectedDealer(null);
+    setSelectedSPV(null);
     setError(null);
   };
 
@@ -236,7 +258,7 @@ const SalesArmy = () => {
                     }
                   >
                     <option value="">Dealer</option>
-                    {dealer?.data?.map((dealer) => (
+                    {dealer?.map((dealer) => (
                       <option key={dealer.uid} value={dealer.uid}>
                         {dealer.name}
                       </option>
@@ -252,7 +274,7 @@ const SalesArmy = () => {
                     }
                   >
                     <option value="">Cabang</option>
-                    {site?.data?.map((site) => (
+                    {site?.map((site) => (
                       <option key={site.uid} value={site.uid}>
                         {site.name}
                       </option>
@@ -323,6 +345,9 @@ const SalesArmy = () => {
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
                             <th scope="col" className=" table-th ">
+                              Kode Referral
+                            </th>
+                            <th scope="col" className=" table-th ">
                               Email
                             </th>
                             <th scope="col" className=" table-th ">
@@ -357,6 +382,9 @@ const SalesArmy = () => {
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
                             <th scope="col" className=" table-th ">
+                              Kode Referral
+                            </th>
+                            <th scope="col" className=" table-th ">
                               Email
                             </th>
                             <th scope="col" className=" table-th ">
@@ -385,7 +413,7 @@ const SalesArmy = () => {
                         </div>
                         <div className="w-full flex justify-center text-secondary">
                           <span className="text-slate-900 dark:text-white text-[20px] transition-all duration-300">
-                            Sales external belum tersedia
+                            Sales army belum tersedia
                           </span>
                         </div>
                       </div>
@@ -394,6 +422,9 @@ const SalesArmy = () => {
                     <table className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700">
                       <thead className="bg-slate-200 dark:bg-slate-700">
                         <tr>
+                          <th scope="col" className=" table-th ">
+                            Kode Referral
+                          </th>
                           <th scope="col" className=" table-th ">
                             Email
                           </th>
@@ -420,6 +451,14 @@ const SalesArmy = () => {
                       <tbody className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
                         {data?.data?.map((item, index) => (
                           <tr key={index}>
+                            {item?.army_profile?.referral_code?.code ? (
+                              <td className="table-td">
+                                {item?.army_profile?.referral_code?.code}
+                              </td>
+                            ) : (
+                              <td className="table-td">-</td>
+                            )}
+
                             <td className="table-td">{item.email}</td>
 
                             {item?.army_profile?.first_name ? (
@@ -642,9 +681,9 @@ const SalesArmy = () => {
                   className="react-select mt-2"
                   classNamePrefix="select"
                   placeholder="Pilih dealer..."
-                  options={dealer?.data?.map((dealer) => ({
-                    value: dealer.uid,
-                    label: dealer.name,
+                  options={dealer?.map((dealer) => ({
+                    value: dealer?.uid,
+                    label: dealer?.name,
                   }))}
                   onChange={(selectedOption) =>
                     setSelectedDealer(selectedOption)
@@ -657,6 +696,24 @@ const SalesArmy = () => {
                     {error.dealer}
                   </span>
                 )}
+              </div>
+              <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
+                <label htmlFor=" hh" className="form-label ">
+                  Pilih SPV (Optional)
+                </label>
+                <Select
+                  className="react-select mt-2"
+                  classNamePrefix="select"
+                  placeholder="Pilih SPV..."
+                  options={data_spv?.map((item) => ({
+                    value: item?.uid,
+                    // label: `${item?.email}`,
+                    label: `${item?.spv_army_profile?.first_name ? item.spv_army_profile.first_name + ' ' : ''}${item?.spv_army_profile?.last_name || '' || item?.email}`,
+                  }))}
+                  onChange={(selectedOption) => setSelectedSPV(selectedOption)}
+                  value={selectedSPV}
+                  isClearable
+                />
               </div>
               <div className="grid justify-items-end">
                 <div className="grid xl:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 ">

@@ -12,6 +12,8 @@ import LoadingButton from "../../../components/LoadingButton";
 import Alert from "@/components/ui/Alert";
 import Textinput from "@/components/ui/Textinput";
 import Loading from "../../../components/Loading";
+import { Modal } from "antd";
+import Select from "react-select";
 
 // import images
 import ProfileImageMen from "@/assets/images/avatar/13.png";
@@ -32,13 +34,51 @@ const DetailArmy = () => {
 
   const [isLoadingButton, setIsLoadingButton] = useState(false);
   const [isApproveLoading, setIsApproveLoading] = useState(false);
+  const [isModalUpdateDealer, setIsModalUpdateDealer] = useState(false);
+  const [isModalUpdateSite, setIsModalUpdateSite] = useState(false);
+  const [isModalUpdateSPV, setIsModalUpdateSPV] = useState(false);
+
+  const [dealer, setDealer] = useState([]);
+  const [site, setSite] = useState([]);
+  const [spv, setSPV] = useState([]);
+  const [selectedSite, setSelectedSite] = useState(null);
+  const [selectedSPV, setSelectedSPV] = useState(null);
+  const [selectedDealer, setSelectedDealer] = useState(null);
 
   const [query, setQuery] = useState({
     search: "",
     armies: [uid],
     paginate: 10,
   });
+  const [query_dealer, setQueryDealer] = useState({
+    brand: "",
+  })
+  const [query_spv, setQuerySPV] = useState({
+    dealer: "",
+  });
   const [error, setError] = useState(null);
+
+  const getDataById = () => {
+    try {
+      if (uid) {
+        axios.get(`${ApiEndpoint.SALES_EXTERNAL}/${uid}`).then((response) => {
+          setData(response.data.data);
+          const dealerUid = response?.data?.data?.army_profile?.dealer?.uid || "";
+          const brandUid = response?.data?.data?.army_profile?.dealer?.car_brand?.uid || "";
+          setQuerySPV(prevState => ({
+            ...prevState,
+            dealer: dealerUid,
+          }));
+          setQueryDealer(prevState => ({
+            ...prevState,
+            brand: brandUid,
+          }));
+        });
+      }
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
 
   async function getDataCustomer(query) {
     setIsLoading(true);
@@ -57,20 +97,98 @@ const DetailArmy = () => {
     }
   }
 
-  useEffect(() => {
-    getDataCustomer(query);
-  }, [query]);
-
-  const getDataById = () => {
+  async function getDealer(query_dealer) {
     try {
-      if (uid) {
-        axios.get(`${ApiEndpoint.SALES_EXTERNAL}/${uid}`).then((response) => {
-          setData(response.data.data);
-        });
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
+      const response = await axios.post(ApiEndpoint.DEALER, {
+        brand: query_dealer?.brand,
+      });
+      setDealer(response?.data?.data);
+    } catch (err) {
+      setError(err);
     }
+  }
+
+  const getSite = () => {
+    axios.get(ApiEndpoint.SITES).then((response) => {
+      setSite(response?.data?.data);
+    });
+  };
+
+  async function getSPV(query_spv) {
+    try {
+      const response = await axios.post(ApiEndpoint.SPV_ARMIES, {
+        dealer: query_spv?.dealer,
+      });
+      setSPV(response?.data?.data);
+    } catch (err) {
+      setError(err);
+    }
+  }
+
+  useEffect(() => {
+    if (query_spv.dealer) {
+      getSPV(query_spv);
+    }
+  }, [query_spv]);
+
+  useEffect(() => {
+    if (query_dealer.brand) {
+      getDealer(query_dealer);
+    }
+  }, [query_dealer]);
+
+  const handleOpenModalUpdateDealer = () => {
+    setIsModalUpdateDealer(true);
+    getDealer(query_dealer);
+    if (data?.army_profile?.dealer?.uid) {
+      setSelectedDealer({
+        value: data?.army_profile?.dealer?.uid,
+        label: `${data?.army_profile?.dealer?.name} - ${data?.army_profile?.dealer?.car_brand?.brand}`,
+      });
+    } else {
+      setSelectedDealer(null);
+    }
+  };
+
+  const handleOpenModalUpdateSite = () => {
+    setIsModalUpdateSite(true);
+    getSite();
+    if (data?.site?.uid) {
+      setSelectedSite({
+        value: data?.site?.uid,
+        label: data?.site?.name,
+      });
+    } else {
+      setSelectedSite(null);
+    }
+  };
+
+  const handleOpenModalUpdateSPV = () => {
+    setIsModalUpdateSPV(true);
+    getSPV(query_spv);
+    if (data?.army_profile?.spv_army_profile?.uid) {
+      setSelectedSPV({
+        value: data?.army_profile?.spv_army_profile?.uid,
+        label: `${data?.army_profile?.spv_army_profile?.first_name} ${data?.army_profile?.spv_army_profile?.last_name} `,
+      });
+    } else {
+      setSelectedSPV(null);
+    }
+  };
+
+  const handleCancelModalUpdateSPV = () => {
+    setIsModalUpdateSPV(false);
+    resetForm();
+  };
+
+  const handleCancelModalUpdateDealer = () => {
+    setIsModalUpdateDealer(false);
+    resetForm();
+  };
+
+  const handleCancelModalUpdateSite = () => {
+    setIsModalUpdateSite(false);
+    resetForm();
   };
 
   const onApproved = async () => {
@@ -105,6 +223,135 @@ const DetailArmy = () => {
       }
     } else {
       setIsApproveLoading(false);
+    }
+  };
+
+  const onUpdateDealer = async () => {
+    const confirmResult = await Swal.fire({
+      title: "Konfirmasi",
+      text: "Anda yakin ingin memperbaharui dealer sales ini?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Ya, Perbaharui",
+      cancelButtonText: "Batal",
+    });
+
+    if (confirmResult.isConfirmed) {
+      try {
+        const requestData = {
+          dealer: selectedDealer,
+        };
+
+        if (selectedDealer) {
+          requestData.dealer = selectedDealer.value;
+        }
+
+        await axios.post(
+          `${ApiEndpoint.SALES_EXTERNAL}/${uid}/change-dealer`,
+          requestData
+        );
+
+        Swal.fire("Sukses", "Dealer berhasil diperbaharui", "success").then(
+          () => {
+            resetForm();
+            setSelectedDealer(null);
+            handleCancelModalUpdateDealer();
+            getDataById();
+          }
+        );
+      } catch (err) {
+        if (err.response.status === 422) {
+          Swal.fire("Gagal", "Maaf, dealer tidak sesuai dengan brand", "error");
+        } else {
+          setError(err.response.data.errors);
+          Swal.fire("Gagal", err.response.data.message, "error");
+        }
+      }
+    }
+  };
+
+  const onUpdateSite = async () => {
+    const confirmResult = await Swal.fire({
+      title: "Konfirmasi",
+      text: "Anda yakin ingin memperbaharui cabang sales ini?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Ya, Perbaharui",
+      cancelButtonText: "Batal",
+    });
+
+    if (confirmResult.isConfirmed) {
+      try {
+        const requestSite = {
+          site: selectedSite,
+        };
+
+        if (selectedSite) {
+          requestSite.site = selectedSite.value;
+        }
+
+        await axios.post(
+          `${ApiEndpoint.SALES_EXTERNAL}/${uid}/change-site`,
+          requestSite
+        );
+
+        Swal.fire("Sukses", "Cabang berhasil diperbaharui", "success").then(
+          () => {
+            resetForm();
+            setSelectedSite(null);
+            handleCancelModalUpdateSite();
+            getDataById();
+          }
+        );
+      } catch (error) {
+        setError(error.response.data.errors);
+        Swal.fire("Gagal", error.response.data.message, "error");
+      }
+    }
+  };
+
+  const onSetSPV = async () => {
+    const confirmResult = await Swal.fire({
+      title: "Konfirmasi",
+      text: "Anda yakin ingin memperbaharui SPV sales ini?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Ya, Perbaharui",
+      cancelButtonText: "Batal",
+    });
+
+    if (confirmResult.isConfirmed) {
+      try {
+        const requestSPV = {
+          spv: selectedSPV,
+        };
+
+        if (selectedSPV) {
+          requestSPV.spv = selectedSPV.value;
+        }
+
+        await axios.post(
+          `${ApiEndpoint.SALES_EXTERNAL}/${uid}/set-spv`,
+          requestSPV
+        );
+        Swal.fire("Sukses", "SPV berhasil diperbaharui", "success").then(() => {
+          resetForm();
+          setSelectedSPV(null);
+          handleCancelModalUpdateSPV();
+          getDataById();
+        });
+      } catch (err) {
+        if (err.response.status === 422) {
+          Swal.fire(
+            "Gagal",
+            "Maaf, SPV army di dealer sekarang tidak sesuai atau tidak tersedia",
+            "error"
+          );
+        } else {
+          setError(err.response.data.errors);
+          Swal.fire("Gagal", err.response.data.message, "error");
+        }
+      }
     }
   };
 
@@ -156,10 +403,6 @@ const DetailArmy = () => {
     toggleAccount(true);
   };
 
-  useEffect(() => {
-    getDataById();
-  }, [uid]);
-
   const handlePrevPagination = () => {
     if (customer.prev_page_url) {
       setQuery({ ...query, page: customer.current_page - 1 });
@@ -195,6 +438,20 @@ const DetailArmy = () => {
 
     return pageNumbers;
   };
+
+  const resetForm = () => {
+    setSelectedSPV(null);
+    setSelectedDealer(null);
+    setSelectedSite(null);
+  };
+
+  useEffect(() => {
+    getDataCustomer(query);
+  }, [query]);
+
+  useEffect(() => {
+    getDataById();
+  }, [uid]);
 
   return (
     <div>
@@ -484,7 +741,6 @@ const DetailArmy = () => {
             <Card title="Info Akun" className="mb-4">
               <ul className="list space-y-8">
                 <li className="flex space-x-3 rtl:space-x-reverse">
-                  
                   <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
                     <Icon icon="heroicons:swatch" />
                   </div>
@@ -498,6 +754,44 @@ const DetailArmy = () => {
                       <span>Belum ada kode referral</span>
                     )}
                   </div>
+                  <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
+                    <Icon icon="heroicons:user" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
+                      SPV Army
+                    </div>
+                    {data?.army_profile?.spv_army_profile?.first_name ||
+                    data?.army_profile?.spv_army_profile?.last_name ? (
+                      <>
+                        {data?.army_profile?.spv_army_profile?.first_name || ""}{" "}
+                        {data?.army_profile?.spv_army_profile?.last_name || ""}
+                        <Button
+                          icon="heroicons-outline:pencil"
+                          className="btn-sm"
+                          onClick={() => handleOpenModalUpdateSPV()}
+                        />
+                      </>
+                    ) : data?.army_profile?.spv_army_profile?.user?.email ? (
+                      <>
+                        {data?.army_profile?.spv_army_profile?.user?.email}
+                        <Button
+                          icon="heroicons-outline:pencil"
+                          className="btn-sm"
+                          onClick={() => handleOpenModalUpdateSPV()}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <span>SPV belum diatur</span>
+                        <Button
+                          icon="heroicons-outline:pencil"
+                          className="btn-sm"
+                          onClick={() => handleOpenModalUpdateSPV()}
+                        />
+                      </>
+                    )}
+                  </div>
                 </li>
 
                 <li className="flex space-x-3 rtl:space-x-reverse">
@@ -506,12 +800,27 @@ const DetailArmy = () => {
                   </div>
                   <div className="flex-1">
                     <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                      Dealer
+                      Dealer - Brand
                     </div>
                     {data?.army_profile?.dealer?.name ? (
-                      <>{data?.army_profile?.dealer?.name}</>
+                      <>
+                        {data?.army_profile?.dealer?.name} -{" "}
+                        {data?.army_profile?.dealer?.car_brand?.brand}
+                        <Button
+                          icon="heroicons-outline:pencil"
+                          className="btn-sm"
+                          onClick={() => handleOpenModalUpdateDealer()}
+                        />
+                      </>
                     ) : (
-                      <span>Dealer belum diatur</span>
+                      <>
+                        <span>Dealer belum diatur</span>
+                        <Button
+                          icon="heroicons-outline:pencil"
+                          className="btn-sm"
+                          onClick={() => handleOpenModalUpdateDealer()}
+                        />
+                      </>
                     )}
                   </div>
                 </li>
@@ -525,9 +834,23 @@ const DetailArmy = () => {
                       Cabang
                     </div>
                     {data?.site?.name ? (
-                      <>{data?.site?.name}</>
+                      <>
+                        {data?.site?.name}
+                        <Button
+                          icon="heroicons-outline:pencil"
+                          className="btn-sm"
+                          onClick={() => handleOpenModalUpdateSite()}
+                        />
+                      </>
                     ) : (
-                      <span>Cabang belum diatur</span>
+                      <>
+                        <span>Cabang belum diatur</span>
+                        <Button
+                          icon="heroicons-outline:pencil"
+                          className="btn-sm"
+                          onClick={() => handleOpenModalUpdateSite()}
+                        />
+                      </>
                     )}
                   </div>
                 </li>
@@ -848,6 +1171,128 @@ const DetailArmy = () => {
                 </div>
               </div>
             </Card>
+
+            {/* START MODAL AREA */}
+
+            <Modal
+              open={isModalUpdateDealer}
+              centered
+              footer
+              onCancel={handleCancelModalUpdateDealer}
+            >
+              <Card>
+                <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mb-4">
+                  <div className="">
+                    <label className="form-label ">
+                      Ubah Dealer Sales Army *
+                    </label>
+                    <Select
+                      className="react-select mt-2"
+                      classNamePrefix="select"
+                      placeholder="Pilih dealer..."
+                      options={dealer?.map((dealer) => ({
+                        value: dealer?.uid,
+                        label: `${dealer?.name} - ${dealer?.car_brand?.brand}`,
+                      }))}
+                      onChange={(selectedOption) =>
+                        setSelectedDealer(selectedOption)
+                      }
+                      value={selectedDealer}
+                      isClearable
+                    />
+                  </div>
+                </div>
+              </Card>
+              <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-5 mt-10">
+                <Button
+                  text={isLoadingButton ? <LoadingButton /> : "Ubah"}
+                  className="btn-primary dark w-full "
+                  type="submit"
+                  onClick={onUpdateDealer}
+                  disabled={isLoadingButton}
+                />
+              </div>
+            </Modal>
+
+            <Modal
+              open={isModalUpdateSite}
+              centered
+              footer
+              onCancel={handleCancelModalUpdateSite}
+            >
+              <Card>
+                <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mb-4">
+                  <div className="">
+                    <label className="form-label ">
+                      Ubah Cabang Sales Army *
+                    </label>
+                    <Select
+                      className="react-select mt-2"
+                      classNamePrefix="select"
+                      placeholder="Pilih cabang..."
+                      options={site?.map((item) => ({
+                        value: item?.uid,
+                        label: item?.name,
+                      }))}
+                      onChange={(selectedOption) =>
+                        setSelectedSite(selectedOption)
+                      }
+                      value={selectedSite}
+                      isClearable
+                    />
+                  </div>
+                </div>
+              </Card>
+              <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-5 mt-10">
+                <Button
+                  text={isLoadingButton ? <LoadingButton /> : "Ubah"}
+                  className="btn-primary dark w-full "
+                  type="submit"
+                  onClick={onUpdateSite}
+                  disabled={isLoadingButton}
+                />
+              </div>
+            </Modal>
+
+            <Modal
+              open={isModalUpdateSPV}
+              centered
+              footer
+              onCancel={handleCancelModalUpdateSPV}
+            >
+              <Card>
+                <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-3 mb-4">
+                  <div className="">
+                    <label className="form-label ">Ubah SPV Sales Army *</label>
+                    <Select
+                      className="react-select mt-2"
+                      classNamePrefix="select"
+                      placeholder="Pilih SPV..."
+                      options={spv?.map((item) => ({
+                        value: item?.uid,
+                        label: `${item?.spv_army_profile?.first_name ? item.spv_army_profile.first_name + ' ' : ''}${item?.spv_army_profile?.last_name || '' || item?.email}`,
+                      }))}
+                      onChange={(selectedOption) =>
+                        setSelectedSPV(selectedOption)
+                      }
+                      value={selectedSPV}
+                      isClearable
+                    />
+                  </div>
+                </div>
+              </Card>
+              <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-5 mt-10">
+                <Button
+                  text={isLoadingButton ? <LoadingButton /> : "Ubah"}
+                  className="btn-primary dark w-full "
+                  type="submit"
+                  onClick={onSetSPV}
+                  disabled={isLoadingButton}
+                />
+              </div>
+            </Modal>
+
+            {/* END MODAL AREA */}
           </div>
         </div>
       </div>
