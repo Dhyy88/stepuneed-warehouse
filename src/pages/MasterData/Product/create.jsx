@@ -361,7 +361,7 @@ const CreateProduct = () => {
       formData.append("price", price);
     }
 
-    formData.append("primary_image", primary_image);
+    formData.append("primary_image", primary_image || "");
 
     for (let i = 0; i < images.length; i++) {
       formData.append("images[]", images[i]);
@@ -632,7 +632,7 @@ const CreateProduct = () => {
         <div className="grid xl:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-5 mb-5">
           <div className="">
             <label htmlFor=" hh" className="form-label ">
-              Gambar Utama *
+              Gambar Utama (optional)
             </label>
             <Fileinput
               selectedFile={primary_image}

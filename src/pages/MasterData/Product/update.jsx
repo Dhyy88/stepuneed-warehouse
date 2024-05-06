@@ -458,7 +458,7 @@ const UpdateProduct = () => {
     }
 
     if (primary_image) {
-      formData.append("primary_image", primary_image);
+      formData.append("primary_image", primary_image || "");
     }
 
     for (let i = 0; i < images.length; i++) {

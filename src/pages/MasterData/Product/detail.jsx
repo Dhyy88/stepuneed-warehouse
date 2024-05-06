@@ -237,15 +237,19 @@ const DetailProducts = () => {
                   </h6>
                 </header>
                 <div className=" py-3 px-5 grid grid-cols-3 gap-4">
-                  {data?.images?.map((item, index) => (
-                    <div className="image-box" key={index}>
-                      <img
-                        src={item?.url}
-                        alt=""
-                        className="rounded-t-md w-full h-full object-cover"
-                      />
-                    </div>
-                  ))}
+                  {data?.images?.length > 0 ? (
+                    data.images.map((item, index) => (
+                      <div className="image-box" key={index}>
+                        <img
+                          src={item.url}
+                          alt=""
+                          className="rounded-t-md w-full h-full object-cover"
+                        />
+                      </div>
+                    ))
+                  ) : (
+                    <span>-</span>
+                  )}
                 </div>
               </Card>
 

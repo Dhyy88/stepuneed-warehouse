@@ -9,6 +9,7 @@ import Swal from "sweetalert2";
 import Button from "@/components/ui/Button";
 import Loading from "../../../components/Loading";
 import { useNavigate } from "react-router-dom";
+import Product from "@/assets/images/logo/logopng.png";
 
 const Products = () => {
   const navigate = useNavigate();
@@ -268,7 +269,7 @@ const Products = () => {
                                 />
                               ) : (
                                 <img
-                                  src={ProfileImageMen}
+                                  src={Product}
                                   alt=""
                                   className="w-16 h-16 object-cover rounded-full"
                                 />
