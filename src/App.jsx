@@ -23,6 +23,12 @@ const DetailArmy = lazy(() => import("./pages/MasterSales/SalesArmy/detail"));
 const ReviewArmy = lazy(() => import("./pages/MasterSales/SalesArmy/review"));
 const ArmyContents = lazy(() => import("./pages/MasterSales/SalesArmy/ArmyContent"));
 
+//Master Sales Army Pages
+const SalesArmySPV = lazy(() => import("./pages/MasterSales/SalesArmy/SPV"));
+const DetailSPVArmy = lazy(() => import("./pages/MasterSales/SalesArmy/SPV/detail"));
+const ReviewSPVArmy = lazy(() => import("./pages/MasterSales/SalesArmy/SPV/review"));
+const CustomerArmy = lazy(() => import("./pages/MasterSales/SalesArmy/Customer"));
+
 const SalesInternal = lazy(() => import("./pages/MasterSales/SalesInternal"));
 
 // Master Divisi
@@ -30,6 +36,8 @@ const Dealers = lazy(() => import("./pages/MasterDivisi/MasterDealer"));
 const Sites = lazy(() => import("./pages/MasterDivisi/MasterSite"));
 const CreateSite = lazy(() => import("./pages/MasterDivisi/MasterSite/create"));
 const UpdateSite = lazy(() => import("./pages/MasterDivisi/MasterSite/update"));
+const Warehouses = lazy(() => import("./pages/MasterUser/MasterWarehouse"));
+const SPVWarehouses = lazy(() => import("./pages/MasterUser/MasterWarehouseSPV"));
 
 // Master User
 const Users = lazy(() => import("./pages/MasterUser/MasterAccountUser"));
@@ -49,7 +57,13 @@ const UpdateBundle = lazy(() => import("./pages/MasterData/Bundles/update"));
 const DetailBundles = lazy(() => import("./pages/MasterData/Bundles/detail"));
 const Categories = lazy(() => import("./pages/MasterData/Category"));
 const Cars = lazy(() => import("./pages/MasterData/Cars"));
+const CarBrands = lazy(() => import("./pages/MasterData/Cars/Brands"));
 const UpdateCars = lazy(() => import("./pages/MasterData/Cars/update"));
+const Suppliers = lazy(() => import("./pages/MasterData/Supplier"));
+const DetailSupplier = lazy(() => import("./pages/MasterData/Supplier/detail"));
+const CreateSupplier = lazy(() => import("./pages/MasterData/Supplier/create"));
+const UpdateSupplier = lazy(() => import("./pages/MasterData/Supplier/update"));
+const SetProduct = lazy(() => import("./pages/MasterData/Supplier/set_product"));
 
 function App() {
   const ability = createMongoAbility();
@@ -67,6 +81,12 @@ function App() {
               <Route path="army/review/:uid" element={<ReviewArmy />} />
               <Route path="contents/army" element={<ArmyContents />} />
 
+              {/* Route Sales Army SPV */}
+              <Route path="spvarmy" element={<SalesArmySPV />} />
+              <Route path="spvarmy/detail/:uid" element={<DetailSPVArmy />} />
+              <Route path="spvarmy/review/:uid" element={<ReviewSPVArmy />} />
+              <Route path="customerarmy" element={<CustomerArmy />} />
+
               {/* Route Sales Internal */}
               <Route path="salesInternal" element={<SalesInternal />} />
 
@@ -75,6 +95,8 @@ function App() {
               <Route path="sites" element={<Sites />} />
               <Route path="site/create" element={ <Suspense fallback={<Loading />}> <CreateSiteProtect /> </Suspense> } />
               <Route path="site/update/:uid" element={ <Suspense fallback={<Loading />}> <UpdateSiteProtect /> </Suspense> } />
+              <Route path="warehouse" element={<Warehouses />} />
+              <Route path="warehousespv" element={<SPVWarehouses />} />
               
               {/* Route Master Data */}
               <Route path="products" element={<Products />} />
@@ -88,7 +110,15 @@ function App() {
               <Route path="bundles/update/:uid" element={<UpdateBundle />} />
               <Route path="categories" element={<Categories />} />
               <Route path="cars" element={<Cars />} />
+              <Route path="brands" element={<CarBrands />} />
               <Route path="cars/update/:uid" element={<UpdateCars />} />
+
+               {/* Route Master Supplier */}
+              <Route path="suppliers" element={<Suppliers />} />
+              <Route path="supplier/create" element={<CreateSupplier />} />
+              <Route path="supplier/detail/:uid" element={<DetailSupplier />} />
+              <Route path="supplier/update/:uid" element={<UpdateSupplier />} />
+              <Route path="supplier/product/:uid" element={<SetProduct />} />
 
               {/* Route User */}
               <Route path="profile" element={<Profiles />} />

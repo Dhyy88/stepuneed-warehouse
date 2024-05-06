@@ -36,7 +36,22 @@ export const menuItems = [
         childlink: "/categories",
       },
       {
-        childtitle: "Data Mobil",
+        childtitle: "Data Supplier",
+        childlink: "/suppliers",
+      },
+    ]
+  },
+  {
+    title: "Master Mobil",
+    icon: "heroicons-outline:truck",
+    link: "/app/home",
+    child: [
+      {
+        childtitle: "Data Brand Mobil",
+        childlink: "/brands"
+      },  
+      {
+        childtitle: "Data Model Mobil",
         childlink: "/cars"
       },  
     ]
@@ -97,6 +112,14 @@ export const menuItems = [
         childlink: "/army",
       },
       {
+        childtitle: "SPV Sales Army",
+        childlink: "/spvarmy",
+      },
+      {
+        childtitle: "Customer Sales Army",
+        childlink: "/customerarmy",
+      },
+      {
         childtitle: "Sales Internal",
         childlink: "/coming-soon"
       }
@@ -109,27 +132,44 @@ export const menuItems = [
     link: "/dealers",
   },
 
-  // {
-  //   isHeadr: true,
-  //   title: "Master Data Pengguna",
-  //   isHide: true,
-  // },
+  {
+    isHeadr: true,
+    title: "Master Pengguna SJM",
+    isHide: true,
+  },
 
   //Menu Master Pengguna
   {
-    title: "Pengguna",
+    title: "Admin Office",
     icon: "heroicons-outline:users",
     link: "/app/home",
     child: [
       {
-        childtitle: "Admin SJM",
+        childtitle: "Admin Office",
         childlink: "/users",
         childicon: "heroicons-outline:users",
       },
       {
-        childtitle: "Role Admin SJM",
+        childtitle: "Role Admin Office",
         childlink: "/permissions",
         childicon: "heroicons-outline:shield-exclamation",
+      },
+    ]
+  },
+  {
+    title: "Admin Warehouse",
+    icon: "heroicons-outline:users",
+    link: "/app/home",
+    child: [
+      {
+        childtitle: "Admin Warehouse",
+        childlink: "/warehouse",
+        childicon: "heroicons-outline:users",
+      },
+      {
+        childtitle: "Admin SPV Warehouse",
+        childlink: "/warehousespv",
+        childicon: "heroicons-outline:users",
       },
     ]
   },
@@ -154,8 +194,16 @@ export const topMenu = [
         megamenuicon: "heroicons-outline:rectangle-group",
         singleMegamenu: [
           {
-            m_childtitle: "Data Mobil",
+            m_childtitle: "Data Brand Mobil",
+            m_childlink: "/brands",
+          },
+          {
+            m_childtitle: "Data Model Mobil",
             m_childlink: "/cars",
+          },
+          {
+            m_childtitle: "Data Supplier",
+            m_childlink: "/suppliers",
           },
           {
             m_childtitle: "Data Kategori",
@@ -168,10 +216,28 @@ export const topMenu = [
         ],
       },
       {
-        megamenutitle: "Master Produk Sales",
+        megamenutitle: "Master Divisi SJM",
+        megamenuicon: "heroicons-outline:building-office-2",
+        singleMegamenu: [
+          {
+            m_childtitle: "Data Cabang SJM",
+            m_childlink: "/sites",
+          },
+          {
+            m_childtitle: "Tambah Cabang SJM",
+            m_childlink: "/site/create",
+          },
+          
+        ],
+      },
+      {
+        megamenutitle: "Master Data Sales",
         megamenuicon: "heroicons-outline:rectangle-group",
         singleMegamenu: [
-        
+          {
+            m_childtitle: "Data Dealer Sales",
+            m_childlink: "/dealers",
+          },
           {
             m_childtitle: "Data Bundle Produk",
             m_childlink: "/bundles",
@@ -183,38 +249,27 @@ export const topMenu = [
         ],
       },
       {
-        megamenutitle: "Master Cabang SJM",
-        megamenuicon: "heroicons-outline:building-office-2",
-        singleMegamenu: [
-          {
-            m_childtitle: "Data Cabang SJM",
-            m_childlink: "/sites",
-          },
-          {
-            m_childtitle: "Tambah Cabang SJM",
-            m_childlink: "/site/create",
-          },
-        ],
-      },
-
-      {
-        megamenutitle: "Master Dealer Sales",
-        megamenuicon: "heroicons-outline:truck",
-        singleMegamenu: [
-          {
-            m_childtitle: "Data Dealer Sales",
-            m_childlink: "/dealers",
-          },
-        ],
-      },
-      {
-        megamenutitle: "Master Sales",
+        megamenutitle: "Master Pengguna Sales Army",
         megamenuicon: "heroicons-outline:user-group",
         singleMegamenu: [
           {
             m_childtitle: "Data Sales Army",
             m_childlink: "/army",
           },
+          {
+            m_childtitle: "Data Sales SPV Army ",
+            m_childlink: "/spvarmy",
+          },
+          {
+            m_childtitle: "Data Customer Sales Army ",
+            m_childlink: "/customerarmy",
+          },
+        ],
+      },
+      {
+        megamenutitle: "Master Pengguna SJM",
+        megamenuicon: "heroicons-outline:user-group",
+        singleMegamenu: [
           {
             m_childtitle: "Data Sales Internal",
             m_childlink: "/coming-soon",
@@ -226,21 +281,32 @@ export const topMenu = [
 
   //Menu Master Pengguna
   {
-    title: "Pengguna",
+    title: "Pengguna SJM",
     icon: "heroicons-outline:chip",
     link: "/app/home",
     isHide: true,
     child: [
       {
-        childtitle: "Admin SJM",
+        childtitle: "Admin Warehouse",
+        link: "/warehouse",
+        childicon: "heroicons-outline:user",
+      },
+      {
+        childtitle: "Admin SPV Warehouse",
+        link: "/warehousespv",
+        childicon: "heroicons-outline:user-circle",
+      },
+      {
+        childtitle: "Admin Office",
         link: "/users",
         childicon: "heroicons-outline:users",
       },
       {
-        childtitle: "Role Admin SJM",
+        childtitle: "Role Admin Office",
         link: "/permissions",
         childicon: "heroicons-outline:shield-exclamation",
       },
+     
    
     ],
   },

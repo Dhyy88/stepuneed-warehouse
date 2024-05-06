@@ -13,6 +13,11 @@ const ApiEndpoint = {
     SALES_EXTERNAL: 'ho/armies',
     CREATE_SALES_EXTERNAL: 'ho/armies/create',
     CUSTOMER_SALES_EXTERNAL: 'ho/army-customers',
+    SALES_EXTERNAL_NO_SPV: 'ho/armies/no-spv',
+
+    SPV_ARMIES: 'ho/spv-armies',
+    CREATE_SPV_ARMIES: 'ho/spv-armies/create',
+    CUSTOMER_ARMIES: 'ho/army-customers',
 
     // DEALER AREA
     DEALER: 'ho/dealers',
@@ -21,6 +26,7 @@ const ApiEndpoint = {
     // CARS AREA
     CARS: 'ho/car-models',
     CREATE_CARS: 'ho/car-models/create',
+    BRANDS_CARS: 'ho/car-brands',
 
     //SITE AREA
     SITES: 'ho/sites',
@@ -28,6 +34,12 @@ const ApiEndpoint = {
     STORE_LIST: 'ho/sites/store',
     WAREHOUSE_LIST: 'ho/sites/warehouse',
     STORE_WH_LIST: 'ho/sites/store-warehouse',
+
+    //WAREHOUSE AREA
+    WAREHOUSE: 'ho/warehouses',
+    CREATE_WAREHOUSE: 'ho/warehouses/create',
+    SPV_WH: 'ho/spv-warehouses',
+    CREATE_SPV_WH : 'ho/spv-warehouses/create',
 
     //CATEGORY
     CATEGORY: 'ho/categories',
@@ -38,6 +50,11 @@ const ApiEndpoint = {
     PRODUCTS : 'ho/products',
     VARIANT_GENERATOR: 'ho/products/variant-generator',
     CREATE_PRODUCTS: 'ho/products/create',
+    ALL_VARIANT: 'ho/products/variants',
+
+    //SUPPLIER
+    SUPPLIER : 'ho/suppliers',
+    CREATE_SUPPLIER: 'ho/suppliers/create',
 
     //BUNDLE PRODUCTS
     BUNDLES : 'ho/bundles',
