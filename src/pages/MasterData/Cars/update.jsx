@@ -13,26 +13,56 @@ import { useParams } from "react-router-dom";
 const UpdateCars = () => {
   const navigate = useNavigate();
   let { uid } = useParams();
-  const [data, setData] = useState(null);
+  const [data, setData] = useState("");
   const [error, setError] = useState("");
 
-  const [brand, setBrand] = useState("");
   const [model, setModel] = useState("");
   const [yearInputs, setYearInputs] = useState([""]);
+
+  const [selected_brand, setSelectedBrand] = useState(null);
+  const [brand, setBrand] = useState(null);
 
   const getDataById = () => {
     try {
       if (uid) {
         axios.get(`${ApiEndpoint.CARS}/${uid}`).then((response) => {
+          const carBrand = response?.data?.data?.car_brand;
           setData(response?.data?.data);
-          setBrand(response?.data?.data?.brand);
           setModel(response?.data?.data?.model);
           setYearInputs(response?.data?.data?.year);
+          if (carBrand) {
+            setBrand({
+              value: carBrand.uid,
+              label: carBrand.brand,
+            });
+            setSelectedBrand({
+              value: carBrand.uid,
+              label: carBrand.brand,
+            });
+          }
         });
       }
     } catch (error) {
       setError(err.response.data.errors);
     }
+  };
+
+  const fetchBrand = async () => {
+    try {
+      const response = await axios.get(ApiEndpoint.BRANDS_CARS);
+      const formattedBrand = response.data.data.map((item) => ({
+        value: item.uid,
+        label: item.brand,
+      }));
+      setBrand(formattedBrand);
+    } catch (error) {
+      console.error("Error fetching brand:", error);
+    }
+  };
+
+  const handleBrandChange = (selected_brand) => {
+    setSelectedBrand(selected_brand);
+    setBrand(selected_brand ? selected_brand.value : null);
   };
 
   const onSubmit = async () => {
@@ -48,19 +78,21 @@ const UpdateCars = () => {
     if (confirmResult.isConfirmed) {
       try {
         const requestData = {
-          brand: brand,
+          brand: selected_brand.value,
           model: model,
           year: yearInputs,
         };
 
         await axios.post(`${ApiEndpoint.CARS}/${uid}`, requestData);
 
-        Swal.fire("Sukses", "Model mobil berhasil diperbaharui", "success").then(
-          () => {
-            resetForm();
-            navigate("/cars");
-          }
-        );
+        Swal.fire(
+          "Sukses",
+          "Model mobil berhasil diperbaharui",
+          "success"
+        ).then(() => {
+          resetForm();
+          navigate("/cars");
+        });
       } catch (err) {
         setError(err.response.data.errors);
         Swal.fire("Gagal", err.response.data.message, "error");
@@ -72,10 +104,14 @@ const UpdateCars = () => {
     getDataById();
   }, [uid]);
 
+  useEffect(() => {
+    fetchBrand();
+  }, []);
+
   const resetForm = () => {
-    setBrand(data ? data.brand : "");
     setModel(data ? data.model : "");
     setYearInputs(data ? data.year : "");
+    setSelectedBrand(brand);
   };
 
   const previousPage = () => {
@@ -88,11 +124,13 @@ const UpdateCars = () => {
         <Card title={"Ubah Model Mobil"}>
           <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-5 mb-5">
             <div className="">
-              <Textinput
-                label="Brand Mobil"
-                type="text"
-                value={brand}
-                onChange={(e) => setBrand(e.target.value)}
+              <Select
+                className="react-select mt-2"
+                classNamePrefix="select"
+                placeholder="Pilih brand..."
+                options={brand}
+                onChange={handleBrandChange}
+                value={selected_brand}
               />
               {error && (
                 <span className="text-danger-600 text-sm py-2">
@@ -129,10 +167,15 @@ const UpdateCars = () => {
           </div>
 
           <div className="grid xl:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-5">
-            <Button
+            {/* <Button
               text="Reset"
               className="btn-primary light w-full"
               onClick={resetForm}
+            /> */}
+            <Button
+              text="Batal"
+              className="btn-secondary light w-full "
+              onClick={previousPage}
             />
             <Button
               text="Simpan"
@@ -140,13 +183,13 @@ const UpdateCars = () => {
               onClick={onSubmit}
             />
           </div>
-          <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-5 mt-5">
+          {/* <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-5 mt-5">
             <Button
               text="Batal"
               className="btn-secondary light w-full "
               onClick={previousPage}
             />
-          </div>
+          </div> */}
         </Card>
       </div>
     </>

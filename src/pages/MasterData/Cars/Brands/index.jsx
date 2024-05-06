@@ -6,15 +6,13 @@ import Modal from "@/components/ui/Modal";
 import Tooltip from "@/components/ui/Tooltip";
 import Swal from "sweetalert2";
 import Button from "@/components/ui/Button";
-import axios from "../../../API/Axios";
-import ApiEndpoint from "../../../API/Api_EndPoint";
-import Loading from "../../../components/Loading";
-import LoadingButton from "../../../components/LoadingButton";
+import axios from "../../../../API/Axios";
+import ApiEndpoint from "../../../../API/Api_EndPoint";
+import Loading from "../../../../components/Loading";
+import LoadingButton from "../../../../components/LoadingButton";
 import { useNavigate } from "react-router-dom";
-import Select from "react-select";
-// import { Select } from "antd";
 
-const Cars = () => {
+const CarBrands = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({
     data: [],
@@ -24,32 +22,22 @@ const Cars = () => {
     next_page_url: null,
   });
 
-  const [data_brand, setDataBrand] = useState(null);
-
   const [brand, setBrand] = useState("");
   const [uid, setUid] = useState("");
-  const [model, setModel] = useState("");
-  const [year, setYear] = useState("");
-  const [full_name, setFullName] = useState("");
-  const [yearInputs, setYearInputs] = useState([""]);
 
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingButton, setIsLoadingButton] = useState(false);
   const [error, setError] = useState(null);
-  const [query, setQuery] = useState({ search: "", paginate: 7, brand: "" });
+  const [query, setQuery] = useState({ search: "", paginate: 7 });
   const [editMode, setEditMode] = useState(false);
-
-  const [selectedBrand, setSelectedBrand] = useState(null);
-  const [brand_select, setBrandSelect] = useState(null)
 
   async function getDataCars(query) {
     setIsLoading(true);
     try {
-      const response = await axios.post(ApiEndpoint.CARS, {
+      const response = await axios.post(ApiEndpoint.BRANDS_CARS, {
         page: query?.page,
         paginate: query?.paginate,
         search: query?.search,
-        brand: query?.brand,
       });
       setData(response?.data?.data);
       setIsLoading(false);
@@ -58,12 +46,6 @@ const Cars = () => {
       setIsLoading(false);
     }
   }
-
-  const getBrand = () => {
-    axios.get(ApiEndpoint.BRANDS_CARS).then((response) => {
-      setDataBrand(response?.data?.data);
-    });
-  };
 
   const onSubmit = async () => {
     setIsLoadingButton(true);
@@ -78,13 +60,10 @@ const Cars = () => {
     setIsLoadingButton(true);
     if (confirmResult.isConfirmed) {
       try {
-        await axios.post(ApiEndpoint.CREATE_CARS, {
-          brand: brand_select?.value,
-          model: model,
-          year: yearInputs.map((yearInput) => yearInput.toString()),
-          // year: yearInputs.map((yearInput) => parseInt(yearInput)),
+        await axios.post(`${ApiEndpoint.BRANDS_CARS}/create`, {
+          brand: brand,
         });
-        Swal.fire("Berhasil", "Model mobil telah ditambahkan", "success");
+        Swal.fire("Berhasil", "Brand mobil telah ditambahkan", "success");
         getDataCars(query);
         resetForm();
         setIsLoadingButton(false);
@@ -102,7 +81,7 @@ const Cars = () => {
     try {
       const result = await Swal.fire({
         icon: "question",
-        title: "Apakah Anda yakin ingin menghapus model mobil ini?",
+        title: "Apakah Anda yakin ingin menghapus brand mobil ini?",
         text: "Anda tidak akan dapat mengembalikannya!",
         showCancelButton: true,
         confirmButtonText: "Ya, Hapus",
@@ -126,15 +105,15 @@ const Cars = () => {
         });
 
         if (input && input.trim().toLowerCase() === "hapus") {
-          await axios.delete(`${ApiEndpoint.CARS}/${uid}`);
+          await axios.delete(`${ApiEndpoint.BRANDS_CARS}/${uid}`);
           Swal.fire(
             "Berhasil!",
-            "Anda berhasil menghapus data model mobil ini.",
+            "Anda berhasil menghapus data brand mobil ini.",
             "success"
           );
           getDataCars(query);
         } else {
-          Swal.fire("Batal", "Hapus data model mobil dibatalkan.", "info");
+          Swal.fire("Batal", "Hapus data brand mobil dibatalkan.", "info");
         }
       }
     } catch (err) {
@@ -142,25 +121,58 @@ const Cars = () => {
     }
   }
 
-  const addYearInput = () => {
-    setYearInputs([...yearInputs, ""]);
+  const onEdit = async (uid) => {
+    try {
+      const response = await axios.get(`${ApiEndpoint.BRANDS_CARS}/${uid}`);
+      const edited_brand = response.data.data;
+
+      setBrand(edited_brand.brand);
+
+      setData({ ...data, uid: edited_brand.uid });
+      setError("");
+      setEditMode(true);
+    } catch (err) {
+      Swal.fire("Gagal", err.response.data.message, "error");
+    }
   };
 
-  const updateYearInput = (index, value) => {
-    const newYearInputs = [...yearInputs];
-    newYearInputs[index] = value;
-    setYearInputs(newYearInputs);
-  };
+  const onUpdate = async (e) => {
+    setIsLoadingButton(true);
+    e.preventDefault();
 
-  const removeYearInput = (index) => {
-    const newYearInputs = [...yearInputs];
-    newYearInputs.splice(index, 1);
-    setYearInputs(newYearInputs);
-  };
+    const result = await Swal.fire({
+      title: "Konfirmasi",
+      text: "Apakah Anda yakin data yang diubah sudah benar?",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Ya, Ubah",
+      cancelButtonText: "Batal",
+    });
+    setIsLoadingButton(true);
+    if (result.isConfirmed) {
+      const formData = new FormData();
+      formData.append("brand", brand);
 
-  const updateBrandModel = (newBrand, newModel) => {
-    setBrand(newBrand);
-    setModel(newModel);
+      try {
+        await axios.post(`${ApiEndpoint.BRANDS_CARS}/${data.uid}`, formData);
+
+        setBrand("");
+
+        Swal.fire({
+          icon: "success",
+          text: "Berhasil, data brand telah diperbaharui!",
+        });
+        getDataCars(query);
+        resetForm();
+        setEditMode(false);
+        setIsLoadingButton(false);
+      } catch (error) {
+        Swal.fire("Gagal", error.response.data.message, "error");
+        setIsLoadingButton(false);
+      }
+    } else {
+      setIsLoadingButton(false);
+    }
   };
 
   const handlePrevPagination = () => {
@@ -203,47 +215,17 @@ const Cars = () => {
     getDataCars(query);
   }, [query]);
 
-  useEffect(() => {
-    getBrand();
-  }, []);
-
   const resetForm = () => {
     setBrand("");
-    setModel("");
-    setYearInputs([""]);
     setEditMode(false);
-    setBrandSelect(null);
   };
 
   return (
     <>
       <div className="grid grid-cols-12 gap-6">
         <div className="lg:col-span-8 col-span-12">
-          <Card title="Model Mobil">
-            <div className="md:flex justify-end items-center mb-4">
-              <div className="md:flex items-center gap-3">
-                <Select
-                  className="react-select mr-5"
-                  placeholder="Pilih Brand..."
-                  options={[
-                    { value: "", label: "Semua Brand" },
-                    ...(data_brand?.map((item) => ({
-                      value: item.uid,
-                      label: item.brand,
-                    })) || []),
-                  ]}
-                  style={{
-                    height: 40,
-                  }}
-                  onChange={(value) => {
-                    setQuery({ ...query, brand: value?.value });
-                    setSelectedBrand(value);
-                  }}
-                  value={selectedBrand}
-                  showSearch
-                  isClearable
-                />
-              </div>
+          <Card title="Data Brand Mobil">
+            <div className="md:flex justify-between items-center mb-4">
               <div className="md:flex items-center gap-3">
                 <div className="row-span-3 md:row-span-4">
                   <Textinput
@@ -251,7 +233,7 @@ const Cars = () => {
                     onChange={(event) =>
                       setQuery({ ...query, search: event.target.value })
                     }
-                    placeholder="Cari model mobil..."
+                    placeholder="Cari brand mobil..."
                   />
                 </div>
               </div>
@@ -265,7 +247,7 @@ const Cars = () => {
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
                             <th scope="col" className=" table-th ">
-                              Nama Mobil
+                              Nama Brand
                             </th>
                             <th scope="col" className=" table-th ">
                               Aksi
@@ -284,7 +266,7 @@ const Cars = () => {
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
                             <th scope="col" className=" table-th ">
-                              Nama Mobil
+                              Nama Brand
                             </th>
                             <th scope="col" className=" table-th ">
                               Aksi
@@ -301,7 +283,7 @@ const Cars = () => {
                         </div>
                         <div className="w-full flex justify-center text-secondary">
                           <span className="text-slate-900 dark:text-white text-[20px] transition-all duration-300">
-                            Model Mobil belum tersedia
+                            Brand Mobil belum tersedia
                           </span>
                         </div>
                       </div>
@@ -311,7 +293,7 @@ const Cars = () => {
                       <thead className="bg-slate-200 dark:bg-slate-700">
                         <tr>
                           <th scope="col" className=" table-th ">
-                            Nama Mobil
+                            Nama Brand
                           </th>
                           <th scope="col" className=" table-th ">
                             Aksi
@@ -321,7 +303,7 @@ const Cars = () => {
                       <tbody className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
                         {data?.data?.map((item, index) => (
                           <tr key={index}>
-                            <td className="table-td">{item?.full_name} </td>
+                            <td className="table-td">{item?.brand} </td>
 
                             <td className="table-td">
                               <div className="flex space-x-3 rtl:space-x-reverse">
@@ -334,9 +316,10 @@ const Cars = () => {
                                   <button
                                     className="action-btn"
                                     type="button"
-                                    onClick={() =>
-                                      navigate(`/cars/update/${item.uid}`)
-                                    }
+                                    // onClick={() =>
+                                    //   navigate(`/cars/update/${item.uid}`)
+                                    // }
+                                    onClick={() => onEdit(item.uid)}
                                   >
                                     <Icon icon="heroicons:pencil-square" />
                                   </button>
@@ -422,27 +405,15 @@ const Cars = () => {
           </Card>
         </div>
         <div className="lg:col-span-4 col-span-12">
-          <Card title={"Tambah Model Mobil"}>
+          <Card title={editMode ? "Ubah Brand Mobil" : "Tambah Brand Mobil"}>
             <div className="text-sm text-slate-600 font-normal bg-white dark:bg-slate-900 dark:text-slate-300 rounded p-5">
               <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
-                <label htmlFor="hh" className="form-label">
-                  Brand Mobil *
-                </label>
-                <Select
-                  className="react-select mb-2 w-full "
-                  classNamePrefix="select"
-                  placeholder="Pilih brand..."
-                  options={data_brand?.map((item) => ({
-                    value: item.uid,
-                    label: item.brand,
-                  }))}
-                  onChange={(optionSelect) => setBrandSelect(optionSelect)}
-                  value={brand_select}
-                  showSearch
-                  style={{
-                    height: 40,
-                  }}
-                  isClearable
+                <Textinput
+                  label="Nama Brand *"
+                  type="text"
+                  placeholder="Masukkan nama brand mobil yang valid"
+                  onChange={(e) => setBrand(e.target.value)}
+                  value={brand}
                 />
                 {error && (
                   <span className="text-danger-600 text-xs py-2">
@@ -450,89 +421,18 @@ const Cars = () => {
                   </span>
                 )}
               </div>
-              <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
-                <Textinput
-                  label="Model mobil *"
-                  type="text"
-                  placeholder="Masukkan model mobil yang valid"
-                  onChange={(e) => setModel(e.target.value)}
-                  value={model}
-                />
-                {error && (
-                  <span className="text-danger-600 text-xs py-2">
-                    {error.model}
-                  </span>
-                )}
-              </div>
-
-              <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
-                <div className="flex row justify-between items-center mb-2">
-                  <label htmlFor="hh" className="form-label">
-                    Tahun keluaran *
-                  </label>
-                  <div className="flex row justify-end gap-2">
-                    <button
-                      type="button"
-                      className="action-btn"
-                      onClick={() => {
-                        addYearInput();
-                        updateBrandModel(brand, model);
-                      }}
-                    >
-                      <Icon icon="heroicons:plus" />
-                    </button>
-                  </div>
-                </div>
-
-                {yearInputs.map((yearInput, index) => (
-                  <div key={index} className="items-center mb-2">
-                    <div className="flex row justify-between items-center mb-2">
-                      <div className={index > 0 ? "w-full mr-2" : "w-full"}>
-                        <Textinput
-                          type="text"
-                          placeholder="Tahun keluaran"
-                          value={yearInput}
-                          onChange={(e) => {
-                            updateYearInput(index, e.target.value);
-                          }}
-                          key={index}
-                        />
-                      </div>
-                      <div className="">
-                        {index > 0 && (
-                          <button
-                            className="action-btn flex"
-                            onClick={() => {
-                              removeYearInput(index);
-                            }}
-                          >
-                            <Icon icon="heroicons:trash" />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-
-                {error && error.yearInput && error.yearInput[index] && (
-                  <span className="text-danger-600 text-xs py-2">
-                    {error.yearInput[index]}
-                  </span>
-                )}
-              </div>
-
               <div className="text-base text-end text-slate-600 dark:text-slate-300">
                 {editMode ? (
                   <Button
                     text={isLoadingButton ? <LoadingButton /> : "Ubah"}
-                    className="btn-primary dark w-full mr-2 mb-2 "
+                    className="btn-primary dark  mr-2 mb-4 "
                     onClick={onUpdate}
                     disabled={isLoadingButton}
                   />
                 ) : (
                   <Button
                     text={isLoadingButton ? <LoadingButton /> : "Simpan"}
-                    className="btn-primary dark w-full mr-2 mb-2 "
+                    className="btn-primary dark  mr-2 mb-4 "
                     onClick={onSubmit}
                     disabled={isLoadingButton}
                   />
@@ -540,13 +440,13 @@ const Cars = () => {
                 {editMode ? (
                   <Button
                     text="Batal"
-                    className="btn-primary light w-full"
+                    className="btn-primary light "
                     onClick={resetForm}
                   />
                 ) : (
                   <Button
                     text="Reset"
-                    className="btn-primary light w-full"
+                    className="btn-primary light "
                     onClick={resetForm}
                   />
                 )}
@@ -559,4 +459,4 @@ const Cars = () => {
   );
 };
 
-export default Cars;
+export default CarBrands;
