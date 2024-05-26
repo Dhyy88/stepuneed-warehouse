@@ -125,6 +125,7 @@ const CustomerArmy = () => {
                 <div className="row-span-3 md:row-span-4 mb-2">
                   <Select
                     className="react-select mr-5"
+                    classNamePrefix="select"
                     placeholder="Pilih Sales Army..."
                     options={[
                       { value: "", label: "Semua Army" },

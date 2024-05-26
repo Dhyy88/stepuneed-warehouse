@@ -65,6 +65,19 @@ const CreateSupplier = lazy(() => import("./pages/MasterData/Supplier/create"));
 const UpdateSupplier = lazy(() => import("./pages/MasterData/Supplier/update"));
 const SetProduct = lazy(() => import("./pages/MasterData/Supplier/set_product"));
 
+// Master Purchase Order
+const PurchaseOrder = lazy(() => import("./pages/MasterPO"));
+const PurchaseOrderByMe = lazy(() => import("./pages/MasterPO/index_by_me"));
+const CreatePurchaseOrder = lazy(() => import("./pages/MasterPO/create"));
+const DetailPurchaseOrder = lazy(() => import("./pages/MasterPO/detail"));
+const UpdatePurchaseOrder = lazy(() => import("./pages/MasterPO/update"));
+const ApprovePuchaseOrder = lazy(() => import("./pages/MasterPO/index_approve"));
+
+// Master Report
+const PurchaseOrderReport = lazy(() => import("./pages/MasterReport/index_PO"));
+const StockOpnameReport = lazy(() => import("./pages/MasterReport/index_SO"));
+const DetailStockOpnameReport = lazy(() => import("./pages/MasterReport/detail"));
+
 function App() {
   const ability = createMongoAbility();
     return (
@@ -120,11 +133,26 @@ function App() {
               <Route path="supplier/update/:uid" element={<UpdateSupplier />} />
               <Route path="supplier/product/:uid" element={<SetProduct />} />
 
+              {/* Route Master Purchase Order */}
+              {/* <Route path="po" element={<PurchaseOrder />} /> */}
+              <Route path="po" element={ <Suspense fallback={<Loading />}> <UserPOProtect /> </Suspense> } />
+              <Route path="pobyme" element={<PurchaseOrderByMe />} />
+              <Route path="poapprove" element={<ApprovePuchaseOrder />} />
+              <Route path="po/create" element={<CreatePurchaseOrder />} />
+              <Route path="po/detail/:uid" element={<DetailPurchaseOrder />} />
+              <Route path="po/update/:uid" element={<UpdatePurchaseOrder />} />
+
+              {/* Route Report */}
+              <Route path="poreport" element={ <PurchaseOrderReport />} />
+              <Route path="soreport" element={ <StockOpnameReport />} />
+              <Route path="soreport/detail/:uid" element={ <DetailStockOpnameReport />} />
+
               {/* Route User */}
               <Route path="profile" element={<Profiles />} />
               <Route path="profile/setting" element={<ProfileSetting />} />
               <Route path="profile/setting/password" element={<PasswordSetting />} />
               <Route path="users" element={ <Suspense fallback={<Loading />}> <UserProtect /> </Suspense> } />
+              
               <Route path="users/detail/:uid" element={<DetailUser />} />
 
               {/* Route Permission */}
@@ -150,10 +178,12 @@ function App() {
   function ProtectedComponent({ action, permission, component }) {
   const ability = useAbility();
   const isSpv = localStorage.getItem("is_spv") === "true";
+  const isHO = localStorage.getItem("is_spv") === "false";
     if (isSpv || ability.can(action, permission)) {
       return component;
     }
     return <Navigate to="/403" />;
+
   }
 
   function UserProtect() {
@@ -165,6 +195,18 @@ function App() {
       />
     );
   }
+
+  function UserPOProtect() {
+    return (
+      <ProtectedComponent 
+      
+        action="read"
+        permission="PO"
+        component={<PurchaseOrder />}
+      />
+    )
+  }
+
   function CreateSiteProtect() {
     return (
       <ProtectedComponent

@@ -41,6 +41,11 @@ const ApiEndpoint = {
     SPV_WH: 'ho/spv-warehouses',
     CREATE_SPV_WH : 'ho/spv-warehouses/create',
 
+    //PURCHASE-ORDER
+    PO : 'ho/purchase-orders',
+    PO_BY_ME : "ho/purchase-orders/create-by-me",
+    PO_APPROVE : "ho/purchase-orders/approve-by-me",
+
     //CATEGORY
     CATEGORY: 'ho/categories',
     CREATE_CATEGORY: 'ho/categories/create',
@@ -71,7 +76,10 @@ const ApiEndpoint = {
     //PERMISSION AREA
     GET_PERMISSION : 'ho/roles/permission-list',
     ROLE : 'ho/roles',
-    POST_ROLES: 'ho/hos'
+    POST_ROLES: 'ho/hos',
+
+    //REPORT
+    STOCK_OPNAME: "ho/stock-opname-reports"
   }
   
   export default ApiEndpoint

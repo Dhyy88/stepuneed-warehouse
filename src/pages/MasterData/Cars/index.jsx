@@ -221,9 +221,10 @@ const Cars = () => {
         <div className="lg:col-span-8 col-span-12">
           <Card title="Model Mobil">
             <div className="md:flex justify-end items-center mb-4">
-              <div className="md:flex items-center gap-3">
+              <div className="md:flex items-center gap-3 w-52">
                 <Select
-                  className="react-select mr-5"
+                  className="react-select mr-5 w-full"
+                  classNamePrefix="select"
                   placeholder="Pilih Brand..."
                   options={[
                     { value: "", label: "Semua Brand" },

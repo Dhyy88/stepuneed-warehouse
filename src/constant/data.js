@@ -76,6 +76,26 @@ export const menuItems = [
     ]
   },
 
+  {
+    title: "Master PO",
+    icon: "heroicons-outline:clipboard-document-list",
+    link: "/app/home",
+    child: [
+      {
+        childtitle: "Data Permintaan PO",
+        childlink: "/pobyme"
+      },  
+      {
+        childtitle: "Data Persetujuan PO",
+        childlink: "/poapprove"
+      },  
+      {
+        childtitle: "Tambah PO",
+        childlink: "/po/create"
+      },  
+    ]
+  },
+
   //Menu Master Dealer
 
   {
@@ -173,6 +193,26 @@ export const menuItems = [
       },
     ]
   },
+
+  {
+    isHeadr: true,
+    title: "Laporan SJM",
+  },
+
+  {
+    title: "Laporan PO",
+    icon: "heroicons-outline:clipboard-document",
+    isOpen: true,
+    isHide: true,
+    link: '/poreport'
+  },  
+  {
+    title: "Laporan Stock Opname",
+    icon: "heroicons-outline:clipboard-document",
+    isOpen: true,
+    isHide: true,
+    link: '/soreport'
+  },  
 ];
 
 export const topMenu = [
@@ -230,6 +270,7 @@ export const topMenu = [
           
         ],
       },
+      
       {
         megamenutitle: "Master Data Sales",
         megamenuicon: "heroicons-outline:rectangle-group",
@@ -279,7 +320,34 @@ export const topMenu = [
     ],
   },
 
+  // Master PO
+
+  {
+    title: "Master PO",
+    icon: "heroicons-outline:clipboard-document-list",
+    link: "/app/home",
+    isHide: true,
+    child: [
+      {
+        childtitle: "Data Permintaan PO",
+        link: "/pobyme",
+        childicon: "heroicons-outline:folder-arrow-down",
+      },
+      {
+        childtitle: "Data Persetujuan PO",
+        link: "/poapprove",
+        childicon: "heroicons-outline:document-check",
+      },
+      {
+        childtitle: "Tambah PO",
+        link: "/po/create",
+        childicon: "heroicons-outline:plus-circle",
+      },
+    ],
+  },
+
   //Menu Master Pengguna
+
   {
     title: "Pengguna SJM",
     icon: "heroicons-outline:chip",
@@ -306,12 +374,30 @@ export const topMenu = [
         link: "/permissions",
         childicon: "heroicons-outline:shield-exclamation",
       },
-     
-   
     ],
   },
 
+  //Master Report
 
+  {
+    title: "Laporan",
+    icon: "heroicons-outline:information-circle",
+    link: "/app/home",
+    isHide: true,
+    child: [
+      {
+        childtitle: "Laporan PO",
+        link: "/poreport",
+        childicon: "heroicons-outline:clipboard-document",
+      },
+      {
+        childtitle: "Laporan Stok Opname",
+        link: "/soreport",
+        childicon: "heroicons-outline:clipboard-document",
+      },
+    ],
+  },
+  
 ];
 
 // import User1 from "@/assets/images/all-img/user.png";
