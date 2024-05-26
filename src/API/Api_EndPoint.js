@@ -1,9 +1,19 @@
 const ApiEndpoint = {
   // AUTH AREA
-    LOGIN: 'ho/auth/login',
-    LOGOUT: 'ho/auth/logout',
-    DETAIL: 'ho/account',
-    CHANGE_PASSWORD: 'ho/account/password/change',
+    LOGIN: 'warehouse/auth/login',
+    LOGOUT: 'warehouse/auth/logout',
+    DETAIL: 'warehouse/account',
+    CHANGE_PASSWORD: 'warehouse/account/password/change',
+
+  //STOCK OPNAME
+    STOCKOPNAME: "warehouse/stocks/opname",
+    RECEIVE_PO: "warehouse/purchase-order-receive",
+    PO_NUMBER: "warehouse/purchase-order-receive/purchase-order-detail",
+
+  // STOCK
+    STOCK: "warehouse/stocks",
+    LOCATION_STOCK: "warehouse/stocks/locations",
+    VARIANTS: "warehouse/variants",
 
   //HO ACCOUNT
     HO: 'ho/hos',
@@ -14,6 +24,10 @@ const ApiEndpoint = {
     CREATE_SALES_EXTERNAL: 'ho/armies/create',
     CUSTOMER_SALES_EXTERNAL: 'ho/army-customers',
 
+    SPV_ARMIES: 'ho/spv-armies',
+    CREATE_SPV_ARMIES: 'ho/spv-armies/create',
+    CUSTOMER_ARMIES: 'ho/army-customers',
+
     // DEALER AREA
     DEALER: 'ho/dealers',
     CREATE_DEALER: 'ho/dealers/create',
@@ -21,6 +35,7 @@ const ApiEndpoint = {
     // CARS AREA
     CARS: 'ho/car-models',
     CREATE_CARS: 'ho/car-models/create',
+    BRANDS_CARS: 'ho/car-brands',
 
     //SITE AREA
     SITES: 'ho/sites',
@@ -28,6 +43,10 @@ const ApiEndpoint = {
     STORE_LIST: 'ho/sites/store',
     WAREHOUSE_LIST: 'ho/sites/warehouse',
     STORE_WH_LIST: 'ho/sites/store-warehouse',
+
+    //WAREHOUSE AREA
+    WAREHOUSE: 'ho/warehouses',
+    CREATE_WAREHOUSE: 'ho/warehouses/create',
 
     //CATEGORY
     CATEGORY: 'ho/categories',
@@ -38,6 +57,10 @@ const ApiEndpoint = {
     PRODUCTS : 'ho/products',
     VARIANT_GENERATOR: 'ho/products/variant-generator',
     CREATE_PRODUCTS: 'ho/products/create',
+
+    //SUPPLIER
+    SUPPLIER : 'ho/suppliers',
+    CREATE_SUPPLIER: 'ho/suppliers/create',
 
     //BUNDLE PRODUCTS
     BUNDLES : 'ho/bundles',

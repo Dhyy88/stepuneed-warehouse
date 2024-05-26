@@ -40,15 +40,15 @@ const Profiles = () => {
                 <div className="flex-1">
                   <div className="text-2xl font-medium text-slate-900 dark:text-slate-200 mb-[3px]">
                     {data?.profile?.first_name ? (
-                        <>
-                            {data?.profile?.first_name} {data?.profile?.last_name}
-                        </>
+                      <>
+                        {data?.profile?.first_name} {data?.profile?.last_name}
+                      </>
                     ) : (
-                        <span>SPV Head Office</span>
+                      <span>SPV Head Office</span>
                     )}
                   </div>
                   <div className="text-sm font-light text-slate-600 dark:text-slate-400">
-                    {data?.uid}
+                    {data?.email}
                   </div>
                 </div>
               </div>
@@ -60,11 +60,11 @@ const Profiles = () => {
                   Posisi
                 </div>
                 <div className="text-sm text-slate-600 font-light dark:text-slate-300">
-                    {data?.profile === null ? (
-                        <span>SPV HO</span>
-                    ): (
-                        <span>HO</span>
-                    )}
+                  {data?.profile === null ? (
+                    <span>SPV HO</span>
+                  ) : (
+                    <span>HO</span>
+                  )}
                 </div>
               </div>
               <div className="flex-1">
@@ -92,42 +92,6 @@ const Profiles = () => {
                 <ul className="list space-y-8">
                   <li className="flex space-x-3 rtl:space-x-reverse">
                     <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                      <Icon icon="heroicons:envelope" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                        Email
-                      </div>
-                      {data?.email}
-                    </div>
-
-                    <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                      <Icon icon="heroicons:face-smile" />
-                    </div>
-
-                    <div className="flex-1">
-                      <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                        Jenis Kelamin
-                      </div>
-                      <div className="text-base text-slate-600 dark:text-slate-50">
-                        {data?.profile?.gender ? (
-                            <>
-                                {data?.profile?.gender === "L" && (
-                                <span>Laki-laki</span>
-                                )}
-                                {data?.profile?.gender === "P" && (
-                                <span>Perempuan</span>
-                                )}
-                            </>
-                        ) : (
-                            <span>-</span>
-                        )}
-                      </div>
-                    </div>
-                  </li>
-
-                  <li className="flex space-x-3 rtl:space-x-reverse">
-                    <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
                       <Icon icon="heroicons:phone-arrow-up-right" />
                     </div>
 
@@ -136,9 +100,7 @@ const Profiles = () => {
                         No Telepon
                       </div>
                       {data?.profile?.phone_number ? (
-                        <>
-                            {data?.profile?.phone_number}
-                        </>
+                        <>{data?.profile?.phone_number}</>
                       ) : (
                         <span>-</span>
                       )}
@@ -153,11 +115,44 @@ const Profiles = () => {
                       </div>
                       <div className="text-base text-slate-600 dark:text-slate-50">
                         {data?.profile?.birth ? (
-                            <>
-                                {data?.profile?.birth}
-                            </>
+                          <>{data?.profile?.birth}</>
                         ) : (
-                            <span>-</span>
+                          <span>-</span>
+                        )}
+                      </div>
+                    </div>
+                  </li>
+                  <li className="flex space-x-3 rtl:space-x-reverse">
+                    {/* <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
+                      <Icon icon="heroicons:envelope" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
+                        Email
+                      </div>
+                      {data?.email}
+                    </div> */}
+
+                    <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
+                      <Icon icon="heroicons:face-smile" />
+                    </div>
+
+                    <div className="flex-1">
+                      <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
+                        Jenis Kelamin
+                      </div>
+                      <div className="text-base text-slate-600 dark:text-slate-50">
+                        {data?.profile?.gender ? (
+                          <>
+                            {data?.profile?.gender === "L" && (
+                              <span>Laki-laki</span>
+                            )}
+                            {data?.profile?.gender === "P" && (
+                              <span>Perempuan</span>
+                            )}
+                          </>
+                        ) : (
+                          <span>-</span>
                         )}
                       </div>
                     </div>

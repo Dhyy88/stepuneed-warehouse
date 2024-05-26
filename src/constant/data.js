@@ -10,103 +10,38 @@ export const menuItems = [
   //Menu Master Inventory
   {
     isHeadr: true,
-    title: "Master Data SJM",
+    title: "Master Data Warehouse",
   },
   {
-    title: "Master Produk",
+    title: "Master PO",
     icon: "heroicons-outline:rectangle-group",
     link: "/app/home",
     child: [
       {
-        childtitle: "Data Produk",
-        childlink: "/products",
-        multi_menu: [
-          {
-            multiTitle: "List Produk",
-            multiLink: "products",
-          },
-          {
-            multiTitle: "Tambah Produk",
-            multiLink: "product/create",
-          },
-        ],
+        childtitle: "Data PO",
+        childlink: "/po",
       },
       {
-        childtitle: "Data Kategori",
-        childlink: "/categories",
-      },
-      {
-        childtitle: "Data Mobil",
-        childlink: "/cars"
+        childtitle: "Penerimaan PO",
+        childlink: "/receivepo"
       },  
     ]
   },
 
-  //Menu Master Cabang
   {
-    title: "Master Cabang SJM",
-    icon: "heroicons-outline:building-office-2",
-    link: "/app/home",
-    child: [
-      {
-        childtitle: "Data Cabang SJM",
-        childlink: "/sites",
-        isHide: false,
-      },
-      {
-        childtitle: "Tambah Cabang SJM",
-        childlink: "/site/create",
-        // isHide: true,
-      }
-    ]
-  },
-
-  //Menu Master Dealer
-
-  {
-    isHeadr: true,
-    title: "Master Data Sales",
-  },
-
-  {
-    title: "Master Produk",
+    title: "Master Stock",
     icon: "heroicons-outline:rectangle-group",
     link: "/app/home",
     child: [
       {
-        childtitle: "Data Bundle Produk",
-        childlink: "/bundles",
-        isHide: false,
+        childtitle: "Data Stock",
+        childlink: "/stock",
       },
       {
-        childtitle: "Data Konten Army",
-        childlink: "/contents/army",
-        // isHide: true,
-      }
+        childtitle: "Stock Opname",
+        childlink: "/stockopname"
+      },  
     ]
-  },
-
-  //Menu Master Sales
-  {
-    title: "Sales",
-    icon: "heroicons-outline:user-group",
-    link: "/app/home",
-    child: [
-      {
-        childtitle: "Sales Army",
-        childlink: "/army",
-      },
-      {
-        childtitle: "Sales Internal",
-        childlink: "/coming-soon"
-      }
-    ]
-  },
-
-  {
-    title: "Master Dealer Sales",
-    icon: "heroicons-outline:truck",
-    link: "/dealers",
   },
 
   // {
@@ -115,21 +50,21 @@ export const menuItems = [
   //   isHide: true,
   // },
 
+  {
+    isHeadr: true,
+    title: "Master Data Akun",
+  },
+
   //Menu Master Pengguna
   {
-    title: "Pengguna",
+    title: "Akun",
     icon: "heroicons-outline:users",
     link: "/app/home",
     child: [
       {
-        childtitle: "Admin SJM",
-        childlink: "/users",
+        childtitle: "Profil",
+        childlink: "/profile",
         childicon: "heroicons-outline:users",
-      },
-      {
-        childtitle: "Role Admin SJM",
-        childlink: "/permissions",
-        childicon: "heroicons-outline:shield-exclamation",
       },
     ]
   },
@@ -145,107 +80,45 @@ export const topMenu = [
   },
 
   {
-    title: "Master Data",
-    icon: "heroicons-outline:view-boards",
-    link: "/app/home",
-    megamenu: [
-      {
-        megamenutitle: "Master Produk SJM",
-        megamenuicon: "heroicons-outline:rectangle-group",
-        singleMegamenu: [
-          {
-            m_childtitle: "Data Mobil",
-            m_childlink: "/cars",
-          },
-          {
-            m_childtitle: "Data Kategori",
-            m_childlink: "/categories",
-          },
-          {
-            m_childtitle: "Data Produk",
-            m_childlink: "/products",
-          },
-        ],
-      },
-      {
-        megamenutitle: "Master Produk Sales",
-        megamenuicon: "heroicons-outline:rectangle-group",
-        singleMegamenu: [
-        
-          {
-            m_childtitle: "Data Bundle Produk",
-            m_childlink: "/bundles",
-          },
-          {
-            m_childtitle: "Data Konten Army",
-            m_childlink: "/contents/army",
-          },
-        ],
-      },
-      {
-        megamenutitle: "Master Cabang SJM",
-        megamenuicon: "heroicons-outline:building-office-2",
-        singleMegamenu: [
-          {
-            m_childtitle: "Data Cabang SJM",
-            m_childlink: "/sites",
-          },
-          {
-            m_childtitle: "Tambah Cabang SJM",
-            m_childlink: "/site/create",
-          },
-        ],
-      },
-
-      {
-        megamenutitle: "Master Dealer Sales",
-        megamenuicon: "heroicons-outline:truck",
-        singleMegamenu: [
-          {
-            m_childtitle: "Data Dealer Sales",
-            m_childlink: "/dealers",
-          },
-        ],
-      },
-      {
-        megamenutitle: "Master Sales",
-        megamenuicon: "heroicons-outline:user-group",
-        singleMegamenu: [
-          {
-            m_childtitle: "Data Sales Army",
-            m_childlink: "/army",
-          },
-          {
-            m_childtitle: "Data Sales Internal",
-            m_childlink: "/coming-soon",
-          },
-        ],
-      },
-    ],
-  },
-
-  //Menu Master Pengguna
-  {
-    title: "Pengguna",
-    icon: "heroicons-outline:chip",
+    title: "Master PO",
+    icon: "heroicons-outline:clipboard-document",
     link: "/app/home",
     isHide: true,
     child: [
       {
-        childtitle: "Admin SJM",
-        link: "/users",
-        childicon: "heroicons-outline:users",
+        childtitle: "Data PO",
+        link: "/po",
+        childicon: "heroicons-outline:document",
       },
       {
-        childtitle: "Role Admin SJM",
-        link: "/permissions",
-        childicon: "heroicons-outline:shield-exclamation",
+        childtitle: "Penerimaan PO",
+        link: "/receivepo",
+        childicon: "heroicons-outline:clipboard-document-check",
       },
    
     ],
   },
 
-
+  //Menu Master Pengguna
+  {
+    title: "Master Stock",
+    icon: "heroicons-outline:archive-box-arrow-down",
+    link: "/app/home",
+    isHide: true,
+    child: [
+      {
+        childtitle: "Data Stock",
+        link: "/stock",
+        childicon: "heroicons-outline:folder-open",
+      },
+      {
+        childtitle: "Stock Opname",
+        link: "/stockopname",
+        childicon: "heroicons-outline:folder-open",
+      },
+   
+    ],
+  },
 ];
 
 // import User1 from "@/assets/images/all-img/user.png";

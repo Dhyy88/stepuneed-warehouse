@@ -17,19 +17,15 @@ const Profiles = lazy(() => import("./pages/MasterUser/MasterAccount"));
 const ProfileSetting = lazy(() => import("./pages/MasterUser/MasterAccount/profile_setting"));
 const PasswordSetting = lazy(() => import("./pages/MasterUser/MasterAccount/password_setting"));
 
-// Master Sales Pages
-const SalesArmy = lazy(() => import("./pages/MasterSales/SalesArmy"));
-const DetailArmy = lazy(() => import("./pages/MasterSales/SalesArmy/detail"));
-const ReviewArmy = lazy(() => import("./pages/MasterSales/SalesArmy/review"));
-const ArmyContents = lazy(() => import("./pages/MasterSales/SalesArmy/ArmyContent"));
-
-const SalesInternal = lazy(() => import("./pages/MasterSales/SalesInternal"));
-
-// Master Divisi
-const Dealers = lazy(() => import("./pages/MasterDivisi/MasterDealer"));
-const Sites = lazy(() => import("./pages/MasterDivisi/MasterSite"));
-const CreateSite = lazy(() => import("./pages/MasterDivisi/MasterSite/create"));
-const UpdateSite = lazy(() => import("./pages/MasterDivisi/MasterSite/update"));
+// Master StockOpname
+const PurchaseOrderDetail = lazy(() => import("./pages/MasterPO/index_PO"));
+const ReceivePO = lazy(() => import("./pages/MasterPO"));
+const DetailPONumber = lazy(() => import("./pages/MasterPO/detail"));
+const Stock = lazy(() => import("./pages/MasterStock/"));
+const StockOpname = lazy(() => import("./pages/MasterStock/StockOpname"));
+const CreateStockOpname = lazy(() => import("./pages/MasterStock/StockOpname/create"));
+const DetailStockOpname = lazy(() => import("./pages/MasterStock/StockOpname/detail"));
+const UpdateNoteStockOpname = lazy(() => import("./pages/MasterStock/StockOpname/update"));
 
 // Master User
 const Users = lazy(() => import("./pages/MasterUser/MasterAccountUser"));
@@ -38,18 +34,6 @@ const Permissions = lazy(() => import("./pages/MasterUser/MasterPermission"));
 const CreatePermission = lazy(() => import('./pages/MasterUser/MasterPermission/create'));
 const UpdatePermission = lazy(() => import('./pages/MasterUser/MasterPermission/update'));
 
-// Master Data
-const Products = lazy(() => import("./pages/MasterData/Product"));
-const CreateProduct = lazy(() => import("./pages/MasterData/Product/create"));
-const DetailProducts = lazy(() => import("./pages/MasterData/Product/detail"));
-const UpdateProduct = lazy(() => import("./pages/MasterData/Product/update"));
-const Bundles = lazy(() => import("./pages/MasterData/Bundles"));
-const CreateBundle = lazy(() => import("./pages/MasterData/Bundles/create"));
-const UpdateBundle = lazy(() => import("./pages/MasterData/Bundles/update"));
-const DetailBundles = lazy(() => import("./pages/MasterData/Bundles/detail"));
-const Categories = lazy(() => import("./pages/MasterData/Category"));
-const Cars = lazy(() => import("./pages/MasterData/Cars"));
-const UpdateCars = lazy(() => import("./pages/MasterData/Cars/update"));
 
 function App() {
   const ability = createMongoAbility();
@@ -61,35 +45,16 @@ function App() {
             <Route path="/*" element={<Layout />}>
               <Route path="dashboard" element={<Dashboard />} />
 
-              {/* Route Sales Army */}
-              <Route path="army" element={<SalesArmy />} />
-              <Route path="army/detail/:uid" element={<DetailArmy />} />
-              <Route path="army/review/:uid" element={<ReviewArmy />} />
-              <Route path="contents/army" element={<ArmyContents />} />
-
-              {/* Route Sales Internal */}
-              <Route path="salesInternal" element={<SalesInternal />} />
-
-              {/* Route Divisi */}
-              <Route path="dealers" element={<Dealers />} />
-              <Route path="sites" element={<Sites />} />
-              <Route path="site/create" element={ <Suspense fallback={<Loading />}> <CreateSiteProtect /> </Suspense> } />
-              <Route path="site/update/:uid" element={ <Suspense fallback={<Loading />}> <UpdateSiteProtect /> </Suspense> } />
+              {/* Route StockOpname */}
+              <Route path="stock" element={<Stock />} />
+              <Route path="stockopname" element={<StockOpname />} />
+              <Route path="stockopname/create" element={<CreateStockOpname />} />
+              <Route path="stockopname/detail/:uid" element={<DetailStockOpname />} />
+              <Route path="stockopname/update/:uid" element={<UpdateNoteStockOpname />} />
+              <Route path="receivepo" element={<ReceivePO />} />
+              <Route path="po" element={<PurchaseOrderDetail />} />
+              <Route path="po/detail/:uid" element={<DetailPONumber />} />
               
-              {/* Route Master Data */}
-              <Route path="products" element={<Products />} />
-              <Route path="product/create" element={<CreateProduct />} />
-              <Route path="product/detail/:uid" element={<DetailProducts />} />
-              <Route path="product/update/:uid" element={<UpdateProduct />} />
-              
-              <Route path="bundles" element={<Bundles />} />
-              <Route path="bundles/create" element={<CreateBundle />} />
-              <Route path="bundles/detail/:uid" element={<DetailBundles />} />
-              <Route path="bundles/update/:uid" element={<UpdateBundle />} />
-              <Route path="categories" element={<Categories />} />
-              <Route path="cars" element={<Cars />} />
-              <Route path="cars/update/:uid" element={<UpdateCars />} />
-
               {/* Route User */}
               <Route path="profile" element={<Profiles />} />
               <Route path="profile/setting" element={<ProfileSetting />} />
@@ -135,23 +100,23 @@ function App() {
       />
     );
   }
-  function CreateSiteProtect() {
-    return (
-      <ProtectedComponent
-        action="read"
-        permission="Tambah Cabang"
-        component={<CreateSite />}
-      />
-    );
-  }
-  function UpdateSiteProtect() {
-    return (
-      <ProtectedComponent
-        action="read"
-        permission="Ubah Cabang"
-        component={<UpdateSite />}
-      />
-    );
-  }
+  // function CreateSiteProtect() {
+  //   return (
+  //     <ProtectedComponent
+  //       action="read"
+  //       permission="Tambah Cabang"
+  //       component={<CreateSite />}
+  //     />
+  //   );
+  // }
+  // function UpdateSiteProtect() {
+  //   return (
+  //     <ProtectedComponent
+  //       action="read"
+  //       permission="Ubah Cabang"
+  //       component={<UpdateSite />}
+  //     />
+  //   );
+  // }
 
 export default App;

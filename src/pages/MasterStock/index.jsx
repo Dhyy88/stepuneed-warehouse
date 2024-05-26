@@ -3,14 +3,14 @@ import Textinput from "@/components/ui/Textinput";
 import Card from "@/components/ui/Card";
 import Icon from "@/components/ui/Icon";
 import Tooltip from "@/components/ui/Tooltip";
-import axios from "../../../API/Axios";
-import ApiEndpoint from "../../../API/Api_EndPoint";
+import axios from "../../API/Axios";
+import ApiEndpoint from "../../API/Api_EndPoint";
 import Swal from "sweetalert2";
 import Button from "@/components/ui/Button";
-import Loading from "../../../components/Loading";
+import Loading from "../../components/Loading";
 import { useNavigate } from "react-router-dom";
 
-const Bundles = () => {
+const Stock = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({
     data: [],
@@ -21,73 +21,44 @@ const Bundles = () => {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [location, setLocation] = useState([]);
 
   const [query, setQuery] = useState({
     search: "",
-    paginate: 5,
+    paginate: 8,
+    location: "",
   });
 
-  async function getDataBundle(query) {
+  async function getDataStock(query) {
     setIsLoading(true);
     try {
-      const response = await axios.post(ApiEndpoint.BUNDLES, {
+      const response = await axios.post(ApiEndpoint.STOCK, {
         page: query?.page,
         search: query?.search,
         paginate: 8,
+        location: query?.location,
       });
       setData(response?.data?.data);
       setIsLoading(false);
     } catch (err) {
-      setError(err.response.data.message);
-      Swal.fire("Gagal", err?.response?.data?.message, "error");
+      setError(err);
       setIsLoading(false);
     }
-    setIsLoading(false);
   }
-  
-  async function onDelete(uid) {
-    try {
-      const result = await Swal.fire({
-        icon: "question",
-        title: "Apakah Anda yakin ingin menghapus bundle ini?",
-        text: "Anda tidak akan dapat mengembalikannya!",
-        showCancelButton: true,
-        confirmButtonText: "Ya, Hapus",
-        cancelButtonText: "Batal",
-      });
 
-      if (result.isConfirmed) {
-        const { value: input } = await Swal.fire({
-          icon: "warning",
-          title: "Verifikasi",
-          text: `Silahkan ketik "hapusdata" untuk melanjutkan verifikasi hapus data !`,
-          input: "text",
-          showCancelButton: true,
-          confirmButtonText: "Konfirmasi",
-          cancelButtonText: "Batal",
-          inputValidator: (value) => {
-            if (!value || value.trim().toLowerCase() !== "hapusdata") {
-              return 'Anda harus memasukkan kata "hapusdata" untuk melanjutkan verifikasi hapus data!';
-            }
-          },
-        });
+  const getLocation = () => {
+    axios.get(ApiEndpoint.LOCATION_STOCK).then((response) => {
+      setLocation(response?.data);
+    });
+  };
 
-        if (input && input.trim().toLowerCase() === "hapusdata") {
-          await axios.delete(`${ApiEndpoint.BUNDLES}/${uid}`);
-          Swal.fire(
-            "Berhasil!",
-            "Anda berhasil menghapus data bundle ini.",
-            "success"
-          );
-          getDataBundle(query);
-        } else {
-          Swal.fire("Batal", "Hapus data bundle dibatalkan.", "info");
-        }
-      }
-    } catch (err) {
-      Swal.fire("Gagal", err.response.data.message, "error");
-    }
-  }
+  useEffect(() => {
+    getLocation();
+  }, []);
+
+  useEffect(() => {
+    getDataStock(query);
+  }, [query]);
 
   const handlePrevPagination = () => {
     if (data.prev_page_url) {
@@ -125,35 +96,38 @@ const Bundles = () => {
     return pageNumbers;
   };
 
-  useEffect(() => {
-    getDataBundle(query);
-  }, [query]);
-
   return (
     <>
       <div className="grid grid-cols-12 gap-6">
         <div className="lg:col-span-12 col-span-12">
-          <Card title="Data Bundle">
-            <div className="md:flex justify-between items-center mb-4">
+          <Card title="Data Stok SJM">
+            <div className="md:flex justify-end items-center mb-4">
               <div className="md:flex items-center gap-3">
                 <div className="row-span-3 md:row-span-4">
-                  <Button
-                    text="Tambah Bundle Produk"
-                    className="btn-primary dark w-full btn-sm "
-                    onClick={() => navigate(`/bundles/create`)}
-                  />
+                  <select
+                    className="form-control py-2 "
+                    value={query.location}
+                    onChange={(event) =>
+                      setQuery({ ...query, location: event.target.value })
+                    }
+                  >
+                    <option value="">Status Produk</option>
+                    {location?.map((item) => (
+                      <option key={item.uid} value={item.uid}>
+                        {item.description}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-              </div>
-              <div className="md:flex items-center gap-3">
-                <div className="row-span-3 md:row-span-4">
+                {/* <div className="row-span-3 md:row-span-4">
                   <Textinput
                     // value={query || ""}
                     onChange={(event) =>
                       setQuery({ ...query, search: event.target.value })
                     }
-                    placeholder="Cari produk bundle..."
+                    placeholder="Cari cabang SJM..."
                   />
-                </div>
+                </div> */}
               </div>
             </div>
             <div className="overflow-x-auto">
@@ -165,13 +139,16 @@ const Bundles = () => {
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
                             <th scope="col" className=" table-th ">
-                              Nama Bundle
+                              SKU
                             </th>
                             <th scope="col" className=" table-th ">
-                              Total produk
+                              Nama Produk
                             </th>
                             <th scope="col" className=" table-th ">
-                              Status
+                              Harga Produk
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Total Stok
                             </th>
                             <th scope="col" className=" table-th ">
                               Aksi
@@ -190,16 +167,16 @@ const Bundles = () => {
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
                             <th scope="col" className=" table-th ">
-                              Nama Bundle
+                              SKU
                             </th>
                             <th scope="col" className=" table-th ">
-                              Total produk
+                              Nama Produk
                             </th>
                             <th scope="col" className=" table-th ">
-                              Status
+                              Harga Produk
                             </th>
                             <th scope="col" className=" table-th ">
-                              Aksi
+                              Total Stok
                             </th>
                           </tr>
                         </thead>
@@ -213,7 +190,7 @@ const Bundles = () => {
                         </div>
                         <div className="w-full flex justify-center text-secondary">
                           <span className="text-slate-900 dark:text-white text-[20px] transition-all duration-300">
-                            Bundle belum tersedia
+                            Stok SJM belum tersedia
                           </span>
                         </div>
                       </div>
@@ -223,89 +200,26 @@ const Bundles = () => {
                       <thead className="bg-slate-200 dark:bg-slate-700">
                         <tr>
                           <th scope="col" className=" table-th ">
-                            Nama Bundle
+                            SKU
                           </th>
                           <th scope="col" className=" table-th ">
-                            Total produk
+                            Nama Produk
                           </th>
                           <th scope="col" className=" table-th ">
-                            Status
+                            Harga Produk
                           </th>
                           <th scope="col" className=" table-th ">
-                            Aksi
+                            Total Stok
                           </th>
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
                         {data?.data?.map((item, index) => (
                           <tr key={index}>
-                            <td className="table-td">{item?.name}</td>
-                            <td className="table-td">
-                              {item?.item_count} Produk{" "}
-                            </td>
-                            <td className="table-td">
-                              {item?.is_active === true ? (
-                                <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
-                                  Aktif
-                                </span>
-                              ) : (
-                                <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-danger-500 bg-danger-500">
-                                  Nonaktif
-                                </span>
-                              )}
-                            </td>
-
-                            <td className="table-td">
-                              <div className="flex space-x-3 rtl:space-x-reverse">
-                                <Tooltip
-                                  content="Detail Bundle"
-                                  placement="top"
-                                  arrow
-                                  animation="shift-away"
-                                >
-                                  <button
-                                    className="action-btn"
-                                    type="button"
-                                    onClick={() =>
-                                      navigate(`/bundles/detail/${item.uid}`)
-                                    }
-                                  >
-                                    <Icon icon="heroicons:eye" />
-                                  </button>
-                                </Tooltip>
-                                {/* <Tooltip
-                                  content="Edit"
-                                  placement="top"
-                                  arrow
-                                  animation="shift-away"
-                                >
-                                  <button
-                                    className="action-btn"
-                                    type="button"
-                                    onClick={() =>
-                                      navigate(`/bundles/update/${item.uid}`)
-                                    }
-                                  >
-                                    <Icon icon="heroicons:pencil-square" />
-                                  </button>
-                                </Tooltip>
-                                <Tooltip
-                                  content="Hapus"
-                                  placement="top"
-                                  arrow
-                                  animation="shift-away"
-                                  theme="danger"
-                                >
-                                  <button
-                                    className="action-btn"
-                                    type="button"
-                                    onClick={() => onDelete(item.uid)}
-                                  >
-                                    <Icon icon="heroicons:trash" />
-                                  </button>
-                                </Tooltip> */}
-                              </div>
-                            </td>
+                            <td className="table-td">{item.sku}</td>
+                            <td className="table-td">{item?.product?.name} </td>
+                            <td className="table-td">Rp {item?.price.toLocaleString("id-ID")}</td>
+                            <td className="table-td">{item?.stocks_count} </td>
                           </tr>
                         ))}
                       </tbody>
@@ -373,4 +287,4 @@ const Bundles = () => {
   );
 };
 
-export default Bundles;
+export default Stock;

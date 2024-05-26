@@ -13,9 +13,7 @@ import axios from "../../../API/Axios";
 import Loading from "../../../components/Loading";
 import LoadingButton from "../../../components/LoadingButton";
 
-import ProfileImageMen from "@/assets/images/avatar/13.png";
-
-const SalesArmy = () => {
+const Warehouses = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({
     data: [],
@@ -25,66 +23,72 @@ const SalesArmy = () => {
     next_page_url: null,
   });
   const [email, setEmail] = useState("");
-  const [dealer, setDealer] = useState("");
+  const [first_name, setFirstName] = useState("");
+  const [last_name, setLastName] = useState("");
+  const [gender, setGender] = useState(null);
+  const [phone_number, setPhoneNumber] = useState("");
+  const [birth, setBirth] = useState("");
+
+  const [dealer, setDealer] = useState([]);
+  const [spv, setSPV] = useState([]);
   const [site, setSite] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingButton, setIsLoadingButton] = useState(false);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState({
-    status: "",
     search: "",
     gender: "",
     paginate: 8,
-    dealer: "",
     site: "",
     is_active: "",
   });
-  const [queryDealer, setQueryDealer] = useState({ search: "" });
   const [selectedDealer, setSelectedDealer] = useState(null);
   const [selectedSite, setSelectedSite] = useState(null);
+  const [selectedSPV, setSelectedSPV] = useState(null);
 
-  async function getDataSalesExternal(query) {
+  async function getDataWarehouse(query) {
     setIsLoading(true);
     try {
-      const response = await axios.post(ApiEndpoint.SALES_EXTERNAL, {
+      const response = await axios.post(ApiEndpoint.WAREHOUSE, {
         page: query?.page,
         search: query?.search,
-        status: query?.status,
         gender: query?.gender,
-        paginate: 5,
-        dealer: query?.dealer,
+        paginate: 7,
         site: query?.site,
         is_active: query?.is_active,
       });
       setData(response?.data?.data);
       setIsLoading(false);
-    } catch (err) {
-      setError(err);
+    } catch (error) {
+      setError(error);
       setIsLoading(false);
     }
   }
 
-  async function getDataDealer(queryDealer) {
-    setIsLoading(true);
-    try {
-      const response = await axios.post(ApiEndpoint.DEALER, {
-        page: queryDealer?.page,
-        search: queryDealer?.search,
-        paginate: 5,
-      });
-      setDealer(response.data.data);
-      setIsLoading(false);
-    } catch (err) {
-      setError(err);
-      setIsLoading(false);
-    }
-  }
+  useEffect(() => {
+    getDataWarehouse(query);
+  }, [query]);
+
+  const getDealer = () => {
+    axios.get(ApiEndpoint.DEALER).then((response) => {
+      setDealer(response?.data?.data);
+    });
+  };
+
+  const getSPV = () => {
+    axios.get(ApiEndpoint.SPV_ARMIES).then((response) => {
+      setSPV(response?.data?.data);
+    });
+  };
 
   const getSite = async () => {
     try {
       const store_response = await axios.get(ApiEndpoint.STORE_LIST);
       const whstore_response = await axios.get(ApiEndpoint.STORE_WH_LIST);
-      const site_response = [...store_response?.data?.data, ...whstore_response?.data?.data];
+      const site_response = [
+        ...store_response?.data?.data,
+        ...whstore_response?.data?.data,
+      ];
 
       setSite(site_response);
     } catch (error) {
@@ -92,11 +96,15 @@ const SalesArmy = () => {
     }
   };
 
+  const handleGenderChange = (selectedOption) => {
+    setGender(selectedOption);
+  };
+
   const onSubmit = async () => {
     setIsLoadingButton(true);
     const confirmResult = await Swal.fire({
       title: "Konfirmasi",
-      text: "Anda yakin ingin menambahkan data sales?",
+      text: "Anda yakin ingin menambahkan data pengguna ini?",
       icon: "question",
       showCancelButton: true,
       confirmButtonText: "Ya, Tambahkan",
@@ -105,13 +113,17 @@ const SalesArmy = () => {
 
     if (confirmResult.isConfirmed) {
       try {
-        await axios.post(ApiEndpoint.CREATE_SALES_EXTERNAL, {
-          email: email,
-          dealer: selectedDealer?.value,
+        await axios.post(ApiEndpoint.CREATE_WAREHOUSE, {
           site: selectedSite?.value,
+          email: email,
+          first_name: first_name,
+          last_name: last_name,
+          gender: gender,
+          phone_number: phone_number,
+          birth: birth,
         });
-        Swal.fire("Sukses", "Data sales berhasil ditambahkan.", "success");
-        getDataSalesExternal(query);
+        Swal.fire("Sukses", "Data pengguna berhasil ditambahkan.", "success");
+        getDataWarehouse(query);
         resetForm();
         setIsLoadingButton(false);
       } catch (err) {
@@ -128,7 +140,7 @@ const SalesArmy = () => {
     try {
       const result = await Swal.fire({
         icon: "question",
-        title: "Apakah Anda yakin ingin menghapus sales ini?",
+        title: "Apakah Anda yakin ingin menghapus akun ini?",
         text: "Anda tidak akan dapat mengembalikannya!",
         showCancelButton: true,
         confirmButtonText: "Ya, Hapus",
@@ -152,15 +164,15 @@ const SalesArmy = () => {
         });
 
         if (input && input.trim().toLowerCase() === "hapus") {
-          await axios.delete(`${ApiEndpoint.SALES_EXTERNAL}/${uid}`);
+          await axios.delete(`${ApiEndpoint.WAREHOUSE}/${uid}`);
           Swal.fire(
             "Berhasil!",
-            "Anda berhasil menghapus data sales ini.",
+            "Anda berhasil menghapus data akun ini.",
             "success"
           );
-          getDataSalesExternal(query);
+          getDataWarehouse(query);
         } else {
-          Swal.fire("Batal", "Hapus data sales dibatalkan.", "info");
+          Swal.fire("Batal", "Hapus data akun warehouse dibatalkan.", "info");
         }
       }
     } catch (err) {
@@ -205,18 +217,19 @@ const SalesArmy = () => {
   };
 
   useEffect(() => {
-    getDataSalesExternal(query);
-    getDataDealer(queryDealer);
-  }, [query, queryDealer]);
-
-  useEffect(() => {
     getSite();
+    getDealer();
+    getSPV();
   }, []);
 
   const resetForm = () => {
     setEmail("");
+    setFirstName("");
+    setLastName("");
+    setBirth("");
+    setGender(null);
+    setPhoneNumber("");
     setSelectedSite(null);
-    setSelectedDealer(null);
     setError(null);
   };
 
@@ -224,25 +237,9 @@ const SalesArmy = () => {
     <>
       <div className="grid grid-cols-12 gap-6">
         <div className="lg:col-span-8 col-span-12">
-          <Card title="Data Army">
+          <Card title="Data Pengguna Gudang SJM">
             <div className="flex items-center mb-4 justify-between ">
               <div className="flex items-center gap-3">
-                <div className="row-span-3 md:row-span-4 mb-2">
-                  <select
-                    className="form-control py-2 "
-                    value={query.dealer}
-                    onChange={(event) =>
-                      setQuery({ ...query, dealer: event.target.value })
-                    }
-                  >
-                    <option value="">Dealer</option>
-                    {dealer?.data?.map((dealer) => (
-                      <option key={dealer.uid} value={dealer.uid}>
-                        {dealer.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
                 <div className="row-span-3 md:row-span-4 mb-2">
                   <select
                     className="form-control py-2 "
@@ -252,39 +249,11 @@ const SalesArmy = () => {
                     }
                   >
                     <option value="">Cabang</option>
-                    {site?.data?.map((site) => (
+                    {site?.map((site) => (
                       <option key={site.uid} value={site.uid}>
                         {site.name}
                       </option>
                     ))}
-                  </select>
-                </div>
-                <div className="row-span-3 md:row-span-4 mb-2">
-                  <select
-                    className="form-control py-2 "
-                    value={query.status}
-                    onChange={(event) =>
-                      setQuery({ ...query, status: event.target.value })
-                    }
-                  >
-                    <option value="">Status Data</option>
-                    <option value="approved">Disetujui</option>
-                    <option value="rejected">Ditolak</option>
-                    <option value="review">Review</option>
-                    <option value="incomplete">Belum Registrasi</option>
-                  </select>
-                </div>
-                <div className="row-span-3 md:row-span-4 mb-2">
-                  <select
-                    className="form-control py-2 "
-                    value={query.is_active}
-                    onChange={(event) =>
-                      setQuery({ ...query, is_active: event.target.value })
-                    }
-                  >
-                    <option value="">Status Akun</option>
-                    <option value="1">Aktif</option>
-                    <option value="0">Nonaktif</option>
                   </select>
                 </div>
                 <div className="row-span-3 md:row-span-4 mb-2">
@@ -300,6 +269,19 @@ const SalesArmy = () => {
                     <option value="P">Perempuan</option>
                   </select>
                 </div>
+                <div className="row-span-3 md:row-span-4 mb-2">
+                  <select
+                    className="form-control py-2 "
+                    value={query.is_active}
+                    onChange={(event) =>
+                      setQuery({ ...query, is_active: event.target.value })
+                    }
+                  >
+                    <option value="">Status Akun</option>
+                    <option value="1">Aktif</option>
+                    <option value="0">Nonaktif</option>
+                  </select>
+                </div>
               </div>
               <div className="md:flex items-center gap-3 ml-3">
                 <div className="row-span-3 md:row-span-4 mb-2">
@@ -309,7 +291,7 @@ const SalesArmy = () => {
                     onChange={(event) =>
                       setQuery({ ...query, search: event.target.value })
                     }
-                    placeholder="Cari sales..."
+                    placeholder="Cari pengguna gudang..."
                   />
                 </div>
               </div>
@@ -332,13 +314,16 @@ const SalesArmy = () => {
                               No Telepon
                             </th>
                             <th scope="col" className=" table-th ">
-                              Status Data
+                              Tanggal Lahir
                             </th>
                             <th scope="col" className=" table-th ">
-                              Status Akun
+                              Jenis Kelamin
                             </th>
                             <th scope="col" className=" table-th ">
-                              Foto Profil
+                              Cabang SJM
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Status
                             </th>
                             <th scope="col" className=" table-th ">
                               Aksi
@@ -363,13 +348,19 @@ const SalesArmy = () => {
                               Nama
                             </th>
                             <th scope="col" className=" table-th ">
-                              Status Data
+                              No Telepon
                             </th>
                             <th scope="col" className=" table-th ">
-                              Status Akun
+                              Tanggal Lahir
                             </th>
                             <th scope="col" className=" table-th ">
-                              Foto Profil
+                              Jenis Kelamin
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Cabang SJM
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Status
                             </th>
                             <th scope="col" className=" table-th ">
                               Aksi
@@ -385,7 +376,7 @@ const SalesArmy = () => {
                         </div>
                         <div className="w-full flex justify-center text-secondary">
                           <span className="text-slate-900 dark:text-white text-[20px] transition-all duration-300">
-                            Sales external belum tersedia
+                            Pengguna Gudang belum tersedia
                           </span>
                         </div>
                       </div>
@@ -401,16 +392,19 @@ const SalesArmy = () => {
                             Nama
                           </th>
                           <th scope="col" className=" table-th ">
+                            Jenis Kelamin
+                          </th>
+                          <th scope="col" className=" table-th ">
                             No Telepon
                           </th>
                           <th scope="col" className=" table-th ">
-                            Status Data
+                            Tanggal Lahir
                           </th>
                           <th scope="col" className=" table-th ">
-                            Status Akun
+                            Cabang SJM
                           </th>
                           <th scope="col" className=" table-th ">
-                            Foto Profil
+                            Status
                           </th>
                           <th scope="col" className=" table-th ">
                             Aksi
@@ -420,58 +414,48 @@ const SalesArmy = () => {
                       <tbody className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
                         {data?.data?.map((item, index) => (
                           <tr key={index}>
-                            <td className="table-td">{item.email}</td>
-
-                            {item?.army_profile?.first_name ? (
-                              <td className="table-td">
-                                {item?.army_profile?.first_name}{" "}
-                                {item.army_profile?.last_name}
-                              </td>
+                            {item?.email ? (
+                              <td className="table-td">{item?.email}</td>
                             ) : (
                               <td className="table-td">-</td>
                             )}
 
-                            {item?.army_profile?.phone_number ? (
+                            {item?.profile?.first_name ? (
                               <td className="table-td">
-                                {item?.army_profile?.phone_number}
+                                {item?.profile?.first_name}{" "}
+                                {item?.profile?.last_name}
                               </td>
                             ) : (
                               <td className="table-td">-</td>
                             )}
 
                             <td className="table-td">
-                              {item?.army_profile?.approve_status ===
-                                "incomplete" && (
-                                <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-blue-500 bg-blue-500">
-                                  Belum Registrasi
-                                </span>
-                              )}
-                              {item?.army_profile?.approve_status ===
-                                "approved" && (
-                                <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
-                                  Verifikasi
-                                </span>
-                              )}
-                              {item?.army_profile?.approve_status ===
-                                "review" && (
-                                <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-warning-500 bg-warning-500">
-                                  Review
-                                </span>
-                              )}
-                              {item?.army_profile?.approve_status ===
-                                "rejected" && (
-                                <Tooltip
-                                  // content={item?.army_profile?.reject_note}
-                                  placement="top"
-                                  arrow
-                                  animation="shift-away"
-                                >
-                                  <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-danger-500 bg-danger-500">
-                                    Ditolak
-                                  </span>
-                                </Tooltip>
-                              )}
+                              {item?.profile?.gender === "L"
+                                ? "Laki-Laki"
+                                : "Perempuan"}
                             </td>
+
+                            {item?.profile?.phone_number ? (
+                              <td className="table-td">
+                                {item?.profile?.phone_number}
+                              </td>
+                            ) : (
+                              <td className="table-td">-</td>
+                            )}
+
+                            {item?.profile?.birth ? (
+                              <td className="table-td">
+                                {item?.profile?.birth}
+                              </td>
+                            ) : (
+                              <td className="table-td">-</td>
+                            )}
+
+                            {item?.site?.name ? (
+                              <td className="table-td">{item?.site?.name}</td>
+                            ) : (
+                              <td className="table-td">-</td>
+                            )}
                             <td className="table-td">
                               {item?.is_active === true ? (
                                 <span className="inline-block px-3 min-w-[90px] text-center mx-auto py-1 rounded-[999px] bg-opacity-25 text-success-500 bg-success-500">
@@ -483,39 +467,9 @@ const SalesArmy = () => {
                                 </span>
                               )}
                             </td>
-                            <td className="table-td">
-                              {item?.army_profile?.profile_picture?.url ? (
-                                <img
-                                  src={item?.army_profile?.profile_picture?.url}
-                                  alt=""
-                                  className="w-16 h-16 object-cover rounded-full"
-                                />
-                              ) : (
-                                <img
-                                  src={ProfileImageMen}
-                                  alt=""
-                                  className="w-16 h-16 object-cover rounded-full"
-                                />
-                              )}
-                            </td>
+
                             <td className="table-td">
                               <div className="flex space-x-3 rtl:space-x-reverse">
-                                <Tooltip
-                                  content="Detail Sales"
-                                  placement="top"
-                                  arrow
-                                  animation="shift-away"
-                                >
-                                  <button
-                                    className="action-btn"
-                                    type="button"
-                                    onClick={() =>
-                                      navigate(`/army/detail/${item.uid}`)
-                                    }
-                                  >
-                                    <Icon icon="heroicons:eye" />
-                                  </button>
-                                </Tooltip>
                                 <Tooltip
                                   content="Hapus"
                                   placement="top"
@@ -596,22 +550,8 @@ const SalesArmy = () => {
           </Card>
         </div>
         <div className="lg:col-span-4 col-span-12">
-          <Card title={"Tambah Army"}>
+          <Card title={"Tambah Pengguna Gudang"}>
             <div className="text-sm text-slate-600 font-normal bg-white dark:bg-slate-900 dark:text-slate-300 rounded p-5">
-              <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
-                <Textinput
-                  label="Email Sales *"
-                  type="email"
-                  placeholder="email_name@domain.com"
-                  onChange={(e) => setEmail(e.target.value)}
-                  value={email}
-                />
-                {error && (
-                  <span className="text-danger-600 text-xs py-2">
-                    {error.email}
-                  </span>
-                )}
-              </div>
               <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
                 <label htmlFor=" hh" className="form-label ">
                   Cabang SJM *
@@ -635,29 +575,104 @@ const SalesArmy = () => {
                 )}
               </div>
               <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
+                <Textinput
+                  label="Email Pengguna *"
+                  type="email"
+                  placeholder="email_name@domain.com"
+                  onChange={(e) => setEmail(e.target.value)}
+                  value={email}
+                />
+                {error && (
+                  <span className="text-danger-600 text-xs py-2">
+                    {error.email}
+                  </span>
+                )}
+              </div>
+
+              <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
+                <Textinput
+                  label="Nama Depan *"
+                  type="text"
+                  placeholder="Masukkan nama depan pengguna"
+                  onChange={(e) => setFirstName(e.target.value)}
+                  value={first_name}
+                />
+                {error && (
+                  <span className="text-danger-600 text-xs py-2">
+                    {error.first_name}
+                  </span>
+                )}
+              </div>
+
+              <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
+                <Textinput
+                  label="Nama Belakang (Optional)"
+                  type="text"
+                  placeholder="Masukkan nama belakang pengguna"
+                  onChange={(e) => setLastName(e.target.value)}
+                  value={last_name}
+                />
+                {error && (
+                  <span className="text-danger-600 text-xs py-2">
+                    {error.last_name}
+                  </span>
+                )}
+              </div>
+
+              <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
+                <Textinput
+                  label="No Telepon (Optional)"
+                  type="number"
+                  placeholder="Masukkan no telepon pengguna ( 085 xxx xxx xxx )"
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  value={phone_number}
+                />
+                {error && (
+                  <span className="text-danger-600 text-xs py-2">
+                    {error.phone_number}
+                  </span>
+                )}
+              </div>
+
+              <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
                 <label htmlFor=" hh" className="form-label ">
-                  Dealer Sales *
+                  Jenis Kelamin *
                 </label>
                 <Select
                   className="react-select mt-2"
                   classNamePrefix="select"
-                  placeholder="Pilih dealer..."
-                  options={dealer?.data?.map((dealer) => ({
-                    value: dealer.uid,
-                    label: dealer.name,
-                  }))}
-                  onChange={(selectedOption) =>
-                    setSelectedDealer(selectedOption)
-                  }
-                  value={selectedDealer}
+                  placeholder="Pilih jenis kelamin..."
+                  value={gender}
+                  onChange={handleGenderChange}
                   isClearable
+                  options={[
+                    { value: "Laki-Laki", label: "Laki-Laki" },
+                    { value: "Perempuan", label: "Perempuan" },
+                  ]}
                 />
                 {error && (
                   <span className="text-danger-600 text-xs py-2">
-                    {error.dealer}
+                    {error.gender}
                   </span>
                 )}
               </div>
+
+              <div className="text-base text-slate-600 dark:text-slate-300 mb-4">
+                <Textinput
+                  label="Tanggal Lahir (Optional)"
+                  type="date"
+                  placeholder="Masukkan tanggal lahir pengguna ( 085 xxx xxx xxx )"
+                  onChange={(e) => setBirth(e.target.value)}
+                  value={birth}
+                />
+                {error && (
+                  <span className="text-danger-600 text-xs py-2">
+                    {error.birth}
+                  </span>
+                )}
+              </div>
+
+            
               <div className="grid justify-items-end">
                 <div className="grid xl:grid-cols-2 md:grid-cols-2 grid-cols-1 gap-3 ">
                   <Button
@@ -682,4 +697,4 @@ const SalesArmy = () => {
   );
 };
 
-export default SalesArmy;
+export default Warehouses;
