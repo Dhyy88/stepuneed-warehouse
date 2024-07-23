@@ -105,9 +105,9 @@ const PurchaseOrderDetail = () => {
                               <th scope="col" className=" table-th ">
                                 Kode Pesanan
                               </th>
-                              <th scope="col" className=" table-th ">
+                              {/* <th scope="col" className=" table-th ">
                                 Aksi
-                              </th>
+                              </th> */}
                             </tr>
                           </thead>
                         </table>
@@ -127,9 +127,9 @@ const PurchaseOrderDetail = () => {
                               <th scope="col" className=" table-th ">
                                 Kode Pesanan
                               </th>
-                              <th scope="col" className=" table-th ">
+                              {/* <th scope="col" className=" table-th ">
                                 Aksi
-                              </th>
+                              </th> */}
                             </tr>
                           </thead>
                         </table>
@@ -155,11 +155,11 @@ const PurchaseOrderDetail = () => {
                               Tanggal Penerimaan
                             </th>
                             <th scope="col" className=" table-th ">
-                              Kode Pesanan
+                              Nomor DO
                             </th>
-                            <th scope="col" className=" table-th ">
+                            {/* <th scope="col" className=" table-th ">
                               Aksi
-                            </th>
+                            </th> */}
                           </tr>
                         </thead>
                         <tbody className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
@@ -168,7 +168,7 @@ const PurchaseOrderDetail = () => {
                               <td className="table-td">{item?.receive_at} </td>
                               <td className="table-td">{item?.delivery_order}</td>
 
-                              <td className="table-td">
+                              {/* <td className="table-td">
                                 <div className="flex space-x-3 rtl:space-x-reverse">
                                   <Tooltip
                                     content="Cetak"
@@ -187,7 +187,7 @@ const PurchaseOrderDetail = () => {
                                     </button>
                                   </Tooltip>
                                 </div>
-                              </td>
+                              </td> */}
                             </tr>
                           ))}
                         </tbody>

@@ -1,34 +1,21 @@
 import React, { useEffect, useState, Fragment } from "react";
 import Card from "@/components/ui/Card";
 import Icon from "@/components/ui/Icon";
-import ApiEndpoint from "../../../API/Api_EndPoint";
-import axios from "../../../API/Axios";
+import ApiEndpoint from "../../API/Api_EndPoint";
+import axios from "../../API/Axios";
 import { useParams } from "react-router-dom";
-import Button from "@/components/ui/Button";
-import Textinput from "@/components/ui/Textinput";
-import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
-import LoadingButton from "../../../components/LoadingButton";
-import Alert from "@/components/ui/Alert";
-import { Modal } from "antd";
-import Select from "react-select";
-import Loading from "../../../components/Loading";
-import Tooltip from "@/components/ui/Tooltip";
+import Loading from "../../components/Loading";
 
-import image1 from "@/assets/images/all-img/widget-bg-1.png";
-
-const DetailStockOpname = () => {
+const DetailStockOpnameReport = () => {
   let { uid } = useParams();
-  const navigate = useNavigate();
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const getDataById = () => {
     setIsLoading(true);
     try {
       if (uid) {
-        axios.get(`${ApiEndpoint.STOCKOPNAME}/${uid}`).then((response) => {
+        axios.get(`${ApiEndpoint.STOCK_OPNAME}/${uid}`).then((response) => {
           setData(response?.data?.data);
           setIsLoading(false);
         });
@@ -46,39 +33,45 @@ const DetailStockOpname = () => {
   return (
     <div>
       <div className="space-y-5 profile-page">
-        <div
-          className="bg-no-repeat bg-cover bg-center p-4 rounded-[6px] relative"
-          style={{
-            backgroundImage: `url(${image1})`,
-          }}
-        >
-          <div className="max-w-[169px]">
-            <div className="text-xl font-medium text-slate-900 mb-2">
-              {data?.name}
-            </div>
-            <p className="text-sm text-slate-800">{data?.email}</p>
-          </div>
-        </div>
 
         <div className="grid grid-cols-12 gap-6 ">
           <div className="lg:col-span-4 col-span-12">
-            <Card title="Info Stok" className="mb-4">
+            <Card title="Info Stock Opname" className="mb-4">
               <ul className="list space-y-8">
                 <li className="flex space-x-3 rtl:space-x-reverse">
                   <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
-                    <Icon icon="heroicons:calendar" />
+                    <Icon icon="heroicons:building-office" />
                   </div>
                   <div className="flex-1">
                     <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
-                      Tanggal Laporan
+                      Cabang
                     </div>
-                    {data?.reported_at ? (
-                      <>{data?.reported_at}</>
+                    {data?.site?.name ? (
+                      <>{data?.site?.name}</>
                     ) : (
                       <span>-</span>
                     )}
                   </div>
                 </li>
+
+                <li className="flex space-x-3 rtl:space-x-reverse">
+                  <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
+                    <Icon icon="heroicons:calendar-days" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
+                      Tanggal Pelaporan
+                    </div>
+                    <div className="text-base text-slate-600 dark:text-slate-50">
+                      {data?.reported_at ? (
+                        <>{data?.reported_at}</>
+                      ) : (
+                        <span>-</span>
+                      )}
+                    </div>
+                  </div>
+                </li>
+
                 <li className="flex space-x-3 rtl:space-x-reverse">
                   <div className="flex-none text-2xl text-slate-600 dark:text-slate-300">
                     <Icon icon="heroicons:document-text" />
@@ -87,45 +80,17 @@ const DetailStockOpname = () => {
                     <div className="uppercase text-xs text-slate-500 dark:text-slate-300 mb-1 leading-[12px]">
                       Catatan
                     </div>
-                    {data?.note ? <>{data?.note}</> : <span>-</span>}
+                    <div className="text-base text-slate-600 dark:text-slate-50">
+                      {data?.note ? <>{data?.note}</> : <span>-</span>}
+                    </div>
                   </div>
                 </li>
               </ul>
             </Card>
-
-            <Card bodyClass="p-0" noborder>
-              <header
-                className={`border-b px-4 pt-4 pb-3 flex items-center  border-danger-500`}
-              >
-                <h6 className={`card-title mb-0  text-danger-500`}>
-                  Danger Zone
-                </h6>
-              </header>
-              <div className="py-3 px-5">
-                <div className="card-title2 mb-2">Perbaharui Catatan</div>
-                <div className="flex row justfiy-between gap-2">
-                  <div className="flex-1">
-                    <div className="text-sm">
-                      Harap memperhatikan kembali catatan yang ingin
-                      diperbaharui.
-                    </div>
-                  </div>
-                  <div className="w-32">
-                    <div className="">
-                      <Button
-                        text="Perbaharui"
-                        className="btn-warning dark w-full btn-sm "
-                        onClick={() => navigate(`/stockopname/update/${uid}`)}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Card>
           </div>
 
           <div className="lg:col-span-8 col-span-12">
-            <Card title="Info Stock Opname Product" className="mb-4">
+            <Card title="Info Produk" className="mb-4">
               <div className="py-4 px-6">
                 <div className="">
                   {isLoading ? (
@@ -140,23 +105,17 @@ const DetailStockOpname = () => {
                               Nama Produk
                             </th>
                             <th scope="col" className=" table-th ">
-                              Stok Fisik
+                              Jumlah Keseluruhan Stok
                             </th>
                             <th scope="col" className=" table-th ">
-                              Laporan Jumlah Stok
+                              Pelaporan Stok
                             </th>
                             <th scope="col" className=" table-th ">
-                              Selisih Stok
+                              Sisa Stok
                             </th>
                             <th scope="col" className=" table-th ">
-                              Deskripsi
+                              Harga
                             </th>
-                            {/* <th scope="col" className=" table-th ">
-                              Harga Beli
-                            </th>
-                            <th scope="col" className=" table-th ">
-                              Harga Jual
-                            </th> */}
                           </tr>
                         </thead>
                       </table>
@@ -177,23 +136,17 @@ const DetailStockOpname = () => {
                               Nama Produk
                             </th>
                             <th scope="col" className=" table-th ">
-                              Stok Fisik
+                              Jumlah Keseluruhan Stok
                             </th>
                             <th scope="col" className=" table-th ">
-                              Laporan Jumlah Stok
+                              Pelaporan Stok
                             </th>
                             <th scope="col" className=" table-th ">
-                              Selisih Stok
+                              Sisa Stok
                             </th>
                             <th scope="col" className=" table-th ">
-                              Deskripsi
+                              Harga
                             </th>
-                            {/* <th scope="col" className=" table-th ">
-                              Harga Beli
-                            </th>
-                            <th scope="col" className=" table-th ">
-                              Harga Jual
-                            </th> */}
                           </tr>
                         </thead>
                       </table>
@@ -222,59 +175,32 @@ const DetailStockOpname = () => {
                             Nama Produk
                           </th>
                           <th scope="col" className=" table-th ">
-                            Stok Fisik
+                            Jumlah Keseluruhan Stok
                           </th>
                           <th scope="col" className=" table-th ">
-                            Laporan Jumlah Stok
+                            Pelaporan Stok
                           </th>
                           <th scope="col" className=" table-th ">
-                            Selisih Stok
+                            Sisa Stok
                           </th>
                           <th scope="col" className=" table-th ">
-                            Deskripsi
+                            Harga
                           </th>
-                          {/* <th scope="col" className=" table-th ">
-                            Harga Beli
-                          </th>
-                          <th scope="col" className=" table-th ">
-                            Harga Jual
-                          </th> */}
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
                         {data?.stock_opname_details?.map((item, index) => (
                           <tr key={index}>
                             <td className="table-td">
-                              {item?.variant?.sku ? item?.variant?.sku : "-"}
+                              {item?.variant?.sku}
                             </td>
-                            <td className="table-td">
-                              {item?.variant?.full_name}
-                            </td>
+                            <td className="table-td">{item?.variant?.product?.name}</td>
                             <td className="table-td">{item?.real_qty}</td>
                             <td className="table-td">{item?.report_qty}</td>
+                            <td className="table-td">{item?.missing_qty}</td>
                             <td className="table-td">
-                              <span className="text-red-500 font-bold">
-                                {item?.missing_qty}
-                              </span>
+                              Rp {item?.variant?.price.toLocaleString("id-ID")}
                             </td>
-
-                            <td className="table-td">
-                              {item?.description ? (
-                                <>{item?.description}</>
-                              ) : (
-                                <span>-</span>
-                              )}
-                            </td>
-                            {/* <td className="table-td">
-                              Rp{" "}
-                              {item?.variant?.buy_price.toLocaleString("id-ID")}
-                            </td>
-                            <td className="table-td">
-                              Rp{" "}
-                              {item?.variant?.sell_price.toLocaleString(
-                                "id-ID"
-                              )}
-                            </td> */}
                           </tr>
                         ))}
                       </tbody>
@@ -290,4 +216,4 @@ const DetailStockOpname = () => {
   );
 };
 
-export default DetailStockOpname;
+export default DetailStockOpnameReport;

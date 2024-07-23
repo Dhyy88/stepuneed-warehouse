@@ -13,9 +13,9 @@ const ComingSoonPage = lazy(() => import("./pages/utility/coming-soon"));
 const UnderConstructionPage = lazy(() => import("./pages/utility/under-construction"));
 
 // Master Account Setting
-const Profiles = lazy(() => import("./pages/MasterUser/MasterAccount")); 
-const ProfileSetting = lazy(() => import("./pages/MasterUser/MasterAccount/profile_setting"));
-const PasswordSetting = lazy(() => import("./pages/MasterUser/MasterAccount/password_setting"));
+const Profiles = lazy(() => import("./pages/MasterUser")); 
+const ProfileSetting = lazy(() => import("./pages/MasterUser/profile_setting"));
+const PasswordSetting = lazy(() => import("./pages/MasterUser/password_setting"));
 
 // Master StockOpname
 const PurchaseOrderDetail = lazy(() => import("./pages/MasterPO/index_PO"));
@@ -26,14 +26,6 @@ const StockOpname = lazy(() => import("./pages/MasterStock/StockOpname"));
 const CreateStockOpname = lazy(() => import("./pages/MasterStock/StockOpname/create"));
 const DetailStockOpname = lazy(() => import("./pages/MasterStock/StockOpname/detail"));
 const UpdateNoteStockOpname = lazy(() => import("./pages/MasterStock/StockOpname/update"));
-
-// Master User
-const Users = lazy(() => import("./pages/MasterUser/MasterAccountUser"));
-const DetailUser = lazy(() => import("./pages/MasterUser/MasterAccountUser/detail"));
-const Permissions = lazy(() => import("./pages/MasterUser/MasterPermission"));
-const CreatePermission = lazy(() => import('./pages/MasterUser/MasterPermission/create'));
-const UpdatePermission = lazy(() => import('./pages/MasterUser/MasterPermission/update'));
-
 
 function App() {
   const ability = createMongoAbility();
@@ -46,27 +38,22 @@ function App() {
               <Route path="dashboard" element={<Dashboard />} />
 
               {/* Route StockOpname */}
-              <Route path="stock" element={<Stock />} />
               <Route path="stockopname" element={<StockOpname />} />
               <Route path="stockopname/create" element={<CreateStockOpname />} />
               <Route path="stockopname/detail/:uid" element={<DetailStockOpname />} />
               <Route path="stockopname/update/:uid" element={<UpdateNoteStockOpname />} />
-              <Route path="receivepo" element={<ReceivePO />} />
+              
               <Route path="po" element={<PurchaseOrderDetail />} />
+              <Route path="receivepo" element={<ReceivePO />} />
+              <Route path="stock" element={<Stock />} />
+
               <Route path="po/detail/:uid" element={<DetailPONumber />} />
               
               {/* Route User */}
               <Route path="profile" element={<Profiles />} />
               <Route path="profile/setting" element={<ProfileSetting />} />
               <Route path="profile/setting/password" element={<PasswordSetting />} />
-              <Route path="users" element={ <Suspense fallback={<Loading />}> <UserProtect /> </Suspense> } />
-              <Route path="users/detail/:uid" element={<DetailUser />} />
 
-              {/* Route Permission */}
-              <Route path="permissions" element={<Permissions />} />
-              <Route path="permission/create" element={<CreatePermission />} />
-              <Route path="permission/update/:uid" element={<UpdatePermission />} />
-              
               {/* Route Error */}
               <Route path="*" element={<Navigate to="/404" />} />
               <Route path="#" element={<Navigate to="/403" />} />
@@ -82,24 +69,6 @@ function App() {
     );
   }
 
-  function ProtectedComponent({ action, permission, component }) {
-  const ability = useAbility();
-  const isSpv = localStorage.getItem("is_spv") === "true";
-    if (isSpv || ability.can(action, permission)) {
-      return component;
-    }
-    return <Navigate to="/403" />;
-  }
-
-  function UserProtect() {
-    return (
-      <ProtectedComponent
-        action="read"
-        permission="Pengguna"
-        component={<Users />}
-      />
-    );
-  }
   // function CreateSiteProtect() {
   //   return (
   //     <ProtectedComponent

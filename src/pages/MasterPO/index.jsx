@@ -97,6 +97,12 @@ const ReceivePO = () => {
     setQuantity(newQuantities);
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter") {
+      handleGenerateClick();
+    }
+  };
+
   return (
     <div className="lg:col-span-12 col-span-12">
       <Card title={"Penerimaan PO"}>
@@ -105,10 +111,11 @@ const ReceivePO = () => {
             <div className="w-full">
               <Textinput
                 label="Nomor PO*"
-                type="number"
+                type="text"
                 placeholder="Masukkan nomor PO"
                 value={document_number}
                 onChange={(e) => setDocumentNumber(e.target.value)}
+                onKeyDown={handleKeyDown}
               />
               {error && (
                 <span className="text-danger-600 text-xs py-2">
@@ -137,9 +144,9 @@ const ReceivePO = () => {
               <div className="grid xl:grid-cols-1 md:grid-cols-1 grid-cols-1 gap-5 mb-5">
                 <div className="">
                   <Textinput
-                    label="Kode Pengiriman*"
+                    label="Nomor DO*"
                     type="text"
-                    placeholder="Masukkan kode pengiriman PO"
+                    placeholder="Masukkan kode pengiriman (DO)"
                     value={receive_code}
                     onChange={(e) => setReceiveCode(e.target.value)}
                   />
@@ -159,10 +166,18 @@ const ReceivePO = () => {
                     <Textinput
                       label="Nama Produk*"
                       type="text"
-                      value={product.item_description}
+                      value={product?.item_description}
                       disabled
                     />
                   </div>
+                  {/* <div className="">
+                    <Textinput
+                      label="Harga Produk*"
+                      type="text"
+                      value={product?.price}
+                      disabled
+                    />
+                  </div> */}
                   <div className="">
                     <Textinput
                       label="Jumlah Barang*"

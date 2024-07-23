@@ -34,18 +34,18 @@ const DetailPONumber = () => {
     getDataById();
   }, [uid]);
 
-  useEffect(() => {
-    if (data) {
-      data.serial_numbers.forEach((item, index) => {
-        item.serial_numbers.forEach((serial, i) => {
-          JsBarcode(`#barcode-${index}-${i}`, serial, {
-            format: "CODE128",
-            displayValue: true,
-          });
-        });
-      });
-    }
-  }, [data]);
+  // useEffect(() => {
+  //   if (data) {
+  //     data.serial_numbers.forEach((item, index) => {
+  //       item.serial_numbers.forEach((serial, i) => {
+  //         JsBarcode(`#barcode-${index}-${i}`, serial, {
+  //           format: "CODE128",
+  //           displayValue: true,
+  //         });
+  //       });
+  //     });
+  //   }
+  // }, [data]);
 
   return (
     <div>
@@ -68,14 +68,13 @@ const DetailPONumber = () => {
                 content={() => printRef.current}
               />
             </div>
-            <Card title="Cetak Barcode" className="mb-4">
+            {/* <Card title="Cetak Barcode" className="mb-4">
               <div className="mb-4" ref={printRef}>
                 <div className="py-2 px-2 print:py-1 print:px-1">
                   {isLoading ? (
                     <Loading />
                   ) : (
-                    data &&
-                    data.serial_numbers.map((item, index) => (
+                    data?.map((item, index) => (
                       <Fragment key={item.uid}>
                         <div
                           className="bg-no-repeat bg-cover bg-center p-4 rounded-[6px] relative print:hidden"
@@ -89,19 +88,12 @@ const DetailPONumber = () => {
                             </div>
                           </div>
                         </div>
-                        <div className="py-2 px-2 print:py-4 print:px-0 print:gap-2 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3 print:grid-cols-2">
-                          {item.serial_numbers.map((serial, i) => (
-                            <div key={i} className="print:mb-2">
-                              <svg id={`barcode-${index}-${i}`}></svg>
-                            </div>
-                          ))}
-                        </div>
                       </Fragment>
                     ))
                   )}
                 </div>
               </div>
-            </Card>
+            </Card> */}
           </div>
         </div>
       </div>

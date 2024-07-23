@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import Card from "@/components/ui/Card";
-import ApiEndpoint from "../../../API/Api_EndPoint";
-import axios from "../../../API/Axios";
+import ApiEndpoint from "../../API/Api_EndPoint";
+import axios from "../../API/Axios";
 import Swal from "sweetalert2";
 import Button from "@/components/ui/Button";
 import { useNavigate } from "react-router-dom";
 import Alert from "@/components/ui/Alert";
 import Textinput from "@/components/ui/Textinput";
 import Select from "react-select";
-import LoadingButton from "../../../components/LoadingButton";
+import LoadingButton from "../../components/LoadingButton";
 
 const ProfileSetting = () => {
   const navigate = useNavigate();

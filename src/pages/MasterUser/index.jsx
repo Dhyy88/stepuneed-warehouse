@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import Card from "@/components/ui/Card";
 import Icon from "@/components/ui/Icon";
 import { Link } from "react-router-dom";
-import ApiEndpoint from "../../../API/Api_EndPoint";
-import axios from "../../../API/Axios";
+import ApiEndpoint from "../../API/Api_EndPoint";
+import axios from "../../API/Axios";
 
 import ProfileImage from "@/assets/images/avatar/13.png";
 

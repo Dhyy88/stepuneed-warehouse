@@ -100,7 +100,7 @@ const Stock = () => {
     <>
       <div className="grid grid-cols-12 gap-6">
         <div className="lg:col-span-12 col-span-12">
-          <Card title="Data Stok SJM">
+          <Card title="Data Stok Gudang">
             <div className="md:flex justify-end items-center mb-4">
               <div className="md:flex items-center gap-3">
                 <div className="row-span-3 md:row-span-4">
@@ -138,20 +138,23 @@ const Stock = () => {
                       <table className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700">
                         <thead className="bg-slate-200 dark:bg-slate-700">
                           <tr>
-                            <th scope="col" className=" table-th ">
+                          <th scope="col" className=" table-th ">
                               SKU
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Barcode
                             </th>
                             <th scope="col" className=" table-th ">
                               Nama Produk
                             </th>
-                            <th scope="col" className=" table-th ">
-                              Harga Produk
+                            {/* <th scope="col" className=" table-th ">
+                              Harga Beli
                             </th>
+                            <th scope="col" className=" table-th ">
+                              Harga Jual
+                            </th> */}
                             <th scope="col" className=" table-th ">
                               Total Stok
-                            </th>
-                            <th scope="col" className=" table-th ">
-                              Aksi
                             </th>
                           </tr>
                         </thead>
@@ -170,11 +173,17 @@ const Stock = () => {
                               SKU
                             </th>
                             <th scope="col" className=" table-th ">
-                              Nama Produk
+                              Barcode
                             </th>
                             <th scope="col" className=" table-th ">
-                              Harga Produk
+                              Nama Produk
                             </th>
+                            {/* <th scope="col" className=" table-th ">
+                              Harga Beli
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Harga Jual
+                            </th> */}
                             <th scope="col" className=" table-th ">
                               Total Stok
                             </th>
@@ -190,7 +199,7 @@ const Stock = () => {
                         </div>
                         <div className="w-full flex justify-center text-secondary">
                           <span className="text-slate-900 dark:text-white text-[20px] transition-all duration-300">
-                            Stok SJM belum tersedia
+                            Stok belum tersedia
                           </span>
                         </div>
                       </div>
@@ -199,26 +208,36 @@ const Stock = () => {
                     <table className="min-w-full divide-y divide-slate-100 table-fixed dark:divide-slate-700">
                       <thead className="bg-slate-200 dark:bg-slate-700">
                         <tr>
-                          <th scope="col" className=" table-th ">
-                            SKU
-                          </th>
-                          <th scope="col" className=" table-th ">
-                            Nama Produk
-                          </th>
-                          <th scope="col" className=" table-th ">
-                            Harga Produk
-                          </th>
-                          <th scope="col" className=" table-th ">
-                            Total Stok
-                          </th>
+                        <th scope="col" className=" table-th ">
+                              SKU
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Barcode
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Nama Produk
+                            </th>
+                            {/* <th scope="col" className=" table-th ">
+                              Harga Beli
+                            </th>
+                            <th scope="col" className=" table-th ">
+                              Harga Jual
+                            </th> */}
+                            <th scope="col" className=" table-th ">
+                              Total Stok
+                            </th>
                         </tr>
                       </thead>
                       <tbody className="bg-white divide-y divide-slate-100 dark:bg-slate-800 dark:divide-slate-700">
                         {data?.data?.map((item, index) => (
                           <tr key={index}>
-                            <td className="table-td">{item.sku}</td>
-                            <td className="table-td">{item?.product?.name} </td>
-                            <td className="table-td">Rp {item?.price.toLocaleString("id-ID")}</td>
+                            <td className="table-td">{item?.sku ? item?.sku : "-"}</td>
+                            <td className="table-td">{item?.barcode ? item?.barcode : "-"}</td>
+                            <td className="table-td">
+                              {item?.product?.full_name}{" "}
+                            </td>
+                            {/* <td className="table-td">Rp {item?.buy_price.toLocaleString("id-ID")}</td>
+                            <td className="table-td">Rp {item?.sell_price.toLocaleString("id-ID")}</td> */}
                             <td className="table-td">{item?.stocks_count} </td>
                           </tr>
                         ))}

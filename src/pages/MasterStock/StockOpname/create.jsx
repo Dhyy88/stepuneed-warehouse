@@ -93,7 +93,7 @@ const CreateStockOpname = () => {
         <Card title={"Penerbitan Stock Opname"}>
           <div className="text-base text-slate-600 dark:text-slate-300 mb-5">
             <Textarea
-              label="Catatan (Optional)"
+              label="Catatan Stock Opname"
               id="pn4"
               rows="6"
               placeholder=""
@@ -112,7 +112,7 @@ const CreateStockOpname = () => {
                   <Textinput
                     label="Nama Produk*"
                     type="text"
-                    value={item?.product?.name}
+                    value={item?.full_name}
                     disabled
                   />
                 </div>
