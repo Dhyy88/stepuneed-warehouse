@@ -26,6 +26,9 @@ const StockOpname = lazy(() => import("./pages/MasterStock/StockOpname"));
 const CreateStockOpname = lazy(() => import("./pages/MasterStock/StockOpname/create"));
 const DetailStockOpname = lazy(() => import("./pages/MasterStock/StockOpname/detail"));
 const UpdateNoteStockOpname = lazy(() => import("./pages/MasterStock/StockOpname/update"));
+const ManualStock = lazy(() => import("./pages/MasterStock/ManualStock"));
+const DetailManualStock = lazy(() => import("./pages/MasterStock/ManualStock/detail"));
+const ReceiveManualStock = lazy(() => import("./pages/MasterStock/ManualStock/receive"));
 
 function App() {
   const ability = createMongoAbility();
@@ -42,6 +45,9 @@ function App() {
               <Route path="stockopname/create" element={<CreateStockOpname />} />
               <Route path="stockopname/detail/:uid" element={<DetailStockOpname />} />
               <Route path="stockopname/update/:uid" element={<UpdateNoteStockOpname />} />
+              <Route path="manualstock" element={<ManualStock />} />
+              <Route path="manualstock/detail/:uid" element={<DetailManualStock />} />
+              <Route path="manualstock/receive/:uid" element={<ReceiveManualStock />} />
               
               <Route path="po" element={<PurchaseOrderDetail />} />
               <Route path="receivepo" element={<ReceivePO />} />

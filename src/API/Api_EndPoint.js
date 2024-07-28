@@ -14,6 +14,7 @@ const ApiEndpoint = {
     STOCK: "warehouse/stocks",
     LOCATION_STOCK: "warehouse/stocks/locations",
     VARIANTS: "warehouse/variants",
+    MANUAL_STOCK: "warehouse/manual-stock-receive",
 
   //HO ACCOUNT
     HO: 'ho/hos',

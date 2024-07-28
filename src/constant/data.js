@@ -41,6 +41,10 @@ export const menuItems = [
         childtitle: "Stock Opname",
         childlink: "/stockopname"
       },  
+      {
+        childtitle: "Manual Stock",
+        childlink: "/manualstock"
+      },  
     ]
   },
 
